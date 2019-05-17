@@ -13,7 +13,7 @@ git pull origin dev
 git flow init
 :: Enter "master" for production release, and "dev" for "next release."
 ```
-To start your own feature branch-
+To start your own `feature/` branch-
 ```
 git flow feature start <your feature>
 git flow feature publish <your feature>
@@ -23,7 +23,7 @@ To push-
 ```
 git push origin feature/<your feature>
 ```
-To finsh your feature and updated your changes to the dev branch so everyone can see it-
+To finsh your `feature/` and updated your changes to the `dev` branch so everyone can see it-
 ```
 git flow feature finish <your feature>
 :: Enter a useful message sumarizing your commits.
