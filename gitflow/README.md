@@ -2,6 +2,21 @@
 
 ## [Install instructions.](https://github.com/nvie/gitflow/wiki/Installation]) ##
 
+## Setup instructions. ##
+```
+git clone https://github.com/nhstaple/ECS189L-Group-Project/
+cd ECS189L-Group-Project
+git branch dev
+git checkout dev
+git pull origin dev
+git flow init
+:: Enter "master" for production release, and "dev" for "next release."
+git flow feature start <your feature>
+git flow feature publish <your feature>
+:: Make changes and commit locally. To push-
+git push origin feature/<your feature>
+```
+
 ## Why use git flow? ##
 
 So we can all work on indivudal components in our own `feature/` branches. Then we push to `dev` when we've finished our component.
