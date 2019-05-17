@@ -23,7 +23,9 @@ This can be thought of an indivial module. Each of us can be assigned a task tha
 
 ##### Pushing to github so others can view your code. #####
 `git flow feature publish <your feature name>`
+
 To update your commits-
+
 `git push origin feature/<your feature name>`
 
 ##### To finish your feature and add it to `dev`. #####
@@ -34,12 +36,16 @@ I recommend that we create a `release/` branch for each stage we finish so we ca
 
 ##### Making a `release/` branch. #####
 `git flow release start <version number>`
+
 `...`
+
 `Fix bugs, add documentation, etc.`
 
 ##### Pushing to github. #####
 `git flow release publish <version number>`
+
 To update your commits-
+
 `git push origin release/<version number>`
 
 ##### To finish a `release/` and update the changes to `master` and `dev`. #####
