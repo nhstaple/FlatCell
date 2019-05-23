@@ -23,6 +23,7 @@ Roles- Game Logic, Narrative Design. [//]: <> (Assisted with Animation/Visuals a
 * Minor: Moosic 🐮
 
 ## Roles ##
+[Link to project details.](https://github.com/dr-jam/ECS189L/blob/master/GameProject.md)
 
 | Role | Name |
 | ---- | ---- |
