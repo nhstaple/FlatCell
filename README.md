@@ -16,7 +16,9 @@ Write our bios so the press kit homie can grab it from here.
 ### Kyle ###
 
 ### Nick ###
-Roles- Game Logic, Narrative Design. [//](Assisted with Animation/Visuals and Game Feel. Uncomment this if we go with his idea.)
+Roles- Game Logic, Narrative Design.
+
+Assisted with Animation/Visuals and Game Feel on flat game?
 
 * 5th year
 * Major: Computer Science
