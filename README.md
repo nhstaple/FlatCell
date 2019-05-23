@@ -37,7 +37,7 @@ Assisted with Animation/Visuals and Game Feel on flat game?
 
 | Subrole | Name | 
 | ------- | ---- |
-| Audio | | Megan
+| Audio | | Megan |
 | Gameplay Testing | | 
 | Narrative Design | Nick |
 | Press Kit and Trailer | | 
