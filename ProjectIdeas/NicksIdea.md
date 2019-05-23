@@ -10,16 +10,16 @@ You play as a `dot`. You kill other `dots`.
 
 You become a `line`. You kill other `lines`.
 
-You become and `arrow`. You kill other `arrows`.
+You become an `arrow`. You kill other `arrows`.
 
 You're a triangle. Illuminati comfirmed 2k19.
 
 ## Inspiration ##
 
-* Spore- the first stage where you're a lil' cell and have to battle it out to gain points / parts to evolve.
+* [Spore](https://en.wikipedia.org/wiki/Spore_(2008_video_game))- the [first stage](https://www.youtube.com/watch?v=Q8NREo35qpE) where you're a lil' cell and have to battle it out to gain points / parts to evolve.
 * This one Gamecube game where you were on an island and had a pet monster that you could evolve.
-* Flatland- good old 2D geometrical action.
-* Metro- procedural generation.
+* [Flatland](https://en.wikipedia.org/wiki/Flatland)- good old 2D geometrical action.
+* [Mini Metro](https://dinopoloclub.com/minimetro/)- procedural generation.
 
 ## Description ##
 The canvas (game `world`) is composed of colored geometric Euclidean geometry, or `geos`.
