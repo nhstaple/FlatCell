@@ -30,15 +30,15 @@ Assisted with Animation/Visuals and Game Feel on flat game?
 | Role | Name |
 | ---- | ---- |
 | UI |Kyle (maybe) |
-| Movement/Physics | |
+| Movement/Physics | Brian |
 | Animation/Visuals | Nick |
-| Input |Kyle (most leaning towards) |
+| Input |Kyle (most leaning towards), Brian |
 | Game Logic | Nick, Kyle (maybe) |
 
 | Subrole | Name | 
 | ------- | ---- |
 | Audio | | Megan |
-| Gameplay Testing |Kyle | 
+| Gameplay Testing |Kyle, Brian | 
 | Narrative Design | Nick |
-| Press Kit and Trailer | | 
+| Press Kit and Trailer | Brian | 
 | Game Feel | Nick |
