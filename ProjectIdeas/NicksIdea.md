@@ -66,3 +66,13 @@ and morph into that shape. Here are examples of enemy drops.
 * 1st stage of evo, `dot` -> `line segment`
 
 ### Target 2 ###
+
+* implement `arrow` and `triangle`
+* 2nd stage of evo, `line segment` -> `arrow`
+
+### Target 3 ### 
+
+* implment `square`, and `pentagon`
+* 3rd stage of evo, `arrow` -> `triangle`
+
+### Targer N ###
