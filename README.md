@@ -27,18 +27,20 @@ Assisted with Animation/Visuals and Game Feel on flat game?
 ## Roles ##
 [Link to project details.](https://github.com/dr-jam/ECS189L/blob/master/GameProject.md)
 
+Please add the roles that you're interested in.
+
 | Role | Name |
 | ---- | ---- |
-| UI |Kyle (maybe) |
+| UI | Kyle |
 | Movement/Physics | Brian |
 | Animation/Visuals | Nick |
 | Input |Kyle (most leaning towards), Brian |
-| Game Logic | Nick, Kyle (maybe) |
+| Game Logic | Nick, Kyle |
 
 | Subrole | Name | 
 | ------- | ---- |
 | Audio | Megan |
-| Gameplay Testing |Kyle, Brian | 
+| Gameplay Testing | Kyle, Brian | 
 | Narrative Design | Nick |
 | Press Kit and Trailer | Brian | 
 | Game Feel | Nick |
