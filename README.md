@@ -31,7 +31,7 @@ Please add the roles that you're interested in.
 
 | Role | Name |
 | ---- | ---- |
-| UI | Kyle |
+| UI | Kyle, David |
 | Movement/Physics | Brian |
 | Animation/Visuals | Nick |
 | Input |Kyle (most leaning towards), Brian |
@@ -44,3 +44,6 @@ Please add the roles that you're interested in.
 | Narrative Design | Nick |
 | Press Kit and Trailer | Brian | 
 | Game Feel | Nick |
+| Environment (parallax)| | David |
+
+*
