@@ -33,8 +33,8 @@ Please add the roles that you're interested in.
 | ---- | ---- |
 | UI | Kyle, David |
 | Movement/Physics | Brian |
-| Animation/Visuals | Nick |
-| Input |Kyle (most leaning towards), Brian |
+| Animation/Visuals | Megan, Nick |
+| Input | Kyle , Brian |
 | Game Logic | Nick, Kyle |
 
 | Subrole | Name | 
@@ -43,7 +43,8 @@ Please add the roles that you're interested in.
 | Gameplay Testing | Kyle, Brian | 
 | Narrative Design | Nick |
 | Press Kit and Trailer | Brian | 
-| Game Feel | Nick |
-| Environment (parallax)| | David |
+| Game Feel | David, Nick |
 
-*
+```
+Environment (parallax),  David
+```
