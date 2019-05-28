@@ -14,13 +14,13 @@ The `grid` acts kinda like graph paper. The length of the squares, I'll call it 
 stage` / `player level`. As the player gets bigger the grid should get bigger as well. Smaller enemies should still display
 properly as being smaller than the player as reference.
 
-Each cell in the grid will have it's own color component, and color component's from neibhboring cells can be added together to influence
+Each cell in the grid will have it's own color component, and color component's from neighboring cells can be added together to influence
 the color of the current cell.
 
 For example,
 
-The cell is blue but adjacent cells are green. Then green will "bleed into" the blue, looking kinda like a water painting. If this is too
-compled for the time frame a single color is fine.
+The cell is blue but adjacent cells are green. Then green will "bleed into" the blue, looking kinda like a water painting, and the blue
+will bleed slightly into the green. If this is too complex for the time frame a single color is fine.
 
 ## Collision ##
 
@@ -39,3 +39,8 @@ is the objective.
 ##### Scope 3 ######
 
 * The cell's color is influences by neighboring cells.
+
+##### Scope 4 ######
+
+* Add height distortion to the grid. For example, when the player enters a grid it osciliates up and down slightly and it effects
+neigbhoring cells.
