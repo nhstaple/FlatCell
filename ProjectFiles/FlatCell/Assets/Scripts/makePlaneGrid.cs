@@ -10,6 +10,7 @@ public class makePlaneGrid : MonoBehaviour
 
     private void Awake()
     {
+        Physics.gravity = new Vector3(0, -5.0F, 0);
         Generate();
     }
 
