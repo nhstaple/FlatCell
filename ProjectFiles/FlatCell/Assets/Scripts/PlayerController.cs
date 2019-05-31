@@ -18,6 +18,13 @@ public class PlayerController : MonoBehaviour
     private Vector3 MovementDirection; 
     private TrailRenderer trail;
 
+    //Used for sample projectile shooting test
+    public GameObject BulletEmitter;
+    public GameObject sampleProjectile;
+
+    public float push;
+
+
     void Awake()
     {
         this.transform.position = new Vector3(this.GeneratedTerrain.Width/2, this.GeneratedTerrain.Height/2, this.transform.position.z);
@@ -43,12 +50,24 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetButton("Fire1"))
         {
-            this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, this.Power);
+            //this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, this.Power);
+            Shoot();
+
         }
         if(Input.GetButton("Fire2"))
         {
             this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, -this.Power);
         }
+        if (Input.GetButton("ToggleWeapon"))
+        {
+            this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, this.Power);
+        }
+        if (Input.GetButton("ToggleArmor"))
+        {
+            this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, -this.Power);
+        }
+
+
 
         this.ModifiedSpeed = this.Speed;
         if (Input.GetButton("Jump")) 
@@ -64,5 +83,25 @@ public class PlayerController : MonoBehaviour
         }
         this.MovementDirection = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
         this.gameObject.transform.Translate(this.MovementDirection * Time.deltaTime * this.ModifiedSpeed);
+    }
+
+    void Shoot()
+    {
+        GameObject bullet = Instantiate(sampleProjectile, this.transform.position, Quaternion.identity) as GameObject;
+
+        Rigidbody bullet_rigidbody;
+        bullet_rigidbody = bullet.GetComponent<Rigidbody>();
+
+        Rigidbody player_rigidbody = this.GetComponent<Rigidbody>();
+
+        //Debug.Log(player_rigidbody.velocity);
+
+        //this.transform.up;
+
+        bullet_rigidbody.AddForce(GetMovementDirection() * push);
+        Debug.Log("Fired");
+        Debug.Log(bullet_rigidbody);
+
+        Destroy(bullet, 4.0f);//destroy bullet after 3 seconds
     }
 }
