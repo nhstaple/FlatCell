@@ -7,63 +7,67 @@ namespace Obscura
     public class PositionLockCameraController : AbstractCameraController
     {
         // Positions to draw on the HUD.
-        private Vector3 Center = new Vector3(0, 0, 85);
-        private Vector3 Top    = new Vector3(0, 5, 85);
-        private Vector3 Bottom = new Vector3(0, -5, 85); 
-        private Vector3 Right  = new Vector3(5, 0, 85);
-        private Vector3 Left   = new Vector3(-5, 0, 85);
-
+        public float cam_offset = 50;
         private Camera ManagedCamera;
         private LineRenderer CameraLineRenderer;
 
+
         private void Awake()
         {
-            this.ManagedCamera = this.gameObject.GetComponent<Camera>();
-            this.CameraLineRenderer = this.gameObject.GetComponent<LineRenderer>();
+            ManagedCamera = gameObject.GetComponent<Camera>();
+            CameraLineRenderer = gameObject.GetComponent<LineRenderer>();
 
             // Move camera to player location.
-            var targetPosition = this.Target.transform.position;
-            var cameraPosition = this.ManagedCamera.transform.position;
+            var targetPosition = Target.transform.position;
+            var cameraPosition = ManagedCamera.transform.position;
             cameraPosition.x = targetPosition.x;
-            cameraPosition.y = targetPosition.y;
-            this.ManagedCamera.transform.position = cameraPosition;
+            cameraPosition.y = targetPosition.y + cam_offset;
+            cameraPosition.z = targetPosition.z;
+            ManagedCamera.transform.position = cameraPosition;
         }
 
         //Use the LateUpdate message to avoid setting the camera's position before
         //GameObject locations are finalized.
         void LateUpdate()
         {
-            var targetPosition = this.Target.transform.position;
-            var cameraPosition = this.ManagedCamera.transform.position;
+            var targetPosition = Target.transform.position;
+            var cameraPosition = ManagedCamera.transform.position;
 
             cameraPosition.x = targetPosition.x;
-            cameraPosition.y = targetPosition.y;
+            cameraPosition.y = targetPosition.y + cam_offset;
+            cameraPosition.z = targetPosition.z;
 
-            this.ManagedCamera.transform.position = cameraPosition;
+            ManagedCamera.transform.position = cameraPosition;
 
-            if (this.DrawLogic)
+            if (DrawLogic)
             {
-                this.CameraLineRenderer.enabled = true;
-                this.DrawCameraLogic();
+                CameraLineRenderer.enabled = true;
+                DrawCameraLogic();
             }
             else
             {
-                this.CameraLineRenderer.enabled = false;
+                CameraLineRenderer.enabled = false;
             }
         }
 
         public override void DrawCameraLogic()
         {
-            this.CameraLineRenderer.positionCount = 8;
-            this.CameraLineRenderer.useWorldSpace = false;
-            this.CameraLineRenderer.SetPosition(0, Center);
-            this.CameraLineRenderer.SetPosition(1, Top);
-            this.CameraLineRenderer.SetPosition(2, Center);
-            this.CameraLineRenderer.SetPosition(3, Bottom);
-            this.CameraLineRenderer.SetPosition(4, Center);
-            this.CameraLineRenderer.SetPosition(5, Right);
-            this.CameraLineRenderer.SetPosition(6, Center);
-            this.CameraLineRenderer.SetPosition(7, Left);
+            Vector3 Center = new Vector3(0, 0, cam_offset);
+            Vector3 Top = new Vector3(0, 5, cam_offset);
+            Vector3 Bottom = new Vector3(0, -5, cam_offset);
+            Vector3 Right = new Vector3(5, 0, cam_offset);
+            Vector3 Left = new Vector3(-5, 0, cam_offset);
+
+            CameraLineRenderer.positionCount = 8;
+            CameraLineRenderer.useWorldSpace = false;
+            CameraLineRenderer.SetPosition(0, Center);
+            CameraLineRenderer.SetPosition(1, Top);
+            CameraLineRenderer.SetPosition(2, Center);
+            CameraLineRenderer.SetPosition(3, Bottom);
+            CameraLineRenderer.SetPosition(4, Center);
+            CameraLineRenderer.SetPosition(5, Right);
+            CameraLineRenderer.SetPosition(6, Center);
+            CameraLineRenderer.SetPosition(7, Left);
         }
     }
 }

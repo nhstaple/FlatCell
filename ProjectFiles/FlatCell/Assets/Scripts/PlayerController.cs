@@ -18,15 +18,22 @@ public class PlayerController : MonoBehaviour
     private Vector3 MovementDirection;
     private TrailRenderer trail;
 
+    //Used for sample projectile shooting test
+    public GameObject BulletEmitter;
+    public GameObject sampleProjectile;
+
+    public float push;
+
+
     void Awake()
     {
-        //       this.transform.position = new Vector3(this.GeneratedTerrain.Width/2, this.GeneratedTerrain.Height/2, this.transform.position.z);
-        //      this.trail = this.GetComponent<TrailRenderer>();
-        //     if(this.GeneratedTerrain == null)
-        //    {
-        //       Debug.Log("You need pass a TrarrainGenerator component to the player.");
-        //      throw new MissingComponentException();
-        //  }
+        transform.position = new Vector3(0, 40, 0);
+        trail = GetComponent<TrailRenderer>();
+        //        if (GeneratedTerrain == null)
+        //        {
+        //            Debug.Log("You need pass a TrarrainGenerator component to the player.");
+        //            throw new MissingComponentException();
+        //        }
     }
 
     public float GetCurrentSpeed()
@@ -43,27 +50,60 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButton("Fire1"))
         {
-            //        GeneratedTerrain.ChangeTerrainHeight(gameObject.transform.position, Power);
+            //this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, this.Power);
+            Shoot();
+
         }
-        if (Input.GetButton("Fire2"))
-        {
-            //          GeneratedTerrain.ChangeTerrainHeight(gameObject.transform.position, -Power);
-        }
+        //        if (Input.GetButton("Fire2"))
+        //       {
+        //           GeneratedTerrain.ChangeTerrainHeight(gameObject.transform.position, -Power);
+        //       }
+        //        if (Input.GetButton("ToggleWeapon"))
+        //        {
+        //            GeneratedTerrain.ChangeTerrainHeight(gameObject.transform.position, Power);
+        //        }
+        //        if (Input.GetButton("ToggleArmor"))
+        //        {
+        //            GeneratedTerrain.ChangeTerrainHeight(gameObject.transform.position, -Power);
+        //        }
+
+
 
         ModifiedSpeed = Speed;
         if (Input.GetButton("Jump"))
         {
             ModifiedSpeed *= BoostFactor;
-            //         trail.widthMultiplier = BoostFactor;
+            trail.widthMultiplier = BoostFactor;
         }
         else
         {
-            //          if (trail.widthMultiplier >= 1.0f)
+            if (trail.widthMultiplier >= 1.0f)
             {
-                //              trail.widthMultiplier -= Time.deltaTime * TrailDecay;
+                trail.widthMultiplier -= Time.deltaTime * TrailDecay;
             }
         }
-        MovementDirection = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
+        MovementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
         gameObject.transform.Translate(MovementDirection * Time.deltaTime * ModifiedSpeed);
+    }
+
+    void Shoot()
+    {
+        GameObject bullet = Instantiate(sampleProjectile, transform.position, Quaternion.identity) as GameObject;
+
+        Rigidbody bullet_rigidbody;
+        bullet_rigidbody = bullet.GetComponent<Rigidbody>();
+        //        bullet_rigidbody.AddRelativeForce()
+
+        Rigidbody player_rigidbody = GetComponent<Rigidbody>();
+
+        //Debug.Log(player_rigidbody.velocity);
+
+        //this.transform.up;
+
+        bullet_rigidbody.AddForce(GetMovementDirection() * push);
+        Debug.Log("Fired");
+        Debug.Log(bullet_rigidbody);
+
+        Destroy(bullet, 4.0f);//destroy bullet after 3 seconds
     }
 }

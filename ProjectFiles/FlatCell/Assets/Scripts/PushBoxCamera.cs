@@ -13,55 +13,55 @@ namespace Obscura
 
         private void Awake()
         {
-            this.ManagedCamera = this.gameObject.GetComponent<Camera>();
-            this.CameraLineRenderer = this.gameObject.GetComponent<LineRenderer>();
+            ManagedCamera = gameObject.GetComponent<Camera>();
+            CameraLineRenderer = gameObject.GetComponent<LineRenderer>();
         }
 
         //Use the LateUpdate message to avoid setting the camera's position before
         //GameObject locations are finalized.
         void LateUpdate()
         {
-            var targetPosition = this.Target.transform.position;
-            var cameraPosition = this.ManagedCamera.transform.position;
+            var targetPosition = Target.transform.position;
+            var cameraPosition = ManagedCamera.transform.position;
             if (targetPosition.y >= cameraPosition.y + TopLeft.y)
             {
-                cameraPosition = new Vector3(cameraPosition.x, targetPosition.y - TopLeft.y, cameraPosition.z);
+                cameraPosition = new Vector3(cameraPosition.x, cameraPosition.z, targetPosition.y - TopLeft.y);
             }
             if (targetPosition.y <= cameraPosition.y + BottomRight.y)
             {
-                cameraPosition = new Vector3(cameraPosition.x, targetPosition.y- BottomRight.y, cameraPosition.z);
+                cameraPosition = new Vector3(cameraPosition.x, cameraPosition.z, targetPosition.y - BottomRight.y);
             }
             if (targetPosition.x >= cameraPosition.x + BottomRight.x)
             {
-                cameraPosition = new Vector3(targetPosition.x - BottomRight.x, cameraPosition.y, cameraPosition.z);
+                cameraPosition = new Vector3(targetPosition.x - BottomRight.x, cameraPosition.z, cameraPosition.y);
             }
             if (targetPosition.x <= cameraPosition.x + TopLeft.x)
             {
-                cameraPosition = new Vector3(targetPosition.x- TopLeft.x, cameraPosition.y, cameraPosition.z);
+                cameraPosition = new Vector3(targetPosition.x - TopLeft.x, cameraPosition.z, cameraPosition.y);
             }
 
-            this.ManagedCamera.transform.position = cameraPosition;
+            ManagedCamera.transform.position = cameraPosition;
 
-            if (this.DrawLogic)
+            if (DrawLogic)
             {
-                this.CameraLineRenderer.enabled = true;
-                this.DrawCameraLogic();
+                CameraLineRenderer.enabled = true;
+                DrawCameraLogic();
             }
             else
             {
-                this.CameraLineRenderer.enabled = false;
+                CameraLineRenderer.enabled = false;
             }
         }
 
         public override void DrawCameraLogic()
         {
-            this.CameraLineRenderer.positionCount = 5;
-            this.CameraLineRenderer.useWorldSpace = false;
-            this.CameraLineRenderer.SetPosition(0, TopLeft);
-            this.CameraLineRenderer.SetPosition(1, new Vector3(BottomRight.x, TopLeft.y, TopLeft.z));
-            this.CameraLineRenderer.SetPosition(2, BottomRight);
-            this.CameraLineRenderer.SetPosition(3, new Vector3(TopLeft.x, BottomRight.y, BottomRight.z));
-            this.CameraLineRenderer.SetPosition(4, TopLeft);
+            CameraLineRenderer.positionCount = 5;
+            CameraLineRenderer.useWorldSpace = false;
+            CameraLineRenderer.SetPosition(0, new Vector3(TopLeft.x, TopLeft.z, TopLeft.y));
+            CameraLineRenderer.SetPosition(1, new Vector3(BottomRight.x, TopLeft.z, TopLeft.y));
+            CameraLineRenderer.SetPosition(2, new Vector3(BottomRight.x, BottomRight.z, BottomRight.y));
+            CameraLineRenderer.SetPosition(3, new Vector3(TopLeft.x, BottomRight.z, BottomRight.y));
+            CameraLineRenderer.SetPosition(4, new Vector3(TopLeft.x, TopLeft.z, TopLeft.y));
         }
     }
 }
