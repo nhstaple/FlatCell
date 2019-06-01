@@ -636,18 +636,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 998048337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef010a65fad874d669d8fd30b014d061, type: 3}
+  m_Script: {fileID: 11500000, guid: 5dc65245564919041b115471996eb71f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 200
   BoostFactor: 4
   Power: 2
   GeneratedTerrain: {fileID: 0}
-  BulletEmitter: {fileID: 5220245055896893209, guid: 9ee3addd4026fe14dbaabbc1f5d27621,
-    type: 3}
+  BulletEmitter: {fileID: 0}
   sampleProjectile: {fileID: 5220245055896893209, guid: 9ee3addd4026fe14dbaabbc1f5d27621,
     type: 3}
-  push: 5
+  push: 50
+  ImpulseModifier: 1.5
+  FireRate: 0.125
+  SpawnOffset: 10
 --- !u!96 &998048344
 TrailRenderer:
   serializedVersion: 2
