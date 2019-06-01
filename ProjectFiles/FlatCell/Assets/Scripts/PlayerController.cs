@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 #pragma warning disable 0649
     [SerializeField] private TerrainGenerator GeneratedTerrain;
 
+    private Vector3 lastMove;
     private float TrailDecay = 5.0f;
     private float ModifiedSpeed;
     private Vector3 MovementDirection;
@@ -95,12 +96,14 @@ public class PlayerController : MonoBehaviour
         //        bullet_rigidbody.AddRelativeForce()
 
         Rigidbody player_rigidbody = GetComponent<Rigidbody>();
-
         //Debug.Log(player_rigidbody.velocity);
-
         //this.transform.up;
+        if (GetMovementDirection().magnitude > 0)
+        {
+            lastMove = GetMovementDirection();
+        }
 
-        bullet_rigidbody.AddForce(GetMovementDirection() * push);
+        bullet_rigidbody.AddRelativeForce(lastMove * push, ForceMode.Impulse);
         Debug.Log("Fired");
         Debug.Log(bullet_rigidbody);
 
