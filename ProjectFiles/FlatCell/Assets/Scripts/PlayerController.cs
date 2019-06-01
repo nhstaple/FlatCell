@@ -10,59 +10,103 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float Power = 2.0f;
     //Serialized private fields flag a warning as of v2018.3. 
     //This pragma disables the warning in this one case.
-    #pragma warning disable 0649
+#pragma warning disable 0649
     [SerializeField] private TerrainGenerator GeneratedTerrain;
 
+    private Vector3 lastMove;
     private float TrailDecay = 5.0f;
     private float ModifiedSpeed;
-    private Vector3 MovementDirection; 
+    private Vector3 MovementDirection;
     private TrailRenderer trail;
+
+    //Used for sample projectile shooting test
+    public GameObject BulletEmitter;
+    public GameObject sampleProjectile;
+
+    public float push;
+
 
     void Awake()
     {
-        this.transform.position = new Vector3(this.GeneratedTerrain.Width/2, this.GeneratedTerrain.Height/2, this.transform.position.z);
-        this.trail = this.GetComponent<TrailRenderer>();
-        if(this.GeneratedTerrain == null)
-        {
-            Debug.Log("You need pass a TrarrainGenerator component to the player.");
-            throw new MissingComponentException();
-        }
+        transform.position = new Vector3(0, 40, 0);
+        trail = GetComponent<TrailRenderer>();
+        //        if (GeneratedTerrain == null)
+        //        {
+        //            Debug.Log("You need pass a TrarrainGenerator component to the player.");
+        //            throw new MissingComponentException();
+        //        }
     }
 
     public float GetCurrentSpeed()
     {
-        return this.ModifiedSpeed;
+        return ModifiedSpeed;
     }
 
     public Vector3 GetMovementDirection()
     {
-        return this.MovementDirection;
+        return MovementDirection;
     }
 
     void Update()
     {
-        if(Input.GetButton("Fire1"))
+        if (Input.GetButton("Fire1"))
         {
-            this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, this.Power);
-        }
-        if(Input.GetButton("Fire2"))
-        {
-            this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, -this.Power);
-        }
+            //this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, this.Power);
+            Shoot();
 
-        this.ModifiedSpeed = this.Speed;
-        if (Input.GetButton("Jump")) 
+        }
+        //        if (Input.GetButton("Fire2"))
+        //       {
+        //           GeneratedTerrain.ChangeTerrainHeight(gameObject.transform.position, -Power);
+        //       }
+        //        if (Input.GetButton("ToggleWeapon"))
+        //        {
+        //            GeneratedTerrain.ChangeTerrainHeight(gameObject.transform.position, Power);
+        //        }
+        //        if (Input.GetButton("ToggleArmor"))
+        //        {
+        //            GeneratedTerrain.ChangeTerrainHeight(gameObject.transform.position, -Power);
+        //        }
+
+
+
+        ModifiedSpeed = Speed;
+        if (Input.GetButton("Jump"))
         {
-            this.ModifiedSpeed *= this.BoostFactor;
-            this.trail.widthMultiplier = this.BoostFactor;
+            ModifiedSpeed *= BoostFactor;
+            trail.widthMultiplier = BoostFactor;
         }
         else
         {
-            if(this.trail.widthMultiplier >= 1.0f) {
-                this.trail.widthMultiplier -= Time.deltaTime * this.TrailDecay;
+            if (trail.widthMultiplier >= 1.0f)
+            {
+                trail.widthMultiplier -= Time.deltaTime * TrailDecay;
             }
         }
-        this.MovementDirection = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
-        this.gameObject.transform.Translate(this.MovementDirection * Time.deltaTime * this.ModifiedSpeed);
+        MovementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+        gameObject.transform.Translate(MovementDirection * Time.deltaTime * ModifiedSpeed);
+    }
+
+    void Shoot()
+    {
+        GameObject bullet = Instantiate(sampleProjectile, transform.position, Quaternion.identity) as GameObject;
+
+        Rigidbody bullet_rigidbody;
+        bullet_rigidbody = bullet.GetComponent<Rigidbody>();
+        //        bullet_rigidbody.AddRelativeForce()
+
+        Rigidbody player_rigidbody = GetComponent<Rigidbody>();
+        //Debug.Log(player_rigidbody.velocity);
+        //this.transform.up;
+        if (GetMovementDirection().magnitude > 0)
+        {
+            lastMove = GetMovementDirection();
+        }
+
+        bullet_rigidbody.AddRelativeForce(lastMove * push, ForceMode.Impulse);
+        Debug.Log("Fired");
+        Debug.Log(bullet_rigidbody);
+
+        Destroy(bullet, 4.0f);//destroy bullet after 3 seconds
     }
 }
