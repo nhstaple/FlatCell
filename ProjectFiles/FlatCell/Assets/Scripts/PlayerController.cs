@@ -28,8 +28,6 @@ public class PlayerController : MonoBehaviour
 
     private float currentSpeed;
     private Vector3 prevPos;
-    [SerializeField]
-    private float ImpulseModifier = 2.0f;
 
     [SerializeField]
     private float FireRate = 0.25f;
@@ -103,7 +101,7 @@ public class PlayerController : MonoBehaviour
         ShootCounter += Time.deltaTime;
         if(ShootCounter >= this.FireRate)
         {
-            Vector3 spawnLoc = transform.position + GetMovementDirection()*SpawnOffset;
+            Vector3 spawnLoc = transform.position + lastMove*SpawnOffset;
 
             GameObject bullet = Instantiate(sampleProjectile, spawnLoc, Quaternion.identity) as GameObject;
 
@@ -114,17 +112,23 @@ public class PlayerController : MonoBehaviour
             Rigidbody player_rigidbody = GetComponent<Rigidbody>();
             //Debug.Log(player_rigidbody.velocity);
             //this.transform.up;
-            if (GetMovementDirection().magnitude > 0)
-            {
-                lastMove = GetMovementDirection();
-            }
 
-            bullet_rigidbody.AddRelativeForce(lastMove * (push + currentSpeed * ImpulseModifier), ForceMode.Impulse);
+            // bullet_rigidbody.AddRelativeForce(lastMove * (push + currentSpeed * ImpulseModifier), ForceMode.Impulse);
+            bullet_rigidbody.AddRelativeForce((lastMove) * (push), ForceMode.Impulse);
             Debug.Log("Fired");
             Debug.Log(bullet_rigidbody);
 
             Destroy(bullet, 4.0f);//destroy bullet after 3 seconds
             ShootCounter = 0.0f;
+        }
+        if (GetMovementDirection().magnitude > 0)
+        {
+            lastMove = GetMovementDirection();
+            if (lastMove.x > 0 && lastMove.z == 0) { lastMove.x = 1; }
+            if (lastMove.x < 0 && lastMove.z == 0) { lastMove.x = -1; }
+            if (lastMove.z > 0 && lastMove.x == 0) { lastMove.z = 1; }
+            if (lastMove.z < 0 && lastMove.x == 0) { lastMove.z = -1; }
+            Debug.Log(lastMove);
         }
     }
 }
