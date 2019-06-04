@@ -49,19 +49,19 @@ Please add the roles that you're interested in.
 
 | Role | Name |
 | ---- | ---- |
-| UI | David |
+| UI | Kyle, David |
 | Movement/Physics | Brian |
-| Animation/Visuals | Megan |
-| Input | Kyle |
-| Game Logic | Nick |
+| Animation/Visuals | Megan, Nick |
+| Input | Kyle , Brian |
+| Game Logic | Nick, Kyle |
 
 | Subrole | Name | 
 | ------- | ---- |
 | Audio | Megan |
-| Gameplay Testing | Kyle | 
+| Gameplay Testing | Kyle, Brian | 
 | Narrative Design | Nick |
 | Press Kit and Trailer | Brian | 
-| Game Feel | David |
+| Game Feel | David, Nick |
 
 ```
 Environment (parallax),  David
