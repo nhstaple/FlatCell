@@ -8,8 +8,6 @@ namespace Projectile.Command
 {
     public class DotProjectile : IProjectile
     {
-        private GameObject DotProjPrefab;
-
         private Vector3 Force;
 
         private float Damage;
@@ -18,10 +16,10 @@ namespace Projectile.Command
 
         private float LifeTime;
 
-        public DotProjectile(GameObject Projectile,
-                             float Damage, float Piercing, float LifeTime)
+        private float Counter = -1;
+
+        public DotProjectile(float Damage, float Piercing, float LifeTime)
         {
-            DotProjPrefab = Projectile;
             this.Damage = Damage;
             this.Piercing = Piercing;
             this.LifeTime = LifeTime;
@@ -36,24 +34,29 @@ namespace Projectile.Command
         // Spawn the projectile.
         public GameObject Spawn(Vector3 Location)
         {
-            // GameObject proj = GameObject.Instantiate(DotProjPrefab, Location, Quaternion.identity);
-            GameObject proj = new GameObject("Projectile");
-            proj.AddComponent<BoxCollider>();
+            Counter++;
+            // Create a new projectile object.
+            GameObject proj = new GameObject("Projectile" + Counter);
+
+            // Add mesh components
+            proj.AddComponent<MeshRenderer>();
             MeshFilter filter = proj.AddComponent<MeshFilter>();
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             filter.mesh = cube.GetComponent<MeshFilter>().mesh;
             GameObject.Destroy(cube);
-            proj.AddComponent<MeshRenderer>();
-            Rigidbody body = proj.AddComponent<Rigidbody>();
-            body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-            proj.transform.position = Location;
-            GameObject.Destroy(proj, LifeTime);
-            return proj;
-        }
 
-        public GameObject GetPrefab()
-        {
-            return this.DotProjPrefab;
+            // Add collision components and set rotation constraints.
+            proj.AddComponent<BoxCollider>();
+            Rigidbody body = proj.AddComponent<Rigidbody>();
+            body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
+            proj.transform.position = Location;
+
+            // Destroys projectile after LifeTime seconds.
+            GameObject.Destroy(proj, LifeTime);
+
+            // Set the size/
+            proj.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+            return proj;
         }
     }
 }

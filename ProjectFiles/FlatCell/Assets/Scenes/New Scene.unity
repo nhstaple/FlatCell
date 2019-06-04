@@ -260,7 +260,7 @@ MonoBehaviour:
   gridSize: 10
   gridPlane: {fileID: 8659519363311212023, guid: 89454cd2d29dbae4798739b0e632a006,
     type: 3}
-  boundary: {fileID: 4073489969973322299, guid: 947e3464fa568d945afd809de986724e,
+  boundary: {fileID: 4073489969973322299, guid: 0f763dfd9b8513e4a8ee04b4c3403e12,
     type: 3}
 --- !u!23 &627442044
 MeshRenderer:
@@ -645,9 +645,16 @@ MonoBehaviour:
   BoostFactor: 4
   MaxHealth: 10
   FireRate: 0.25
-  TrailDecay: 2.5
-  SpawnOffset: 10
-  push: 100
+  health: 0
+  armor: 0
+  dhieldMana: 0
+  Push: 100
+  lastMovement: {x: 0, y: 0, z: 0}
+  movementDirection: {x: 0, y: 0, z: 0}
+  currentSpeed: 0
+  prevPos: {x: 0, y: 0, z: 0}
+  SpawnOffset: 20
+  trailDecay: 1
   PlayerProjectile: {fileID: 5220245055896893209, guid: 9ee3addd4026fe14dbaabbc1f5d27621,
     type: 3}
   sampleShield: {fileID: 7591963805130457138, guid: eaedc4341dd3e7d42b5571acc0582056,

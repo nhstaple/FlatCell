@@ -16,9 +16,6 @@ namespace Weapon.Command
         private float ProjectileLifetime = 2.5f;
         private IProjectile Projectile;
 
-        /** Cosmetics **/
-        private float SpawnOffset;
-
         /** Script variables **/
         // The owner of the weapon
         private IGeo Owner;
@@ -27,11 +24,10 @@ namespace Weapon.Command
         // Keeps track of the last time the weapon was shot.
         private float ShootCounter;
 
-        public DotWeapon(IGeo GeoOwner, GameObject ProjectilePrefab, float Offset, float Rate)
+        public DotWeapon(IGeo GeoOwner , float Offset, float Rate)
         {
             this.Owner = GeoOwner;
-            this.Projectile = new DotProjectile(ProjectilePrefab, Damage, Piercing, ProjectileLifetime);
-            this.SpawnOffset = Offset;
+            this.Projectile = new DotProjectile(Damage, Piercing, ProjectileLifetime);
             this.FireRate = Rate;
         }
 
@@ -46,7 +42,7 @@ namespace Weapon.Command
             this.Piercing = Piercing;
         }
 
-        public void Fire(Vector3 movementDir, Vector3 pos, float push)
+        public void Fire(Vector3 movementDir, Vector3 pos, float push, float SpawnOffset)
         {
             ShootCounter += Time.deltaTime;
             if (ShootCounter >= this.FireRate)

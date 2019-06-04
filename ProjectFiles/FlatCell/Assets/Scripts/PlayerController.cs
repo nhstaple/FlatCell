@@ -10,20 +10,18 @@ public class PlayerController : DotObject
 {
     /** Player Stats **/
     // The AI spawner
-    DotSpawner Factory;
-    private float SpawnCounter = 0.5f;
-    private int SpawnCount = 10;
+    DotSpawner factory;
+    private float spawnCounter = 0.5f;
+    private int spawnCount = 10;
 
     /** Cosmetics **/
-    [SerializeField] private float TrailDecay = 2.5f;
-    // The force applied to the projectile. 
-    [SerializeField] private float push = 100.0f;
+    [SerializeField] private float trailDecay = 1f;
 
     /** Prefabs **/
     [SerializeField] public GameObject PlayerProjectile;
 
     /** Script variables **/
-    private float ModifiedSpeed;
+    private float modifiedSpeed;
     private TrailRenderer trail;
     // Added to track the 3 moves we can use
     private int weaponSelect;
@@ -35,43 +33,33 @@ public class PlayerController : DotObject
     private int shieldOn;
     private float ShieldTimer;
 
-    private void Start()
+    private bool GrowFlag = false;
+
+    new private void Start()
     {
-        prevPos = new Vector3(0.0f, 0.0f, 0.0f);
-        currentSpeed = 0;
-        this.Weapon = new DotWeapon(this, PlayerProjectile, SpawnOffset, FireRate);
+        // Call parent class's method.
+        base.Start();
+        prevPos = new Vector3(0.0f, 5.0f, 0.0f);
         weaponSelect = 1;
         shieldOn = 0;
         ShieldTimer = 0.0f;
-        Health = MaxHealth;
-        Rigidbody body = GetComponent<Rigidbody>();
-        body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; // | RigidbodyConstraints.FreezePositionY;
     }
 
     void Awake()
     {
         transform.position = new Vector3(0, 5, 0);
         this.trail = this.GetComponent<TrailRenderer>();
-        Factory = new DotSpawner();
-        for (int i = 0; i < SpawnCount; i++)
+        factory = new DotSpawner();
+        for (int i = 0; i < spawnCount; i++)
         {
-            Factory.Spawn();
+            factory.Spawn();
         }
-    }
-
-    public Vector3 GetMovementDirection()
-    {
-        return MovementDirection;
-    }
-
-    private void FixedUpdate()
-    {
-        currentSpeed = (transform.position - prevPos).magnitude / Time.deltaTime;
-        prevPos = this.transform.position;
+        transform.localScale = new Vector3(25, 25, 25);
     }
 
     void Update()
     {
+        gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         /*
         SpawnCounter += Time.deltaTime;
         if(SpawnCounter >= 0.5)
@@ -80,13 +68,32 @@ public class PlayerController : DotObject
             Factory.Spawn();
             SpawnCounter = 0;
         }
+        
+        if(transform.localScale.x <= 25 && GrowFlag)
+        {
+            transform.localScale += new Vector3(0.1f, 0.00f, 0.0f);
+            if(transform.localScale.x >= 25)
+            {
+                GrowFlag = false;
+            }
+        }
+        else if(transform.localScale.x >= 5 && !GrowFlag)
+        {
+            transform.localScale -= new Vector3(0.1f, 0.00f, 0.0f);
+            if (transform.localScale.x <= 5)
+            {
+                GrowFlag = true;
+            }
+        }
         */
+
         if(shield != null && shieldOn == 1)
         {
             Debug.Log("Shield On");
             this.shield.transform.position = this.transform.position;
             ShieldTimer += Time.deltaTime;
         }
+
         if (ShieldTimer >= 5.0f)
         {
             Destroy(shield);
@@ -94,7 +101,7 @@ public class PlayerController : DotObject
             shieldOn = 0;
         }
 
-        if (Health == 0)
+        if (health == 0)
         {
             Destroy(this);
         }
@@ -102,13 +109,10 @@ public class PlayerController : DotObject
         if (Input.GetButton("Fire1"))
         {
             Debug.Log("Fired");
-            if (weaponSelect == 1)
-            {
-                this.Weapon.Fire(GetMovementDirection(), transform.position, push);
-            }
+            Shoot(weaponSelect, SpawnOffset);
         }
 
-        if(Input.GetButtonDown("Fire2") && shieldOn == 0)
+        if (Input.GetButtonDown("Fire2") && shieldOn == 0)
         {
             Shield();
         }
@@ -119,22 +123,23 @@ public class PlayerController : DotObject
             SwitchWeapon();
         }
 
-
-        ModifiedSpeed = Speed;
+        modifiedSpeed = Speed;
         if (Input.GetButton("Jump"))
         {
-            ModifiedSpeed *= BoostFactor;
+            modifiedSpeed *= BoostFactor;
             trail.widthMultiplier = BoostFactor;
         }
+
         else
         {
             if (trail.widthMultiplier >= 1.0f)
             {
-                trail.widthMultiplier -= Time.deltaTime * TrailDecay;
+                trail.widthMultiplier -= Time.deltaTime * trailDecay;
             }
         }
-        MovementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-        gameObject.transform.Translate(MovementDirection * Time.deltaTime * ModifiedSpeed);
+
+        movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+        gameObject.transform.Translate(movementDirection * Time.deltaTime * modifiedSpeed);
     }
 
     void SwitchWeapon()
@@ -161,10 +166,5 @@ public class PlayerController : DotObject
     {
         shield = Instantiate(sampleShield, this.transform.position, Quaternion.identity) as GameObject;
         shieldOn = 1;
-    }
-
-    public void Shoot()
-    {
-        return;
     }
 }

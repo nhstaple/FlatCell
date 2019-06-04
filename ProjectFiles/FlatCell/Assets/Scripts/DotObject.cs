@@ -6,92 +6,39 @@ using Geo.Command;
 using Weapon.Command;
 using Projectile.Command;
 
-public class DotObject : MonoBehaviour, IGeo
+public class DotObject : GeoObject
 {
-    /** Geo Stats **/
-    [SerializeField] public float Speed = 100.0f;
-    [SerializeField] public float BoostFactor = 4.0f;
-    [SerializeField] public float MaxHealth = 10.0f;
-    [SerializeField] public float FireRate = 0.25f;
-
-    public float Health;
-    public float Armor = 0.0f;
-    public float ShieldMana = 0.0f;
-    public IWeapon Weapon;
-
     /** Cosmetics **/
     [SerializeField] public float SpawnOffset = 10f;
     private Mesh DotMesh;
 
-    /** Prefabs **/
-    private GameObject DotProjectile;
-
-    /** Script variables **/
-    public Vector3 lastMove;
-    public Vector3 MovementDirection;
-    public float currentSpeed;
-    public Vector3 prevPos;
-
-    void SetProjectile(GameObject Prefab)
-    {
-        DotProjectile = Prefab;
-    }
-
     // Start is called before the first frame update
-    void Start()
+    new public void Start()
     {
-        currentSpeed = 0;
-        this.Weapon = new DotWeapon(this, DotProjectile, SpawnOffset, FireRate);
-        Health = MaxHealth;
+        // Call parent class's method.
+        base.Start();
 
-        gameObject.AddComponent<MeshFilter>();
-        // Add a sphere.
-        //gameObject.AddComponent<MeshFilter>();
-        gameObject.AddComponent<MeshRenderer>();
+        // Add the weapon.
+        DotWeapon dotGun = new DotWeapon(this, SpawnOffset, FireRate);
+        weapon.Add(dotGun);
+
+        // Add a sphere mesh and collider to the game object.
         SphereCollider volume = gameObject.AddComponent<SphereCollider>();
         volume.radius = 0.5f;
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         GetComponent<MeshFilter>().mesh = sphere.GetComponent<MeshFilter>().mesh;
         Destroy(sphere);
-    }
 
-    private void FixedUpdate()
-    {
-        currentSpeed = (transform.position - prevPos).magnitude / Time.deltaTime;
-        prevPos = this.transform.position;
+        // Set physics constraints
+        Rigidbody body = gameObject.AddComponent<Rigidbody>();
+        body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void Shoot(Vector3 Direction, Vector3 Location, float Force)
-    {
-        this.Weapon.Fire(Direction, Location, Force);
-        return;
-    }
-
-    public float GetCurrentSpeed()
-    {
-        return currentSpeed;
-    }
-
-    // Check for collisions with other objects.
-    public void OnCollisionEnter(Collision collision)
-    {
-        /*
-        Debug.Log("collided with ");
-        Debug.Log(collision.gameObject.transform.parent.gameObject.ToString());
-        
-        bool IsProjectile = typeof(IProjectile).IsAssignableFrom(collision.gameObject.transform.parent.gameObject.GetType());
-        if(IsProjectile)
-        {
-            Debug.Log("interface match");
-            Destroy(collision.collider);
-        }
-        */
-        return;
-    }
 }
