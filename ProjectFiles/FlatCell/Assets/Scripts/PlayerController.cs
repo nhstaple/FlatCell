@@ -2,59 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Weapon.Command;
+using Geo.Command;
+
 [RequireComponent(typeof(TrailRenderer))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : DotObject
 {
-    [SerializeField] private float Speed = 200.0f;
-    [SerializeField] private float BoostFactor = 4.0f;
-    [SerializeField] private float Power = 2.0f;
-    //Serialized private fields flag a warning as of v2018.3. 
-    //This pragma disables the warning in this one case.
-#pragma warning disable 0649
-    [SerializeField] private TerrainGenerator GeneratedTerrain;
+    /** Player Stats **/
+    // The AI spawner
+    DotSpawner Factory;
+    private float SpawnCounter = 0.5f;
+    private int SpawnCount = 10;
 
-    private Vector3 lastMove;
-    private float TrailDecay = 5.0f;
+    /** Cosmetics **/
+    [SerializeField] private float TrailDecay = 2.5f;
+    // The force applied to the projectile. 
+    [SerializeField] private float push = 100.0f;
+
+    /** Prefabs **/
+    [SerializeField] public GameObject PlayerProjectile;
+
+    /** Script variables **/
     private float ModifiedSpeed;
-    private Vector3 MovementDirection;
     private TrailRenderer trail;
+    // Added to track the 3 moves we can use
+    private int weaponSelect;
+    // Components for a Shield
+    [SerializeField] public GameObject sampleShield;
+    // gets sampleShield passed into it with instantiation
+    private GameObject shield;
+    //if shield is on, maybe disable other actions
+    private int shieldOn;
+    private float ShieldTimer;
 
-    //Used for sample projectile shooting test
-    public GameObject BulletEmitter;
-    [SerializeField]
-    public GameObject sampleProjectile;
-
-    public float push;
-
-    private float currentSpeed;
-    private Vector3 prevPos;
-
-    [SerializeField]
-    private float FireRate = 0.25f;
-    [SerializeField]
-    private float SpawnOffset = 10f;
-    private float ShootCounter;
     private void Start()
     {
         prevPos = new Vector3(0.0f, 0.0f, 0.0f);
         currentSpeed = 0;
-        ShootCounter = 0;
+        this.Weapon = new DotWeapon(this, PlayerProjectile, SpawnOffset, FireRate);
+        weaponSelect = 1;
+        shieldOn = 0;
+        ShieldTimer = 0.0f;
+        Health = MaxHealth;
+        Rigidbody body = GetComponent<Rigidbody>();
+        body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; // | RigidbodyConstraints.FreezePositionY;
     }
 
     void Awake()
     {
-        transform.position = new Vector3(0, 40, 0);
-        trail = GetComponent<TrailRenderer>();
-        //        if (GeneratedTerrain == null)
-        //        {
-        //            Debug.Log("You need pass a TrarrainGenerator component to the player.");
-        //            throw new MissingComponentException();
-        //        }
-    }
-
-    public float GetCurrentSpeed()
-    {
-        return ModifiedSpeed;
+        transform.position = new Vector3(0, 5, 0);
+        this.trail = this.GetComponent<TrailRenderer>();
+        Factory = new DotSpawner();
+        for (int i = 0; i < SpawnCount; i++)
+        {
+            Factory.Spawn();
+        }
     }
 
     public Vector3 GetMovementDirection()
@@ -70,14 +72,53 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(currentSpeed);
+        /*
+        SpawnCounter += Time.deltaTime;
+        if(SpawnCounter >= 0.5)
+        {
+            Debug.Log("Spawned");
+            Factory.Spawn();
+            SpawnCounter = 0;
+        }
+        */
+        if(shield != null && shieldOn == 1)
+        {
+            Debug.Log("Shield On");
+            this.shield.transform.position = this.transform.position;
+            ShieldTimer += Time.deltaTime;
+        }
+        if (ShieldTimer >= 5.0f)
+        {
+            Destroy(shield);
+            ShieldTimer = 0.0f;
+            shieldOn = 0;
+        }
+
+        if (Health == 0)
+        {
+            Destroy(this);
+        }
+
         if (Input.GetButton("Fire1"))
         {
             Debug.Log("Fired");
-            //this.GeneratedTerrain.ChangeTerrainHeight(this.gameObject.transform.position, this.Power);
-            Shoot();
-
+            if (weaponSelect == 1)
+            {
+                this.Weapon.Fire(GetMovementDirection(), transform.position, push);
+            }
         }
+
+        if(Input.GetButtonDown("Fire2") && shieldOn == 0)
+        {
+            Shield();
+        }
+
+        if (Input.GetButtonDown("SortWeapon"))
+        {
+            Debug.Log("Switching Weapons");
+            SwitchWeapon();
+        }
+
 
         ModifiedSpeed = Speed;
         if (Input.GetButton("Jump"))
@@ -96,39 +137,34 @@ public class PlayerController : MonoBehaviour
         gameObject.transform.Translate(MovementDirection * Time.deltaTime * ModifiedSpeed);
     }
 
-    void Shoot()
+    void SwitchWeapon()
     {
-        ShootCounter += Time.deltaTime;
-        if(ShootCounter >= this.FireRate)
+        if (weaponSelect == 1)
         {
-            Vector3 spawnLoc = transform.position + lastMove*SpawnOffset;
-
-            GameObject bullet = Instantiate(sampleProjectile, spawnLoc, Quaternion.identity) as GameObject;
-
-            Rigidbody bullet_rigidbody;
-            bullet_rigidbody = bullet.GetComponent<Rigidbody>();
-            //        bullet_rigidbody.AddRelativeForce()
-
-            Rigidbody player_rigidbody = GetComponent<Rigidbody>();
-            //Debug.Log(player_rigidbody.velocity);
-            //this.transform.up;
-
-            // bullet_rigidbody.AddRelativeForce(lastMove * (push + currentSpeed * ImpulseModifier), ForceMode.Impulse);
-            bullet_rigidbody.AddRelativeForce((lastMove) * (push), ForceMode.Impulse);
-            Debug.Log("Fired");
-            Debug.Log(bullet_rigidbody);
-
-            Destroy(bullet, 4.0f);//destroy bullet after 3 seconds
-            ShootCounter = 0.0f;
+            weaponSelect = 2;
+            Debug.Log("Switching to Weapon 2");
         }
-        if (GetMovementDirection().magnitude > 0)
+        else if (weaponSelect == 2)
         {
-            lastMove = GetMovementDirection();
-            if (lastMove.x > 0 && lastMove.z == 0) { lastMove.x = 1; }
-            if (lastMove.x < 0 && lastMove.z == 0) { lastMove.x = -1; }
-            if (lastMove.z > 0 && lastMove.x == 0) { lastMove.z = 1; }
-            if (lastMove.z < 0 && lastMove.x == 0) { lastMove.z = -1; }
-            Debug.Log(lastMove);
+            weaponSelect = 3;
+            Debug.Log("Switching to Weapon 3");
         }
+        else if (weaponSelect == 3)
+        {
+            weaponSelect = 1;
+            Debug.Log("Switching to Weapon 1");
+        }
+
+    }
+
+    void Shield()
+    {
+        shield = Instantiate(sampleShield, this.transform.position, Quaternion.identity) as GameObject;
+        shieldOn = 1;
+    }
+
+    public void Shoot()
+    {
+        return;
     }
 }
