@@ -5,7 +5,8 @@ namespace Geo.Command
     public interface IGeo
     {
         // Fires a projectile.
-        void Shoot(Vector3 Direction, Vector3 Location, float Force);
+        void Shoot(int WeaponIndex, float SpawnOffset);
+
         // Returns the current speed.
         float GetCurrentSpeed();
 

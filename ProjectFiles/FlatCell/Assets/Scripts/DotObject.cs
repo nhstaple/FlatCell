@@ -18,7 +18,9 @@ public class DotObject : GeoObject
         // Call parent class's method.
         base.Start();
 
-        Weapon = new DotWeapon(this, SpawnOffset, FireRate);
+        // Add the weapon.
+        DotWeapon dotGun = new DotWeapon(this, SpawnOffset, FireRate);
+        weapon.Add(dotGun);
 
         // Add a sphere mesh and collider to the game object.
         SphereCollider volume = gameObject.AddComponent<SphereCollider>();
@@ -26,6 +28,11 @@ public class DotObject : GeoObject
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         GetComponent<MeshFilter>().mesh = sphere.GetComponent<MeshFilter>().mesh;
         Destroy(sphere);
+
+        // Set physics constraints
+        Rigidbody body = gameObject.AddComponent<Rigidbody>();
+        body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
+
     }
 
     // Update is called once per frame

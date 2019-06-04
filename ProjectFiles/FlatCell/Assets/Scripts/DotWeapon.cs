@@ -16,9 +16,6 @@ namespace Weapon.Command
         private float ProjectileLifetime = 2.5f;
         private IProjectile Projectile;
 
-        /** Cosmetics **/
-        private float SpawnOffset;
-
         /** Script variables **/
         // The owner of the weapon
         private IGeo Owner;
@@ -31,7 +28,6 @@ namespace Weapon.Command
         {
             this.Owner = GeoOwner;
             this.Projectile = new DotProjectile(Damage, Piercing, ProjectileLifetime);
-            this.SpawnOffset = Offset;
             this.FireRate = Rate;
         }
 
@@ -46,7 +42,7 @@ namespace Weapon.Command
             this.Piercing = Piercing;
         }
 
-        public void Fire(Vector3 movementDir, Vector3 pos, float push)
+        public void Fire(Vector3 movementDir, Vector3 pos, float push, float SpawnOffset)
         {
             ShootCounter += Time.deltaTime;
             if (ShootCounter >= this.FireRate)

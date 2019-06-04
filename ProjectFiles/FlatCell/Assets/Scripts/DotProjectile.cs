@@ -48,11 +48,14 @@ namespace Projectile.Command
             // Add collision components and set rotation constraints.
             proj.AddComponent<BoxCollider>();
             Rigidbody body = proj.AddComponent<Rigidbody>();
-            body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
             proj.transform.position = Location;
 
             // Destroys projectile after LifeTime seconds.
             GameObject.Destroy(proj, LifeTime);
+
+            // Set the size/
+            proj.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
             return proj;
         }
     }

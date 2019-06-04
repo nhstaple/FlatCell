@@ -11,6 +11,6 @@ namespace Weapon.Command
         void SetDamage(float Damage, float Piercing);
 
         // Fires a projectile.
-        void Fire(Vector3 movementDir, Vector3 pos, float push);
+        void Fire(Vector3 movementDir, Vector3 pos, float push, float SpawnOffset);
     }
 }
