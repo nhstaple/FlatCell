@@ -7,14 +7,10 @@ namespace Obscura
     public class PositionLockCameraController : AbstractCameraController
     {
         // Positions to draw on the HUD.
-        private Vector3 Center = new Vector3(0, 85, 0);
-        private Vector3 Top = new Vector3(0, 85, 5);
-        private Vector3 Bottom = new Vector3(0, 85, -5);
-        private Vector3 Right = new Vector3(5, 85, 0);
-        private Vector3 Left = new Vector3(-5, 85, 0);
-
+        public float cam_offset = 50;
         private Camera ManagedCamera;
         private LineRenderer CameraLineRenderer;
+
 
         private void Awake()
         {
@@ -25,6 +21,7 @@ namespace Obscura
             var targetPosition = Target.transform.position;
             var cameraPosition = ManagedCamera.transform.position;
             cameraPosition.x = targetPosition.x;
+            cameraPosition.y = targetPosition.y + cam_offset;
             cameraPosition.z = targetPosition.z;
             ManagedCamera.transform.position = cameraPosition;
         }
@@ -37,6 +34,7 @@ namespace Obscura
             var cameraPosition = ManagedCamera.transform.position;
 
             cameraPosition.x = targetPosition.x;
+            cameraPosition.y = targetPosition.y + cam_offset;
             cameraPosition.z = targetPosition.z;
 
             ManagedCamera.transform.position = cameraPosition;
@@ -54,6 +52,12 @@ namespace Obscura
 
         public override void DrawCameraLogic()
         {
+            Vector3 Center = new Vector3(0, 0, cam_offset);
+            Vector3 Top = new Vector3(0, 5, cam_offset);
+            Vector3 Bottom = new Vector3(0, -5, cam_offset);
+            Vector3 Right = new Vector3(5, 0, cam_offset);
+            Vector3 Left = new Vector3(-5, 0, cam_offset);
+
             CameraLineRenderer.positionCount = 8;
             CameraLineRenderer.useWorldSpace = false;
             CameraLineRenderer.SetPosition(0, Center);
