@@ -35,15 +35,15 @@ public class PlayerController : DotObject
     private int shieldOn;
     private float ShieldTimer;
 
-    private void Start()
+    new private void Start()
     {
-        prevPos = new Vector3(0.0f, 0.0f, 0.0f);
-        currentSpeed = 0;
-        this.Weapon = new DotWeapon(this, PlayerProjectile, SpawnOffset, FireRate);
+        // Call parent class's method.
+        base.Start();
+        PrevPos = new Vector3(0.0f, 0.0f, 0.0f);
         weaponSelect = 1;
         shieldOn = 0;
         ShieldTimer = 0.0f;
-        Health = MaxHealth;
+
         Rigidbody body = GetComponent<Rigidbody>();
         body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; // | RigidbodyConstraints.FreezePositionY;
     }
@@ -62,12 +62,6 @@ public class PlayerController : DotObject
     public Vector3 GetMovementDirection()
     {
         return MovementDirection;
-    }
-
-    private void FixedUpdate()
-    {
-        currentSpeed = (transform.position - prevPos).magnitude / Time.deltaTime;
-        prevPos = this.transform.position;
     }
 
     void Update()

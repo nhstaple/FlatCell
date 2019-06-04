@@ -27,10 +27,10 @@ namespace Weapon.Command
         // Keeps track of the last time the weapon was shot.
         private float ShootCounter;
 
-        public DotWeapon(IGeo GeoOwner, GameObject ProjectilePrefab, float Offset, float Rate)
+        public DotWeapon(IGeo GeoOwner , float Offset, float Rate)
         {
             this.Owner = GeoOwner;
-            this.Projectile = new DotProjectile(ProjectilePrefab, Damage, Piercing, ProjectileLifetime);
+            this.Projectile = new DotProjectile(Damage, Piercing, ProjectileLifetime);
             this.SpawnOffset = Offset;
             this.FireRate = Rate;
         }
