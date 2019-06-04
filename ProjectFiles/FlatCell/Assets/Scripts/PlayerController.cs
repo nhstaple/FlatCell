@@ -6,25 +6,16 @@ using Weapon.Command;
 using Geo.Command;
 
 [RequireComponent(typeof(TrailRenderer))]
-public class PlayerController : MonoBehaviour, IGeo
+public class PlayerController : DotObject
 {
     /** Player Stats **/
-    [SerializeField] private float Speed = 100.0f;
-    [SerializeField] private float BoostFactor = 4.0f;
-    [SerializeField] private float MaxHealth = 10.0f;
-    [SerializeField] private float FireRate = 0.25f;
-    // The player's current HP.
-    private float Health;
-    // The player's armor.
-    private float Armor = 0.0f;
-    // The player's shield mana. Ie, burns through when active and recharges when inactive.
-    private float ShieldMana = 0.0f;
-    // The player's weapon. 
-    private IWeapon Weapon;
+    // The AI spawner
+    DotSpawner Factory;
+    private float SpawnCounter = 0.5f;
+    private int SpawnCount = 10;
 
     /** Cosmetics **/
     [SerializeField] private float TrailDecay = 2.5f;
-    [SerializeField] private float SpawnOffset = 10f;
     // The force applied to the projectile. 
     [SerializeField] private float push = 100.0f;
 
@@ -32,12 +23,8 @@ public class PlayerController : MonoBehaviour, IGeo
     [SerializeField] public GameObject PlayerProjectile;
 
     /** Script variables **/
-    private Vector3 lastMove;
     private float ModifiedSpeed;
-    private Vector3 MovementDirection;
     private TrailRenderer trail;
-    private float currentSpeed;
-    private Vector3 prevPos;
     // Added to track the 3 moves we can use
     private int weaponSelect;
     // Components for a Shield
@@ -57,17 +44,19 @@ public class PlayerController : MonoBehaviour, IGeo
         shieldOn = 0;
         ShieldTimer = 0.0f;
         Health = MaxHealth;
+        Rigidbody body = GetComponent<Rigidbody>();
+        body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ; // | RigidbodyConstraints.FreezePositionY;
     }
 
     void Awake()
     {
         transform.position = new Vector3(0, 5, 0);
         this.trail = this.GetComponent<TrailRenderer>();
-    }
-
-    public float GetCurrentSpeed()
-    {
-        return currentSpeed;
+        Factory = new DotSpawner();
+        for (int i = 0; i < SpawnCount; i++)
+        {
+            Factory.Spawn();
+        }
     }
 
     public Vector3 GetMovementDirection()
@@ -83,7 +72,15 @@ public class PlayerController : MonoBehaviour, IGeo
 
     void Update()
     {
-        //Debug.Log(currentSpeed);
+        /*
+        SpawnCounter += Time.deltaTime;
+        if(SpawnCounter >= 0.5)
+        {
+            Debug.Log("Spawned");
+            Factory.Spawn();
+            SpawnCounter = 0;
+        }
+        */
         if(shield != null && shieldOn == 1)
         {
             Debug.Log("Shield On");

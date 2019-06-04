@@ -36,17 +36,19 @@ namespace Projectile.Command
         // Spawn the projectile.
         public GameObject Spawn(Vector3 Location)
         {
-            GameObject proj = GameObject.Instantiate(DotProjPrefab, Location, Quaternion.identity);
+            // GameObject proj = GameObject.Instantiate(DotProjPrefab, Location, Quaternion.identity);
+            GameObject proj = new GameObject("Projectile");
+            proj.AddComponent<BoxCollider>();
+            MeshFilter filter = proj.AddComponent<MeshFilter>();
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            filter.mesh = cube.GetComponent<MeshFilter>().mesh;
+            GameObject.Destroy(cube);
+            proj.AddComponent<MeshRenderer>();
+            Rigidbody body = proj.AddComponent<Rigidbody>();
+            body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            proj.transform.position = Location;
             GameObject.Destroy(proj, LifeTime);
             return proj;
-        }
-
-        // Check for collisions with other objects.
-        public void OnCollisionEnter(Collision collision)
-        {
-            //if(Collider.GameObject == Enemy || Collider.GameObject == Boss)
-            GameObject.Destroy(this.DotProjPrefab);
-            //and then destroy Enemy or inflict Damage on Boss
         }
 
         public GameObject GetPrefab()
