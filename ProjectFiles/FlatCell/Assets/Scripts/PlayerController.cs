@@ -49,15 +49,10 @@ public class PlayerController : DotObject
     {
         transform.position = new Vector3(0, 25, 0);
         this.trail = this.GetComponent<TrailRenderer>();
-        factory = new DotSpawner();
-        for (int i = 0; i < spawnCount; i++)
-        {
-            factory.Spawn();
-        }
         transform.localScale = new Vector3(25, 25, 25);
     }
 
-    void Update()
+    new void Update()
     {
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         /*
