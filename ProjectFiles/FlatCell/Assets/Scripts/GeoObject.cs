@@ -80,6 +80,11 @@ public class GeoObject : MonoBehaviour, IGeo
         }
     }
 
+    public Vector3 GetForward()
+    {
+        return transform.forward;
+    }
+
     public void OnCollisionEnter(Collision collision)
     {
         

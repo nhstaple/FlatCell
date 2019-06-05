@@ -108,7 +108,7 @@ public class PlayerController : DotObject
 
         if (Input.GetButton("Fire1"))
         {
-            Debug.Log("Fired");
+            // Debug.Log("Fired");
             Shoot(weaponSelect, SpawnOffset);
         }
 
@@ -144,6 +144,7 @@ public class PlayerController : DotObject
         // Move our position a step closer to the target.
         transform.position = Vector3.MoveTowards(transform.position, transform.position + movementDirection * step, step);
         transform.forward = newDir;
+        Debug.Log(transform.forward);
     }
 
     void SwitchWeapon()

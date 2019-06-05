@@ -12,5 +12,7 @@ namespace Geo.Command
 
         // Check for collisions with other objects.
         void OnCollisionEnter(Collision collision);
+
+        Vector3 GetForward();
     }
 }

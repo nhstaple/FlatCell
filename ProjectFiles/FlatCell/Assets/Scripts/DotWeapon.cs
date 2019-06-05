@@ -48,7 +48,8 @@ namespace Weapon.Command
             if (ShootCounter >= this.FireRate)
             {
                 ShootCounter = 0.0f;
-                Vector3 spawnLoc = pos + lastMove * SpawnOffset;
+                Debug.Log(Owner.GetForward());
+                Vector3 spawnLoc = pos + Owner.GetForward() * SpawnOffset;
                 GameObject bullet = Projectile.Spawn(spawnLoc);
                 Rigidbody bullet_rigidbody;
                 bullet_rigidbody = bullet.GetComponent<Rigidbody>();
@@ -61,7 +62,7 @@ namespace Weapon.Command
                 if (lastMove.x < 0 && lastMove.z == 0) { lastMove.x = -1; }
                 if (lastMove.z > 0 && lastMove.x == 0) { lastMove.z = 1; }
                 if (lastMove.z < 0 && lastMove.x == 0) { lastMove.z = -1; }
-                Debug.Log(lastMove);
+                // Debug.Log(lastMove);
             }
 
             return;
