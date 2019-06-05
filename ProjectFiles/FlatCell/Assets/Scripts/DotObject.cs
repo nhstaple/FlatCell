@@ -30,15 +30,15 @@ public class DotObject : GeoObject
         Destroy(sphere);
 
         // Set physics constraints
-        Rigidbody body = gameObject.AddComponent<Rigidbody>();
+        Debug.Log(base.gameObject.ToString());
+        Rigidbody body = base.gameObject.AddComponent<Rigidbody>();
         body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
-
     }
 
     // Update is called once per frame
-    void Update()
+    new public void Update()
     {
-
+        base.Update();
     }
 
 }

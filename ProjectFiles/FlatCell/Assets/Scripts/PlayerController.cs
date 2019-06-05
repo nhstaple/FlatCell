@@ -47,7 +47,7 @@ public class PlayerController : DotObject
 
     void Awake()
     {
-        transform.position = new Vector3(0, 5, 0);
+        transform.position = new Vector3(0, 25, 0);
         this.trail = this.GetComponent<TrailRenderer>();
         factory = new DotSpawner();
         for (int i = 0; i < spawnCount; i++)

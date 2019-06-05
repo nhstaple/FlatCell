@@ -50,9 +50,9 @@ public class GeoObject : MonoBehaviour, IGeo
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        
+
     }
 
     /** IGeo methods **/
@@ -89,7 +89,7 @@ public class GeoObject : MonoBehaviour, IGeo
             Debug.Log("interface match");
             Destroy(collision.gameObject, .1f);
         }
-        
+                
         return;
     }
 }
