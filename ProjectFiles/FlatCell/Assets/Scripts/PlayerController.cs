@@ -137,9 +137,13 @@ public class PlayerController : DotObject
                 trail.widthMultiplier -= Time.deltaTime * trailDecay;
             }
         }
-
+        float step = modifiedSpeed * Time.deltaTime;
         movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-        gameObject.transform.Translate(movementDirection * Time.deltaTime * modifiedSpeed);
+        Vector3 old = transform.position;
+        Vector3 newDir = Vector3.RotateTowards(transform.forward, new Vector3(movementDirection.x, 0, movementDirection.z), step, 0.0f);
+        // Move our position a step closer to the target.
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + movementDirection * step, step);
+        transform.forward = newDir;
     }
 
     void SwitchWeapon()

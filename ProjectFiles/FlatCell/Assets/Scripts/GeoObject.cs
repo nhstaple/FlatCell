@@ -41,6 +41,8 @@ public class GeoObject : MonoBehaviour, IGeo
         // Init values. 
         currentSpeed = 0;
         health = MaxHealth;
+
+        transform.forward = new Vector3(1, 0, 0);
     }
 
     public void FixedUpdate()
@@ -70,11 +72,11 @@ public class GeoObject : MonoBehaviour, IGeo
     {
         if(weapon.Count > 1 && WeaponIndex < weapon.Count)
         {
-            weapon[WeaponIndex].Fire(GetMovementDirection(), transform.position, Push, SpawnOffset);
+            weapon[WeaponIndex].Fire(transform.forward, transform.position, Push, SpawnOffset);
         }
         else if(weapon.Count == 1)
         {
-            weapon[0].Fire(GetMovementDirection(), transform.position, Push, SpawnOffset);
+            weapon[0].Fire(transform.forward, transform.position, Push, SpawnOffset);
         }
     }
 
