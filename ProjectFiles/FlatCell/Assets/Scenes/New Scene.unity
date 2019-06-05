@@ -260,7 +260,7 @@ MonoBehaviour:
   gridSize: 10
   gridPlane: {fileID: 8659519363311212023, guid: 89454cd2d29dbae4798739b0e632a006,
     type: 3}
-  boundary: {fileID: 4073489969973322299, guid: a7cc91df39c03463cbf18277023e35df,
+  boundary: {fileID: 4073489969973322299, guid: 0f763dfd9b8513e4a8ee04b4c3403e12,
     type: 3}
 --- !u!23 &627442044
 MeshRenderer:
