@@ -70,6 +70,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             controller.health = controller.MaxHealth;
             var score = controller.killHistory["Dot"];
             controller.killHistory["Dot"] = (int)UnityEngine.Random.Range(score * 0.50f, score * 0.75f);
+            /*
             var scale = controller.transform.localScale;
             if(score >= 25)
             {
@@ -82,6 +83,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
                 controller.SpawnOffset = controller.initSpawnOffset + (int)score;
             }
             controller.transform.localScale = scale;
+            */           
             Debug.Log("You died! Fool");
         }
         else if(Alive.Contains(Dot))
@@ -91,7 +93,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             if(KilledByPlayer)
             {
                 PlayerController p = player.GetComponent<PlayerController>();
-                p.killHistory["Dot"] = p.killHistory["Dot"] + 5;
+                p.killHistory["Dot"] = p.killHistory["Dot"] + 1;
             }
         }
     }
