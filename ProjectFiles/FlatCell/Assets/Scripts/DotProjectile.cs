@@ -56,6 +56,11 @@ namespace Projectile.Command
 
             // Set the size/
             proj.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+
+            // For damage calc
+            ProjectileObject bullet = proj.AddComponent<ProjectileObject>();
+            bullet.SetDamage(Damage, Piercing);
+            bullet.SetLifeTime(LifeTime);
             return proj;
         }
     }

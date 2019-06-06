@@ -82,7 +82,7 @@ public class DotController : DotObject
 
     new public void OnCollisionEnter(Collision collision)
     {
-
+        base.OnCollisionEnter(collision);
         Debug.Log("collided with ");
         Debug.Log(collision.gameObject.ToString());
 

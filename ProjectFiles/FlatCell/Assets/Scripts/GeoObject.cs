@@ -10,7 +10,7 @@ public class GeoObject : MonoBehaviour, IGeo
     /** Geo Stats **/
     [SerializeField] public float Speed = 100.0f;
     [SerializeField] public float BoostFactor = 4.0f;
-    [SerializeField] public float MaxHealth = 10.0f;
+    [SerializeField] public float MaxHealth = 5.0f;
     [SerializeField] public float FireRate = 0.25f;
 
     public float health;
@@ -54,7 +54,10 @@ public class GeoObject : MonoBehaviour, IGeo
     // Update is called once per frame
     public void Update()
     {
-
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     /** IGeo methods **/
@@ -68,7 +71,7 @@ public class GeoObject : MonoBehaviour, IGeo
         return movementDirection;
     }
 
-    public void Shoot(int WeaponIndex = 0, float SpawnOffset = 15)
+    public void Shoot(int WeaponIndex = 0, float SpawnOffset = 20)
     {
         if(weapon.Count > 1 && WeaponIndex < weapon.Count)
         {
@@ -95,6 +98,8 @@ public class GeoObject : MonoBehaviour, IGeo
         {
             Debug.Log("interface match");
             Destroy(collision.gameObject, .1f);
+            ProjectileObject bullet = collision.gameObject.GetComponent<ProjectileObject>();
+            health -= bullet.GetDamage();
         }
                 
         return;

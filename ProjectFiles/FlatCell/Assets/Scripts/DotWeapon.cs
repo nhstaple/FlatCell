@@ -48,7 +48,6 @@ namespace Weapon.Command
             if (ShootCounter >= this.FireRate)
             {
                 ShootCounter = 0.0f;
-                Debug.Log(Owner.GetForward());
                 Vector3 spawnLoc = pos + Owner.GetForward() * SpawnOffset;
                 GameObject bullet = Projectile.Spawn(spawnLoc);
                 Rigidbody bullet_rigidbody;

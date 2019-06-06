@@ -54,6 +54,7 @@ public class PlayerController : DotObject
 
     new void Update()
     {
+        base.Update();
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         /*
         SpawnCounter += Time.deltaTime;
@@ -96,11 +97,6 @@ public class PlayerController : DotObject
             shieldOn = 0;
         }
 
-        if (health == 0)
-        {
-            Destroy(this);
-        }
-
         if (Input.GetButton("Fire1"))
         {
             // Debug.Log("Fired");
@@ -139,7 +135,6 @@ public class PlayerController : DotObject
         // Move our position a step closer to the target.
         transform.position = Vector3.MoveTowards(transform.position, transform.position + movementDirection * step, step);
         transform.forward = newDir;
-        Debug.Log(transform.forward);
     }
 
     void SwitchWeapon()
