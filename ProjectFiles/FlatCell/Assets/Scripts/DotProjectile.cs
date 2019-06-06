@@ -22,6 +22,8 @@ namespace Projectile.Command
 
         public IWeapon Owner;
 
+        private Renderer renderer;
+
         public DotProjectile(IWeapon gun, float Damage, float Piercing, float LifeTime)
         {
             this.Owner = gun;
@@ -46,7 +48,7 @@ namespace Projectile.Command
             GameObject proj = new GameObject(owner.ToString() + " Projectile " + Counter);
 
             // Add mesh components
-            proj.AddComponent<MeshRenderer>();
+            renderer = proj.AddComponent<MeshRenderer>();
             MeshFilter filter = proj.AddComponent<MeshFilter>();
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             filter.mesh = cube.GetComponent<MeshFilter>().mesh;
@@ -68,6 +70,11 @@ namespace Projectile.Command
             ProjectileObject bullet = proj.AddComponent<ProjectileObject>();
             bullet.SetDamage(Damage, Piercing);
             bullet.SetLifeTime(LifeTime);
+
+            renderer.material = GameObject.Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
+            renderer.material.color = Owner.GetOwner().GetColor();
+            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+
             return proj;
         }
     }

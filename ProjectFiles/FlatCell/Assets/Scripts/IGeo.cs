@@ -14,5 +14,7 @@ namespace Geo.Command
         void OnCollisionEnter(Collision collision);
 
         Vector3 GetForward();
+
+        Color GetColor();
     }
 }

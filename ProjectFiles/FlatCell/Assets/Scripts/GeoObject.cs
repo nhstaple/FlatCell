@@ -32,6 +32,10 @@ public class GeoObject : MonoBehaviour, IGeo
     public Vector3 prevPos;
     public bool killedByPlayer = false;
 
+    public Color color;
+    private Renderer renderer;
+    const float colorRefreshPoll = 0.5f;
+    private float refreshCounter = 0;
 
     // Start is called before the first frame update
     public void Start()
@@ -47,6 +51,28 @@ public class GeoObject : MonoBehaviour, IGeo
         health = MaxHealth;
 
         transform.forward = new Vector3(1, 0, 0);
+
+        // Set material
+        color = Color.clear;
+
+        var res = Random.Range(1, 100);
+        if (1 <= res && res <= 33)
+        {
+            color = Color.red;
+        }
+        else if (res > 33 && res < 66)
+        {
+            color = Color.blue;
+        }
+        else
+        {
+            color = Color.green;
+        }
+
+        renderer = gameObject.GetComponent<MeshRenderer>();
+        renderer.material = Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
+        renderer.material.color = this.color;
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
     }
 
     public void FixedUpdate()
@@ -58,11 +84,17 @@ public class GeoObject : MonoBehaviour, IGeo
     // Update is called once per frame
     public void Update()
     {
+        refreshCounter += Time.deltaTime;
         if (health <= 0)
         {
             GameObject spawner = GameObject.FindWithTag("DotSpawner");
             ISpawner controller = spawner.GetComponent<DotSpawner>();
             controller.Kill(this.gameObject, killedByPlayer);
+        }
+        if (refreshCounter >= colorRefreshPoll)
+        {
+            renderer.material.color = this.color;
+            refreshCounter = 0;
         }
     }
 
@@ -75,6 +107,11 @@ public class GeoObject : MonoBehaviour, IGeo
     public Vector3 GetMovementDirection()
     {
         return movementDirection;
+    }
+
+    public Color GetColor()
+    {
+        return color;
     }
 
     public void Shoot(int WeaponIndex = 0, float SpawnOffset = 20)
