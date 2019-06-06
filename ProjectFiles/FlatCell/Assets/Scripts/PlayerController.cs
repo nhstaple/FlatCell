@@ -5,7 +5,6 @@ using UnityEngine;
 using Weapon.Command;
 using Geo.Command;
 
-[RequireComponent(typeof(TrailRenderer))]
 public class PlayerController : DotObject
 {
     /** Player Stats **/
@@ -15,15 +14,12 @@ public class PlayerController : DotObject
     private int spawnCount = 10;
     public Dictionary<string, int> killHistory;
 
-    /** Cosmetics **/
-    [SerializeField] private float trailDecay = 1f;
-
     /** Prefabs **/
     [SerializeField] public GameObject PlayerProjectile;
 
     /** Script variables **/
     private float modifiedSpeed;
-    private TrailRenderer trail;
+    // private TrailRenderer trail;
     // Added to track the 3 moves we can use
     private int weaponSelect;
     // Components for a Shield
@@ -50,12 +46,12 @@ public class PlayerController : DotObject
         initSpawnOffset = SpawnOffset;
         // this.color = Color.clear;
         this.color = Color.grey;
+        trail.enabled = true;
     }
 
     void Awake()
     {
         transform.position = new Vector3(0, 25, 0);
-        this.trail = this.GetComponent<TrailRenderer>();
         transform.localScale = new Vector3(25, 25, 25);
     }
 
@@ -116,7 +112,7 @@ public class PlayerController : DotObject
             Shoot(weaponSelect, SpawnOffset);
         }
 
-        if (Input.GetButtonDown("Fire2") && shieldOn == 0)
+        else if(Input.GetButtonDown("Fire2") && shieldOn == 0)
         {
             Shield();
         }

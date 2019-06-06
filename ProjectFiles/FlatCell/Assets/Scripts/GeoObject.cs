@@ -24,8 +24,10 @@ public class GeoObject : MonoBehaviour, IGeo
     /** Cosemetics **/
     // The force applied to the projectile. 
     [SerializeField] private float Push = 100.0f;
+    [SerializeField] public float trailDecay = 1f;
 
     /** Script variables **/
+    public TrailRenderer trail;
     public Vector3 lastMovement;
     public Vector3 movementDirection;
     public float currentSpeed;
@@ -35,7 +37,7 @@ public class GeoObject : MonoBehaviour, IGeo
     public Color color;
     private Renderer renderer;
     const float colorRefreshPoll = 0.5f;
-    private float refreshCounter = 0;
+    public float refreshCounter = 0;
 
     // Start is called before the first frame update
     public void Start()
@@ -73,6 +75,12 @@ public class GeoObject : MonoBehaviour, IGeo
         renderer.material = Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
         renderer.material.color = this.color;
         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        trail = gameObject.AddComponent<TrailRenderer>();
+        trail.startColor = this.color;
+        trail.endColor = Color.white;
+        trail.material = new Material(Resources.Load("TrailShader", typeof(Shader)) as Shader);
+        trail.enabled = true;
+        trail.time = 1.0f;
     }
 
     public void FixedUpdate()
@@ -94,6 +102,8 @@ public class GeoObject : MonoBehaviour, IGeo
         if (refreshCounter >= colorRefreshPoll)
         {
             renderer.material.color = this.color;
+            trail.startColor = this.color;
+            trail.endColor = Color.black;
             refreshCounter = 0;
         }
     }
