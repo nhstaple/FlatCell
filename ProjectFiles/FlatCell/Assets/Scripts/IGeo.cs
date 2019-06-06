@@ -16,5 +16,7 @@ namespace Geo.Command
         Vector3 GetForward();
 
         Color GetColor();
+
+        bool AreShieldsActive();
     }
 }

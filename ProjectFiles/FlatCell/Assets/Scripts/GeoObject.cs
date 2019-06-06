@@ -21,6 +21,11 @@ public class GeoObject : MonoBehaviour, IGeo
     public float dhieldMana = 0.0f;
     public List<IWeapon> weapon;
 
+    [SerializeField] public float shieldMana;
+    public const float MAXSHIELDMANA = 2.0f;
+    public bool shieldReady;
+    public bool shieldActive;
+
     /** Cosemetics **/
     // The force applied to the projectile. 
     [SerializeField] private float Push = 100.0f;
@@ -35,7 +40,7 @@ public class GeoObject : MonoBehaviour, IGeo
     public bool killedByPlayer = false;
 
     public Color color;
-    private Renderer renderer;
+    public Renderer renderer;
     const float colorRefreshPoll = 0.5f;
     public float refreshCounter = 0;
 
@@ -81,6 +86,8 @@ public class GeoObject : MonoBehaviour, IGeo
         trail.material = new Material(Resources.Load("TrailShader", typeof(Shader)) as Shader);
         trail.enabled = true;
         trail.time = 1.0f;
+        shieldReady = true;
+        shieldActive = false;
     }
 
     public void FixedUpdate()
@@ -152,13 +159,20 @@ public class GeoObject : MonoBehaviour, IGeo
             Debug.Log("interface match");
             Destroy(collision.gameObject, .1f);
             ProjectileObject bullet = collision.gameObject.GetComponent<ProjectileObject>();
-            health -= bullet.GetDamage();
+            if (!shieldActive)
+            {
+                health -= bullet.GetDamage();
+            }
             if(health <= 0 && collision.gameObject.ToString().Contains("Player"))
             {
                 killedByPlayer = true;
             }
-        }
-                
+        }            
         return;
+    }
+
+    public bool AreShieldsActive()
+    {
+        return shieldActive;
     }
 }

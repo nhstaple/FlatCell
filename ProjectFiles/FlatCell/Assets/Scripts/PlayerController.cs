@@ -22,13 +22,8 @@ public class PlayerController : DotObject
     // private TrailRenderer trail;
     // Added to track the 3 moves we can use
     private int weaponSelect;
-    // Components for a Shield
-    [SerializeField] public GameObject sampleShield;
-    // gets sampleShield passed into it with instantiation
-    private GameObject shield;
     //if shield is on, maybe disable other actions
     private int shieldOn;
-    private float ShieldTimer;
     public float initSpawnOffset;
 
     private bool GrowFlag = false;
@@ -40,7 +35,7 @@ public class PlayerController : DotObject
         prevPos = new Vector3(0.0f, 5.0f, 0.0f);
         weaponSelect = 1;
         shieldOn = 0;
-        ShieldTimer = 0.0f;
+        shieldMana = MAXSHIELDMANA;
         killHistory = new Dictionary<string, int>();
         killHistory.Add("Dot", 0);
         initSpawnOffset = SpawnOffset;
@@ -76,10 +71,8 @@ public class PlayerController : DotObject
                 GrowFlag = true;
             }
         }
-        */
-
+            
         // Check for incremental evolution.
-
         if (killHistory["Dot"] >= 25)
         {
             transform.localScale = new Vector3(50, 1, 1);
@@ -90,31 +83,41 @@ public class PlayerController : DotObject
             transform.localScale = new Vector3(25 + killHistory["Dot"], 25 - killHistory["Dot"], 25 - killHistory["Dot"]);
             SpawnOffset = initSpawnOffset + (int)killHistory["Dot"];
         }
+        */
 
-
-        if(shield != null && shieldOn == 1)
+        modifiedSpeed = Speed;
+        if (Input.GetButton("Jump"))
         {
-            Debug.Log("Shield On");
-            this.shield.transform.position = this.transform.position;
-            ShieldTimer += Time.deltaTime;
+            modifiedSpeed *= BoostFactor;
+            trail.widthMultiplier = BoostFactor;
         }
-
-        if (ShieldTimer >= 5.0f)
-        {
-            Destroy(shield);
-            ShieldTimer = 0.0f;
-            shieldOn = 0;
+        else if (Input.GetButton("Fire2") && shieldMana >= 0 && shieldReady)
+        { 
+            Shield();
         }
-
-        if (Input.GetButton("Fire1"))
+        else if (Input.GetButton("Fire1") && !shieldActive)
         {
             // Debug.Log("Fired");
             Shoot(weaponSelect, SpawnOffset);
         }
-
-        else if(Input.GetButtonDown("Fire2") && shieldOn == 0)
+        else
         {
-            Shield();
+            shieldActive = false;
+            if(shieldMana <= 0)
+            {
+                shieldReady = false;
+            }
+            shieldMana += Time.deltaTime;
+            if (shieldMana >= MAXSHIELDMANA)
+            {
+                shieldMana = MAXSHIELDMANA;
+                shieldReady = true;
+            }
+            renderer.material.DisableKeyword("_EMISSION");
+            if (trail.widthMultiplier >= 1.0f)
+            {
+                trail.widthMultiplier -= Time.deltaTime * trailDecay;
+            }
         }
 
         if (Input.GetButtonDown("SortWeapon"))
@@ -123,20 +126,6 @@ public class PlayerController : DotObject
             SwitchWeapon();
         }
 
-        modifiedSpeed = Speed;
-        if (Input.GetButton("Jump"))
-        {
-            modifiedSpeed *= BoostFactor;
-            trail.widthMultiplier = BoostFactor;
-        }
-
-        else
-        {
-            if (trail.widthMultiplier >= 1.0f)
-            {
-                trail.widthMultiplier -= Time.deltaTime * trailDecay;
-            }
-        }
         float step = modifiedSpeed * Time.deltaTime;
         movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
         Vector3 old = transform.position;
@@ -168,7 +157,8 @@ public class PlayerController : DotObject
 
     void Shield()
     {
-        shield = Instantiate(sampleShield, this.transform.position, Quaternion.identity) as GameObject;
-        shieldOn = 1;
+        renderer.material.EnableKeyword("_EMISSION");
+        shieldMana -= Time.deltaTime;
+        shieldActive = true;
     }
 }
