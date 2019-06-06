@@ -48,6 +48,8 @@ public class PlayerController : DotObject
         killHistory = new Dictionary<string, int>();
         killHistory.Add("Dot", 0);
         initSpawnOffset = SpawnOffset;
+        // this.color = Color.clear;
+        this.color = Color.grey;
     }
 
     void Awake()
