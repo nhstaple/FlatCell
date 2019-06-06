@@ -2,9 +2,6 @@
 
 public class colorPlane : MonoBehaviour
 {
-    void Start()
-    {
-    }
     void Awake()
     {
         // Pick a random, saturated and not-too-dark color

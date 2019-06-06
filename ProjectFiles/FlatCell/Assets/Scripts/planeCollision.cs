@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class planeCollision : MonoBehaviour
 {
-
+    GameObject player;
+    void Start()
+    {
+        player = GameObject.FindWithTag("Player");
+    }
     void OnTriggerEnter(Collider other)
     {
-        GetComponent<Renderer>().material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+        if(other.gameObject.ToString().Contains("Player") && !other.gameObject.ToString().Contains("Projectile"))
+        {
+            GetComponent<Renderer>().material.color = player.GetComponent<PlayerController>().color;
+        }
     }
 
 }
