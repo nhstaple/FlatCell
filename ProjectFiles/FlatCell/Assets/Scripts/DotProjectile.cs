@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Projectile.Command;
+using Weapon.Command;
+using Geo.Command;
 
 namespace Projectile.Command
 {
@@ -18,8 +20,11 @@ namespace Projectile.Command
 
         private float Counter = -1;
 
-        public DotProjectile(float Damage, float Piercing, float LifeTime)
+        public IWeapon Owner;
+
+        public DotProjectile(IWeapon gun, float Damage, float Piercing, float LifeTime)
         {
+            this.Owner = gun;
             this.Damage = Damage;
             this.Piercing = Piercing;
             this.LifeTime = LifeTime;
@@ -35,8 +40,10 @@ namespace Projectile.Command
         public GameObject Spawn(Vector3 Location)
         {
             Counter++;
+            IGeo owner = Owner.GetOwner();
+
             // Create a new projectile object.
-            GameObject proj = new GameObject("Projectile" + Counter);
+            GameObject proj = new GameObject(owner.ToString() + " Projectile " + Counter);
 
             // Add mesh components
             proj.AddComponent<MeshRenderer>();

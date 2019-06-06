@@ -5,13 +5,16 @@ using UnityEngine;
 using Weapon.Command;
 using Geo.Command;
 using Projectile.Command;
+using Spawner.Command;
+
 public class GeoObject : MonoBehaviour, IGeo
 {
     /** Geo Stats **/
-    [SerializeField] public float Speed = 100.0f;
-    [SerializeField] public float BoostFactor = 4.0f;
-    [SerializeField] public float MaxHealth = 5.0f;
-    [SerializeField] public float FireRate = 0.25f;
+    [SerializeField] public float Speed;
+    [SerializeField] public float BoostFactor;
+    [SerializeField] public float MaxHealth;
+    [SerializeField] public float FireRate;
+    [SerializeField] public float Damage;
 
     public float health;
     public float armor = 0.0f;
@@ -27,6 +30,7 @@ public class GeoObject : MonoBehaviour, IGeo
     public Vector3 movementDirection;
     public float currentSpeed;
     public Vector3 prevPos;
+    public bool killedByPlayer = false;
 
 
     // Start is called before the first frame update
@@ -56,7 +60,9 @@ public class GeoObject : MonoBehaviour, IGeo
     {
         if (health <= 0)
         {
-            Destroy(this.gameObject);
+            GameObject spawner = GameObject.FindWithTag("DotSpawner");
+            ISpawner controller = spawner.GetComponent<DotSpawner>();
+            controller.Kill(this.gameObject, killedByPlayer);
         }
     }
 
@@ -100,6 +106,10 @@ public class GeoObject : MonoBehaviour, IGeo
             Destroy(collision.gameObject, .1f);
             ProjectileObject bullet = collision.gameObject.GetComponent<ProjectileObject>();
             health -= bullet.GetDamage();
+            if(health <= 0 && collision.gameObject.ToString().Contains("Player"))
+            {
+                killedByPlayer = true;
+            }
         }
                 
         return;

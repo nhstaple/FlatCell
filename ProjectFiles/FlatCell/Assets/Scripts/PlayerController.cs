@@ -13,6 +13,7 @@ public class PlayerController : DotObject
     DotSpawner factory;
     private float spawnCounter = 0.5f;
     private int spawnCount = 10;
+    public Dictionary<string, int> killHistory;
 
     /** Cosmetics **/
     [SerializeField] private float trailDecay = 1f;
@@ -32,6 +33,7 @@ public class PlayerController : DotObject
     //if shield is on, maybe disable other actions
     private int shieldOn;
     private float ShieldTimer;
+    public float initSpawnOffset;
 
     private bool GrowFlag = false;
 
@@ -43,6 +45,9 @@ public class PlayerController : DotObject
         weaponSelect = 1;
         shieldOn = 0;
         ShieldTimer = 0.0f;
+        killHistory = new Dictionary<string, int>();
+        killHistory.Add("Dot", 0);
+        initSpawnOffset = SpawnOffset;
     }
 
     void Awake()
@@ -57,14 +62,6 @@ public class PlayerController : DotObject
         base.Update();
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         /*
-        SpawnCounter += Time.deltaTime;
-        if(SpawnCounter >= 0.5)
-        {
-            Debug.Log("Spawned");
-            Factory.Spawn();
-            SpawnCounter = 0;
-        }
-        
         if(transform.localScale.x <= 25 && GrowFlag)
         {
             transform.localScale += new Vector3(0.1f, 0.00f, 0.0f);
@@ -82,6 +79,20 @@ public class PlayerController : DotObject
             }
         }
         */
+
+        // Check for incremental evolution.
+
+        if (killHistory["Dot"] >= 25)
+        {
+            transform.localScale = new Vector3(50, 1, 1);
+            SpawnOffset = initSpawnOffset + 15;
+        }
+        else
+        {
+            transform.localScale = new Vector3(25 + killHistory["Dot"], 25 - killHistory["Dot"], 25 - killHistory["Dot"]);
+            SpawnOffset = initSpawnOffset + (int)killHistory["Dot"];
+        }
+
 
         if(shield != null && shieldOn == 1)
         {

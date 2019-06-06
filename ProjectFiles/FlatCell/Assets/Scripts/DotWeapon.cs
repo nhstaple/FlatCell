@@ -18,7 +18,7 @@ namespace Weapon.Command
 
         /** Script variables **/
         // The owner of the weapon
-        private IGeo Owner;
+        public IGeo Owner;
         // Keeps track of the player's last input values.
         private Vector3 lastMove;
         // Keeps track of the last time the weapon was shot.
@@ -27,7 +27,7 @@ namespace Weapon.Command
         public DotWeapon(IGeo GeoOwner , float Offset, float Rate)
         {
             this.Owner = GeoOwner;
-            this.Projectile = new DotProjectile(Damage, Piercing, ProjectileLifetime);
+            this.Projectile = new DotProjectile(this, Damage, Piercing, ProjectileLifetime);
             this.FireRate = Rate;
         }
 
@@ -65,6 +65,11 @@ namespace Weapon.Command
             }
 
             return;
+        }
+
+        public IGeo GetOwner()
+        {
+            return Owner;
         }
     }
 }

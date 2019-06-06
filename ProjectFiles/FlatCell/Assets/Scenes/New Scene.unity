@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 206065357}
   m_Layer: 0
   m_Name: DotSpawner
-  m_TagString: Untagged
+  m_TagString: DotSpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,6 +149,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b91f6b601fd694fbf9498ae299d530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Speed: 50
+  MaxHealth: 3
+  FireRate: 0.05
+  FireChance: 15
+  Damage: 1
 --- !u!4 &206065358
 Transform:
   m_ObjectHideFlags: 0
@@ -575,7 +580,7 @@ GameObject:
   - component: {fileID: 998048343}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -608,8 +613,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 100
   BoostFactor: 4
-  MaxHealth: 10
+  MaxHealth: 5
   FireRate: 0.25
+  Damage: 0
   health: 0
   armor: 0
   dhieldMana: 0

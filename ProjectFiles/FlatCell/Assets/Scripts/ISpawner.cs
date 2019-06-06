@@ -15,5 +15,7 @@ namespace Spawner.Command
     public interface ISpawner
     {
         void Spawn();
+
+        void Kill(GameObject Dot, bool KilledByPlayer);
     }
 }
