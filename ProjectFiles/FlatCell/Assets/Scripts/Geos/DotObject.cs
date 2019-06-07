@@ -9,7 +9,6 @@ using Projectile.Command;
 public class DotObject : GeoObject
 {
     /** Cosmetics **/
-    [SerializeField] public float SpawnOffset = 20f;
     private Mesh DotMesh;
 
     // Start is called before the first frame update
@@ -19,7 +18,7 @@ public class DotObject : GeoObject
         base.Start();
 
         // Add the weapon.
-        DotWeapon dotGun = new DotWeapon(this, SpawnOffset, FireRate);
+        DotWeapon dotGun = new DotWeapon(this, FireRate);
         weapon.Add(dotGun);
 
         // Add a sphere mesh and collider to the game object.
@@ -32,6 +31,7 @@ public class DotObject : GeoObject
         // Set physics constraints
         Rigidbody body = base.gameObject.AddComponent<Rigidbody>();
         body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
+        trail.enabled = EnableTrail;
     }
 
     // Update is called once per frame

@@ -6,16 +6,12 @@ using Geo.Command;
 
 namespace Spawner.Command
 {
-    public enum EGeoSpawnType
-    {
-        Dot = 0,
-        Line = 1
-    }
-
     public interface ISpawner
     {
+        // Spawns an AI
         void Spawn();
 
+        // Kills an AI. If it's the player, they respawn. See IGeo.Respawn()
         void Kill(GameObject geo, GameObject killer);
     }
 }

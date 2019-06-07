@@ -11,5 +11,9 @@ namespace Projectile.Command
 
         // Sets the damage and piercing
         void SetDamage(float Damage, float Piercing);
+
+        IWeapon GetOwner();
+
+        float GetDamage();
     }
 }

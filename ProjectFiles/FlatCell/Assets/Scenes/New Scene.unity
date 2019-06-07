@@ -149,7 +149,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b91f6b601fd694fbf9498ae299d530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NumAi: 10
+  NumAi: 15
+  SpawnOffset: 250
+  SpawnLocation: {x: 0, y: 25, z: 0}
+  EnableTrail: 1
   Speed: 50
   MaxHealth: 3
   FireRate: 0.05
@@ -164,7 +167,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 206065356}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -707.167, y: 28.761494, z: 140.64362}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -620,8 +623,8 @@ MonoBehaviour:
   MaxShieldEnergy: 2
   FireChance: 35
   ShieldChance: 35
+  ProjectileSpawnOffset: 20
   Push: 100
   trailDecay: 1
-  SpawnOffset: 25
-  PlayerProjectile: {fileID: 5220245055896893209, guid: 9ee3addd4026fe14dbaabbc1f5d27621,
-    type: 3}
+  EnableTrail: 1
+  SpawnLocation: {x: 0, y: 25, z: 0}

@@ -13,7 +13,8 @@ public class SimpleDotController : DotObject
     protected float timer = 0.0f;
 
     [SerializeField] protected float DotProjectilePush = 100;
-    [SerializeField] protected float DirectionChangeTimer = 5.0f;
+    [SerializeField] protected float DirectionChangeTimer = 1f;
+    [SerializeField] protected float DirectionChangeWeight = 10;
     private float initSpeed;
     private float initDamage;
 
@@ -59,10 +60,10 @@ public class SimpleDotController : DotObject
         timer += Time.deltaTime;
         if (timer >= DirectionChangeTimer) //If 2.5 seconds reached - reset timer, change direction
         {
-            xMovementDir = Random.Range(-SpawnOffset, SpawnOffset);//Code pulled from DotSpawner
-            zMovementDir = Random.Range(-SpawnOffset, SpawnOffset);//change movement direction angle coords
-            movementDirection = new Vector3(xMovementDir, 0.0f, zMovementDir);
             timer = 0.0f;
+            movementDirection = new Vector3(Random.Range(-1, 1) * DirectionChangeWeight,
+                                            0.0f,
+                                            Random.Range(-1, 1) * DirectionChangeWeight);
         }
     }
 

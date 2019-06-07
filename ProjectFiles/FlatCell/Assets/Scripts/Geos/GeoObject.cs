@@ -5,77 +5,6 @@ using UnityEngine;
 using Weapon.Command;
 using Geo.Command;
 using Projectile.Command;
-using Spawner.Command;
-
-public class Shield
-{
-    private float energy;
-    private bool ready;
-    private bool active;
-    private float max;
-
-    public Shield(float m)
-    {
-        energy = max = m;
-        ready = true;
-        active = false;
-    }
-
-    public void SetMaxEnergy(float f)
-    {
-        energy = max = f;
-    }
-
-    public void Drain(float e)
-    {
-        energy -= e;
-        if (energy <= 0)
-        {
-            energy = 0;
-            ready = false;
-        }
-    }
-
-    public void Charge(float e)
-    {
-        energy += e;
-        if(energy >= max)
-        {
-            energy = max;
-            ready = true;
-        }
-    }
-
-    public void TurnOn()
-    {
-        active = true;
-    }
-
-    public void TurnOff()
-    {
-        active = false;
-    }
-
-    public float GetEnergy()
-    {
-        return energy;
-    }
-
-    public float GetMaxEnergy()
-    {
-        return max;
-    }
-
-    public bool IsReady()
-    {
-        return ready;
-    }
-
-    public bool IsActve()
-    {
-        return active;
-    }
-}
 
 public class GeoObject : MonoBehaviour, IGeo
 {
@@ -98,8 +27,10 @@ public class GeoObject : MonoBehaviour, IGeo
 
     /** Cosemetics **/
     // The force applied to the projectile. 
+    [SerializeField] public float ProjectileSpawnOffset = 20f;
     [SerializeField] protected float Push = 100.0f;
     [SerializeField] protected float trailDecay = 1f;
+    [SerializeField] protected bool EnableTrail;
 
     /** Script variables **/
     protected TrailRenderer trail;
@@ -114,13 +45,25 @@ public class GeoObject : MonoBehaviour, IGeo
     const float colorRefreshPoll = 0.5f;
     protected float refreshCounter = 0;
 
-    public void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance)
+    public void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
     {
         this.Speed = Speed;
         this.MaxHealth = MaxHP;
         this.FireRate = FireRate;
         this.FireChance = FireChance;
         this.ShieldChance = ShieldChance;
+        AddTrail();
+        trail.enabled = ShowTrail;
+    }
+
+    private void AddTrail()
+    {
+        trail = gameObject.AddComponent<TrailRenderer>();
+        trail.startColor = this.color;
+        trail.endColor = Color.white;
+        trail.material = new Material(Resources.Load("TrailShader", typeof(Shader)) as Shader);
+        trail.enabled = true;
+        trail.time = 1.0f;
     }
 
     // Start is called before the first frame update
@@ -159,12 +102,11 @@ public class GeoObject : MonoBehaviour, IGeo
         rend.material = Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
         rend.material.color = this.color;
         rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        trail = gameObject.AddComponent<TrailRenderer>();
-        trail.startColor = this.color;
-        trail.endColor = Color.white;
-        trail.material = new Material(Resources.Load("TrailShader", typeof(Shader)) as Shader);
-        trail.enabled = true;
-        trail.time = 1.0f;
+        if(!trail)
+        {
+            AddTrail();
+            trail.enabled = EnableTrail;
+        }
         shield = new Shield(MaxShieldEnergy);
         lastHitBy = this.gameObject;
         killHistory = new Dictionary<string, int>();
@@ -211,15 +153,12 @@ public class GeoObject : MonoBehaviour, IGeo
         return color;
     }
 
-    public void Shoot(int WeaponIndex = 0, float SpawnOffset = 20)
+    public void Shoot(float SpawnOffset = 20)
     {
-        if(weapon.Count > 1 && WeaponIndex < weapon.Count)
+        if(weapon.Count >= 1)
         {
-            weapon[WeaponIndex].Fire(transform.forward, transform.position, Push, SpawnOffset);
-        }
-        else if(weapon.Count == 1)
-        {
-            weapon[0].Fire(transform.forward, transform.position, Push, SpawnOffset);
+            DotWeapon gun = (DotWeapon)weapon[0];
+            gun.Fire(transform.forward, transform.position, Push, SpawnOffset);
         }
     }
 
@@ -232,13 +171,18 @@ public class GeoObject : MonoBehaviour, IGeo
     {
         if (collision.gameObject.ToString().Contains("Projectile"))
         {
-            Destroy(collision.gameObject, .1f);
             ProjectileObject bullet = collision.gameObject.GetComponent<ProjectileObject>();
+            if(bullet != null &&
+               bullet.GetOwner() != null &&
+               bullet.GetOwner().GetOwner() != null)
+            {
+                lastHitBy = bullet.GetOwner().GetOwner().GetGameObject();
+            }
             if (!shield.IsActve())
             {
-                health -= bullet.GetDamage();
+                Hurt(bullet.GetDamage());
             }
-            lastHitBy = bullet.GetOwner().GetOwner().GetGameObject();
+            Destroy(collision.gameObject, .1f);
         }            
         return;
     }
@@ -250,7 +194,11 @@ public class GeoObject : MonoBehaviour, IGeo
 
     public GameObject GetGameObject()
     {
-        return gameObject;
+        if(this != null && gameObject != null)
+        {
+            return gameObject;
+        }
+        return null;
     }
 
     // Turn the shields on. Sets a flag and toggles emmision field on mat

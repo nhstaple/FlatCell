@@ -10,8 +10,6 @@ namespace Projectile.Command
 {
     public class DotProjectile : IProjectile
     {
-        private Vector3 Force;
-
         private float Damage;
 
         private float Piercing;
@@ -77,6 +75,16 @@ namespace Projectile.Command
             renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
             return proj;
+        }
+
+        public IWeapon GetOwner()
+        {
+            return Owner;
+        }
+
+        public float GetDamage()
+        {
+            return Damage;
         }
     }
 }

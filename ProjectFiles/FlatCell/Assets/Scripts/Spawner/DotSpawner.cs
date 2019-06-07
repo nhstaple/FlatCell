@@ -8,18 +8,19 @@ using Spawner.Command;
 
 public class DotSpawner : MonoBehaviour, ISpawner
 {
-    private Vector3 Location = new Vector3(0, 25, 0);
-    private const float SpawnOffset = 250.0f;
     private List<GameObject> Alive = new List<GameObject>();
     private int counter = -1;
 
-    [SerializeField] public float NumAi;
-    [SerializeField] public float Speed;
-    [SerializeField] public float MaxHealth;
-    [SerializeField] public float FireRate;
-    [SerializeField] public float FireChance;
-    [SerializeField] public float ShieldChance;
-    [SerializeField] public float Damage;
+    [SerializeField] public int NumAi = 15;
+    [SerializeField] public float SpawnOffset = 250f;
+    [SerializeField] public Vector3 SpawnLocation = new Vector3(0, 25, 0);
+    [SerializeField] public bool EnableTrail;
+    [SerializeField] public float Speed = 50;
+    [SerializeField] public float MaxHealth = 3;
+    [SerializeField] public float FireRate = 0.05f;
+    [SerializeField] public float FireChance = 25;
+    [SerializeField] public float ShieldChance = 25;
+    [SerializeField] public float Damage = 1;
 
     GameObject player;
 
@@ -46,6 +47,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
     public void Spawn()
     {
         counter++;
+        Vector3 Location = SpawnLocation;
         Location.x = UnityEngine.Random.Range(-SpawnOffset, SpawnOffset);
         Location.z = UnityEngine.Random.Range(-SpawnOffset, SpawnOffset);
 
@@ -58,7 +60,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             Dot.transform.position = Location;
             Dot.transform.localScale = new Vector3(25, 25, 25);
             ai = Dot.AddComponent<SimpleDotController>();
-            ai.init(Speed, MaxHealth, FireRate, FireChance, ShieldChance);
+            ai.init(Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
             Alive.Add(Dot);
         }
         else if(res == 2)
@@ -67,7 +69,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             Dot.transform.position = Location;
             Dot.transform.localScale = new Vector3(25, 25, 25);
             ai = Dot.AddComponent<ShooterDotController>();
-            ai.init(Speed, MaxHealth, FireRate, FireChance, ShieldChance);
+            ai.init(Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
             Alive.Add(Dot);
         }
         else
@@ -76,7 +78,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             Dot.transform.position = Location;
             Dot.transform.localScale = new Vector3(25, 25, 25);
             ai = Dot.AddComponent<ShieldDotController>();
-            ai.init(Speed, MaxHealth, FireRate, FireChance, ShieldChance);
+            ai.init(Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
             Alive.Add(Dot);
         }
     }

@@ -1,21 +1,27 @@
+// PlayerController.cs
+// Nick S.
+// Game Logic
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using Weapon.Command;
-using Geo.Command;
+/*
+ * Player Controller
+ * 
+ * The player controller script that handles user input
+*/
 
 public class PlayerController : DotObject
 {
-    /** Prefabs **/
-    [SerializeField] public GameObject PlayerProjectile;
+    [SerializeField] Vector3 SpawnLocation = new Vector3(0, 25, 0);
 
     /** Script variables **/
     private float modifiedSpeed;
-    // private TrailRenderer trail;
     // Added to track the 3 moves we can use
     private int weaponSelect;
-    //if shield is on, maybe disable other actions
+
+    /** Evolution variables **/
     private float initSpawnOffset;
     private bool GrowFlag = false;
 
@@ -23,12 +29,12 @@ public class PlayerController : DotObject
     {
         // Call parent class's method.
         base.Start();
-        prevPos = new Vector3(0.0f, 5.0f, 0.0f);
+
+        prevPos = SpawnLocation;
         weaponSelect = 1;
-        initSpawnOffset = SpawnOffset;
+        initSpawnOffset = ProjectileSpawnOffset;
         // this.color = Color.clear;
         this.color = Color.grey;
-        trail.enabled = true;
     }
 
     void Awake()
@@ -60,7 +66,7 @@ public class PlayerController : DotObject
         }
             
         // Check for incremental evolution.
-        if (killHistory["Dot"] >= 25)
+        if (GetScore() >= 25)
         {
             transform.localScale = new Vector3(50, 1, 1);
             SpawnOffset = initSpawnOffset + 15;
@@ -73,6 +79,7 @@ public class PlayerController : DotObject
         */
 
         modifiedSpeed = Speed;
+
         if (Input.GetButton("Jump"))
         {
             modifiedSpeed *= BoostFactor;
@@ -85,7 +92,8 @@ public class PlayerController : DotObject
         }
         else if (Input.GetButton("Fire1") && !shield.IsActve())
         {
-            Shoot(weaponSelect, SpawnOffset);
+            // Fire me matey!
+            Shoot(ProjectileSpawnOffset);
         }
         else
         {

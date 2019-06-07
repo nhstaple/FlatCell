@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Weapon.Command;
 
 public class ShooterDotController : SimpleDotController
 {
@@ -10,18 +11,19 @@ public class ShooterDotController : SimpleDotController
     }
     void Awake()
     {
-
+   
     }
 
-    new protected void Update()
+    new public void Update()
     {
         base.Update();
         
         if(Random.Range(0, 100) <= FireChance)
         {
-            if(Random.Range(0, 100) <= FireChance*2)
+            if(Random.Range(0, 100) <= FireChance*FireChance/2)
             {
-                weapon[0].Fire(transform.forward, transform.position, DotProjectilePush, SpawnOffset);
+                DotWeapon gun = (DotWeapon)weapon[0];
+                gun.Fire(transform.forward, transform.position, DotProjectilePush, ProjectileSpawnOffset);
             }
         }
     }

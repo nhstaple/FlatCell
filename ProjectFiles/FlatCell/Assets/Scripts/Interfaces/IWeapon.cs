@@ -13,6 +13,7 @@ namespace Weapon.Command
         // Fires a projectile.
         void Fire(Vector3 movementDir, Vector3 pos, float push, float SpawnOffset);
 
+        // Returns the IGeo owner of the weapon.
         IGeo GetOwner();
     }
 }
