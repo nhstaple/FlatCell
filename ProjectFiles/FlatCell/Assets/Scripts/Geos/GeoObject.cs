@@ -60,7 +60,7 @@ public class GeoObject : MonoBehaviour, IGeo
     const float colorRefreshPoll = 0.5f;
     protected float refreshCounter = 0;
 
-    private AudioSource source;
+    protected AudioSource source;
 
     public void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
     {
@@ -176,12 +176,21 @@ public class GeoObject : MonoBehaviour, IGeo
         return color;
     }
 
+    public void Shoot()
+    {
+        Shoot(ProjectileSpawnOffset);
+    }
+
     public void Shoot(float SpawnOffset = 20)
     {
-        if(weapon.Count >= 1)
+        if (weapon.Count >= 1)
         {
             DotWeapon gun = (DotWeapon)weapon[0];
             gun.Fire(transform.forward, transform.position, Push, SpawnOffset);
+        }
+        else
+        {
+            Debug.Log("Error- no weapon assigned to " + gameObject.ToString());
         }
     }
 
@@ -308,4 +317,44 @@ public class GeoObject : MonoBehaviour, IGeo
         }
         return score;
     }
+
+    public float GetSpeed()
+    {
+        return Speed;
+    }
+
+    public void SetDamage(float d)
+    {
+        Damage = d;
+        if(weapon.Count > 0)
+        {
+            weapon[0].SetDamage(Damage, DotPiercing);
+        }
+    }
+
+    public void SetSpeed(float s)
+    {
+        Speed = s;
+    }
+
+    public float GetShieldChance()
+    {
+        return ShieldChance;
+    }
+
+    public float GetFireChance()
+    {
+        return FireChance;
+    }
+
+    public IWeapon GetWeapon()
+    {
+        if(weapon.Count > 0)
+        {
+            return weapon[0];
+        }
+        return null;
+    }
+
 }
+

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Weapon.Command;
 
 namespace Geo.Command
 {
@@ -9,6 +10,8 @@ namespace Geo.Command
 
         // Fires a projectile.
         void Shoot(float SpawnOffset);
+
+        void Shoot();
 
         // Toggles the shields on/off
         void FlameOn();
@@ -53,5 +56,17 @@ namespace Geo.Command
 
         // Returns the aggregated score of the kill record.
         float GetScore();
+
+        float GetSpeed();
+
+        void SetDamage(float d);
+
+        void SetSpeed(float s);
+
+        float GetShieldChance();
+
+        float GetFireChance();
+
+        IWeapon GetWeapon();
     }
 }

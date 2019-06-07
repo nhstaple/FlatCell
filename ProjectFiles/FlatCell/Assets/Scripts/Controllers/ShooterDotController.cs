@@ -16,8 +16,11 @@ using Weapon.Command;
  * 
 */
 
-public class ShooterDotController : SimpleDotController
+/*
+
+    public class ShooterDotController
 {
+
     new void Start()
     {
         base.Start();
@@ -36,8 +39,10 @@ public class ShooterDotController : SimpleDotController
             if(Random.Range(0, 100) <= FireChance*FireChance/2)
             {
                 DotWeapon gun = (DotWeapon)weapon[0];
-                gun.Fire(transform.forward, transform.position, DotProjectilePush, ProjectileSpawnOffset);
+                // ogun.Fire(transform.forward, transform.position, DotProjectilePush, ProjectileSpawnOffset);
             }
         }
     }
 }
+
+    */

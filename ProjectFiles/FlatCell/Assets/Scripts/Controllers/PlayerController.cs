@@ -26,7 +26,6 @@ public class PlayerController : DotObject
     private float initSpawnOffset;
     private bool GrowFlag = false;
 
-    private AudioSource source;
     public AudioClip shootSound;
     private float volLowRange = 0.5F;
     private float volHighRange = 1.0F;
