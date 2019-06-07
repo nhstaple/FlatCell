@@ -48,33 +48,10 @@ public class SimpleDotController : DotObject
     new public void Update()
     {
         base.Update();
-        const int maxKills = 10;
-        const int killWeight = 5;
-        if(GetScore() < maxKills)
-        {
-            Speed = initSpeed + killHistory["Dot"] * killWeight;
-            Damage = initDamage + killHistory["Dot"] * 0.1f;
-        }
-        else
-        {
-            Speed = initSpeed + maxKills * killWeight;
-            Damage = initDamage + maxKills * 0.1f;
-        }
-
-        float step = Speed * Time.deltaTime;
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, new Vector3(movementDirection.x, 0, movementDirection.z), step, 0.0f);
-        // Move our position a step closer to the target.
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + movementDirection * step, step);
-        transform.forward = newDir;
 
         timer += Time.deltaTime;
-        if (timer >= DirectionChangeTimer) //If 2.5 seconds reached - reset timer, change direction
-        {
-            timer = 0.0f;
-            movementDirection = new Vector3(Random.Range(-1, 1) * DirectionChangeWeight,
-                                            0.0f,
-                                            Random.Range(-1, 1) * DirectionChangeWeight);
-        }
+        CheckScore();
+        Move();
     }
 
     new public void OnCollisionEnter(Collision collision)
@@ -88,5 +65,38 @@ public class SimpleDotController : DotObject
         }
 
         return;
+    }
+
+    void CheckScore()
+    {
+        const int maxKills = 10;
+        const int killWeight = 5;
+        if (GetScore() < maxKills)
+        {
+            Speed = initSpeed + killHistory["Dot"] * killWeight;
+            Damage = initDamage + killHistory["Dot"] * 0.1f;
+        }
+        else
+        {
+            Speed = initSpeed + maxKills * killWeight;
+            Damage = initDamage + maxKills * 0.1f;
+        }
+    }
+
+    void Move()
+    {
+        float step = Speed * Time.deltaTime;
+        Vector3 newDir = Vector3.RotateTowards(transform.forward, new Vector3(movementDirection.x, 0, movementDirection.z), step, 0.0f);
+        // Move our position a step closer to the target.
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + movementDirection * step, step);
+        transform.forward = newDir;
+
+        if (timer >= DirectionChangeTimer)
+        {
+            timer = 0.0f;
+            movementDirection = new Vector3(Random.Range(-1, 1) * DirectionChangeWeight,
+                                            0.0f,
+                                            Random.Range(-1, 1) * DirectionChangeWeight);
+        }
     }
 }

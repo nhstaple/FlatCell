@@ -9,6 +9,7 @@ public class makePlaneGrid : MonoBehaviour
     public Transform gridPlane;
     public Transform boundary;
     public AudioClip backgroundSound;
+
     private AudioSource source;
 
     private void Awake()
@@ -16,7 +17,7 @@ public class makePlaneGrid : MonoBehaviour
         Physics.gravity = new Vector3(0, -5.0F, 0);
         Generate();
 
-        source = GetComponent<AudioSource>();
+        source = gameObject.AddComponent<AudioSource>();
         source.PlayOneShot(backgroundSound, 0.4F);
     }
 
