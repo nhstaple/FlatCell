@@ -70,6 +70,7 @@ namespace Projectile.Command
             ProjectileObject bullet = proj.AddComponent<ProjectileObject>();
             bullet.SetDamage(Damage, Piercing);
             bullet.SetLifeTime(LifeTime);
+            bullet.SetOwner(Owner);
 
             renderer.material = GameObject.Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
             renderer.material.color = Owner.GetOwner().GetColor();

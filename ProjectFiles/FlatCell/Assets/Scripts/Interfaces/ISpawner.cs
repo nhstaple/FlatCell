@@ -16,6 +16,6 @@ namespace Spawner.Command
     {
         void Spawn();
 
-        void Kill(GameObject Dot, bool KilledByPlayer);
+        void Kill(GameObject geo, GameObject killer);
     }
 }

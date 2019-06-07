@@ -4,8 +4,13 @@ namespace Geo.Command
 {
     public interface IGeo
     {
+        void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance);
+
         // Fires a projectile.
         void Shoot(int WeaponIndex, float SpawnOffset);
+
+        void FlameOn();
+        void FlameOff();
 
         // Returns the current speed.
         float GetCurrentSpeed();
@@ -17,6 +22,17 @@ namespace Geo.Command
 
         Color GetColor();
 
-        bool AreShieldsActive();
+        Shield GetShield();
+
+        bool SetMaxHealth(float h);
+        float GetMaxHealth();
+
+        void Hurt(float d);
+
+        void Respawn();
+
+        void AddKill(string name);
+
+        GameObject GetGameObject();
     }
 }

@@ -131,8 +131,8 @@ GameObject:
   - component: {fileID: 206065358}
   - component: {fileID: 206065357}
   m_Layer: 0
-  m_Name: DotSpawner
-  m_TagString: DotSpawner
+  m_Name: Spawner
+  m_TagString: Spawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,13 +146,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 206065356}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fc134f0169034069a46fb3f9b7615b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 94b91f6b601fd694fbf9498ae299d530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NumAi: 10
   Speed: 50
   MaxHealth: 3
-  FireRate: 0.125
-  FireChance: 25
+  FireRate: 0.05
+  FireChance: 15
+  ShieldChance: 5
   Damage: 1
 --- !u!4 &206065358
 Transform:
@@ -308,7 +310,7 @@ MonoBehaviour:
   gridSize: 10
   gridPlane: {fileID: 8659519363311212023, guid: 89454cd2d29dbae4798739b0e632a006,
     type: 3}
-  boundary: {fileID: 4073489969973322299, guid: 512f1614267964edab5e04d470fcc761,
+  boundary: {fileID: 4073489969973322299, guid: 0f763dfd9b8513e4a8ee04b4c3403e12,
     type: 3}
 --- !u!23 &627442044
 MeshRenderer:
@@ -615,26 +617,11 @@ MonoBehaviour:
   MaxHealth: 5
   FireRate: 0.25
   Damage: 0
-  health: 0
-  armor: 0
-  dhieldMana: 0
-  shieldMana: 0
-  shieldReady: 0
-  shieldActive: 0
+  MaxShieldEnergy: 2
+  FireChance: 35
+  ShieldChance: 35
   Push: 100
   trailDecay: 1
-  trail: {fileID: 0}
-  lastMovement: {x: 0, y: 0, z: 0}
-  movementDirection: {x: 0, y: 0, z: 0}
-  currentSpeed: 0
-  prevPos: {x: 0, y: 0, z: 0}
-  killedByPlayer: 0
-  color: {r: 0, g: 0, b: 0, a: 0}
-  renderer: {fileID: 0}
-  refreshCounter: 0
   SpawnOffset: 25
   PlayerProjectile: {fileID: 5220245055896893209, guid: 9ee3addd4026fe14dbaabbc1f5d27621,
     type: 3}
-  sampleShield: {fileID: 7591963805130457138, guid: 610721e61fc9c4310870cd7f341d47d7,
-    type: 3}
-  initSpawnOffset: 0

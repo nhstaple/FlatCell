@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using Weapon.Command;
+
 namespace Projectile.Command
 {
     public interface IProjectile

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Weapon.Command;
+
 public class ProjectileObject : MonoBehaviour
 {
     private float Damage;
@@ -9,6 +11,8 @@ public class ProjectileObject : MonoBehaviour
     private float Piercing;
 
     private float LifeTime;
+
+    IWeapon owner;
 
     public void SetDamage(float Damage, float Piercing)
     {
@@ -33,6 +37,16 @@ public class ProjectileObject : MonoBehaviour
     public float GetLifeTime()
     {
         return this.LifeTime;
+    }
+
+    public void SetOwner(IWeapon w)
+    {
+        owner = w;
+    }
+
+    public IWeapon GetOwner()
+    {
+        return owner;
     }
 
     // Start is called before the first frame update

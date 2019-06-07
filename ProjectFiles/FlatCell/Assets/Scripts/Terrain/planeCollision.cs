@@ -13,7 +13,7 @@ public class planeCollision : MonoBehaviour
     {
         if(other.gameObject.ToString().Contains("Player") && !other.gameObject.ToString().Contains("Projectile"))
         {
-            GetComponent<Renderer>().material.color = player.GetComponent<PlayerController>().color;
+            GetComponent<Renderer>().material.color = player.GetComponent<PlayerController>().GetColor();
         }
     }
 

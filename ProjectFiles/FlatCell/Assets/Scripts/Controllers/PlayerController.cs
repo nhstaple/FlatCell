@@ -7,13 +7,6 @@ using Geo.Command;
 
 public class PlayerController : DotObject
 {
-    /** Player Stats **/
-    // The AI spawner
-    DotSpawner factory;
-    private float spawnCounter = 0.5f;
-    private int spawnCount = 10;
-    public Dictionary<string, int> killHistory;
-
     /** Prefabs **/
     [SerializeField] public GameObject PlayerProjectile;
 
@@ -23,9 +16,7 @@ public class PlayerController : DotObject
     // Added to track the 3 moves we can use
     private int weaponSelect;
     //if shield is on, maybe disable other actions
-    private int shieldOn;
-    public float initSpawnOffset;
-
+    private float initSpawnOffset;
     private bool GrowFlag = false;
 
     new private void Start()
@@ -34,10 +25,6 @@ public class PlayerController : DotObject
         base.Start();
         prevPos = new Vector3(0.0f, 5.0f, 0.0f);
         weaponSelect = 1;
-        shieldOn = 0;
-        shieldMana = MAXSHIELDMANA;
-        killHistory = new Dictionary<string, int>();
-        killHistory.Add("Dot", 0);
         initSpawnOffset = SpawnOffset;
         // this.color = Color.clear;
         this.color = Color.grey;
@@ -91,29 +78,19 @@ public class PlayerController : DotObject
             modifiedSpeed *= BoostFactor;
             trail.widthMultiplier = BoostFactor;
         }
-        else if (Input.GetButton("Fire2") && shieldMana >= 0 && shieldReady)
-        { 
-            Shield();
-        }
-        else if (Input.GetButton("Fire1") && !shieldActive)
+        else if (Input.GetButton("Fire2") && shield.GetEnergy() >= 0 && shield.IsReady())
         {
-            // Debug.Log("Fired");
+            // Shields on.
+            FlameOn();
+        }
+        else if (Input.GetButton("Fire1") && !shield.IsActve())
+        {
             Shoot(weaponSelect, SpawnOffset);
         }
         else
         {
-            shieldActive = false;
-            if(shieldMana <= 0)
-            {
-                shieldReady = false;
-            }
-            shieldMana += Time.deltaTime;
-            if (shieldMana >= MAXSHIELDMANA)
-            {
-                shieldMana = MAXSHIELDMANA;
-                shieldReady = true;
-            }
-            renderer.material.DisableKeyword("_EMISSION");
+            // Shields off.
+            FlameOff();
             if (trail.widthMultiplier >= 1.0f)
             {
                 trail.widthMultiplier -= Time.deltaTime * trailDecay;
@@ -155,10 +132,4 @@ public class PlayerController : DotObject
 
     }
 
-    void Shield()
-    {
-        renderer.material.EnableKeyword("_EMISSION");
-        shieldMana -= Time.deltaTime;
-        shieldActive = true;
-    }
 }
