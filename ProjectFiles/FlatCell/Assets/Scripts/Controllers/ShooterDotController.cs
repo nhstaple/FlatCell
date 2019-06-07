@@ -1,7 +1,20 @@
-﻿using System.Collections;
+﻿// ShooterDotController.cs
+// Nick S.
+// Game Logic - AI
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Weapon.Command;
+
+/*
+ * Shooter Dot Controller
+ * 
+ * This AI can:
+   - move
+   - shoot
+ * 
+*/
 
 public class ShooterDotController : SimpleDotController
 {

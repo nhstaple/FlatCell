@@ -1,19 +1,26 @@
-﻿
+﻿// Shield.cs
+// Nick S. & Kyle C.
+// Game Logic - AI
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+/*
+ * Shield
+ * 
+ * This is an abstraction for the geometry's shield.
+ * 
+*/
+
 namespace Geo.Command
 {
-    public class Shield
+    public class Shield : ScriptableObject
     {
-        private float energy;
-        private bool ready;
-        private bool active;
-        private float max;
-
-        public Shield(float m)
-        {
-            energy = max = m;
-            ready = true;
-            active = false;
-        }
+        private float energy = 0;
+        private bool ready = true;
+        private bool active = false;
+        private float max = 0;
 
         public void SetMaxEnergy(float f)
         {

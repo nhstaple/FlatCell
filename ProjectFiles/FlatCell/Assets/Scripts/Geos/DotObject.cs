@@ -1,10 +1,18 @@
-﻿using System.Collections;
+﻿// DotObject.cs
+// Nick S.
+// Game Logic - AI
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using Geo.Command;
 using Weapon.Command;
-using Projectile.Command;
+
+/*
+ * Dot Object
+ * 
+ * This is a derivation of Geo object.
+ * 
+*/
 
 public class DotObject : GeoObject
 {
@@ -18,7 +26,9 @@ public class DotObject : GeoObject
         base.Start();
 
         // Add the weapon.
-        DotWeapon dotGun = new DotWeapon(this, FireRate);
+        DotWeapon dotGun = gameObject.AddComponent<DotWeapon>();  // DotWeapon(this, FireRate);
+
+        dotGun.init(this, DotDamage, DotPiercing, FireRate);
         weapon.Add(dotGun);
 
         // Add a sphere mesh and collider to the game object.

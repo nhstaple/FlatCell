@@ -1,21 +1,28 @@
-﻿using System.Collections;
+﻿// ShieldDotController.cs
+// Nick S.
+// Game Logic - AI
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Shield Dot Controller
+ * 
+ * This AI can:
+   - move
+   - use shields
+*/
+
 public class ShieldDotController : SimpleDotController
 {
-    private float counter = 0.0f;
     private float period = 0.0f;
-    new void Start()
+    new public void Start()
     {
         base.Start();
     }
-    void Awake()
-    {
 
-    }
-
-    new void Update()
+    new public void Update()
     {
         base.Update();
 

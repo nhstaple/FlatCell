@@ -1,17 +1,25 @@
-﻿using System.Collections;
+﻿// DotSpawner.cs
+// Nick S.
+// Game Logic - AI
+
+using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
 using Geo.Command;
 using Spawner.Command;
 
+/*
+ * Dot Spawner
+ * 
+ * Spawns Dots as enemies. The serialized fields are passed to the AI's constructors.
+ * 
+*/
+
 public class DotSpawner : MonoBehaviour, ISpawner
 {
-    private List<GameObject> Alive = new List<GameObject>();
-    private int counter = -1;
-
-    [SerializeField] public int NumAi = 15;
+    [SerializeField] public int NumDots = 15;
+    [SerializeField] public int ArchetypeCount = 3;
     [SerializeField] public float SpawnOffset = 250f;
     [SerializeField] public Vector3 SpawnLocation = new Vector3(0, 25, 0);
     [SerializeField] public bool EnableTrail;
@@ -22,26 +30,32 @@ public class DotSpawner : MonoBehaviour, ISpawner
     [SerializeField] public float ShieldChance = 25;
     [SerializeField] public float Damage = 1;
 
-    GameObject player;
+    private List<GameObject> Alive;
+    private int counter = -1;
 
     public void Start()
     {
-        player = GameObject.FindWithTag("Player");
+        Alive = new List<GameObject>();
     }
 
     void Update()
     {
-        if(Alive.Count < NumAi)
+        Lottery();
+
+        if(Alive.Count < NumDots)
         {
             Spawn();
         }
-        /*
-        // .1% to kill a random dot
-        if(UnityEngine.Random.Range(0, 1000) <= 1 && Alive.Count > 0)
+    }
+
+    // .1% to kill a random dot
+    public void Lottery()
+    {
+        if (UnityEngine.Random.Range(0, 1000) <= 1 && Alive.Count > 0)
         {
             int index = UnityEngine.Random.Range(0, Alive.Count - 1);
             Kill(Alive[index]);
-        }*/
+        }
     }
 
     public void Spawn()
@@ -53,7 +67,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
 
         // Add a random Ai controller to the List
         IGeo ai;
-        int res = UnityEngine.Random.Range(1, 3 + 1);
+        int res = UnityEngine.Random.Range(1, ArchetypeCount + 1);
         if (res == 1)
         {
             GameObject Dot = new GameObject("SimpleDot" + counter);
@@ -83,12 +97,13 @@ public class DotSpawner : MonoBehaviour, ISpawner
         }
     }
 
-    public void Kill(GameObject dead, GameObject killer)
+    public void Kill(GameObject dead, GameObject killer = null)
     {
         /** Update the killer's score **/
         IGeo geo;
-        if (dead.ToString().Contains("Dot") ||
-            dead.ToString().Contains("Player"))
+        if (killer != null && (
+            dead.ToString().Contains("Dot") ||
+            dead.ToString().Contains("Player")))
         {
             if (killer.gameObject.ToString().Contains("SimpleDot"))
             {
@@ -122,7 +137,10 @@ public class DotSpawner : MonoBehaviour, ISpawner
 
         /** Kill the dead object **/
         Alive.Remove(dead);
-        Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
+        if(killer != null)
+        {
+            Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
+        }
         Destroy(dead);
     }
 }

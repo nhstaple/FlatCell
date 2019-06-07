@@ -1,10 +1,24 @@
-﻿using System.Collections;
+﻿// SimpleDotController.cs
+// Nick S. & Kyle C
+// Game Logic - AI
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Simple Dot Controller
+ * 
+ * This is a basic AI controller for a Dot object. All this AI does is move.
+ * This AI can:
+   - move
+
+ * TODO comment
+*/
+
 public class SimpleDotController : DotObject
 {
-    protected GameObject player; //Player object must have the tag 'Player';
+    protected GameObject player;
 
     protected float xMovementDir;
     protected float zMovementDir;
@@ -29,10 +43,6 @@ public class SimpleDotController : DotObject
         shield.SetMaxEnergy(MaxShieldEnergy);
         initSpeed = Speed;
         initDamage = Damage;
-    }
-    void Awake()
-    {
-
     }
 
     new public void Update()

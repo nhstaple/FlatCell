@@ -9,7 +9,8 @@ using UnityEngine;
 /*
  * Player Controller
  * 
- * The player controller script that handles user input
+ * The player controller script that handles user input and stuff
+ * 
 */
 
 public class PlayerController : DotObject

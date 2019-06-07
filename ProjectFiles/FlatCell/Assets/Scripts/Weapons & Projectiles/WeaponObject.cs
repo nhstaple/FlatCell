@@ -1,36 +1,49 @@
-﻿using System.Collections;
+﻿// WeaponObject.cs
+// Nick S.
+// Game Logic - Combat
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using Weapon.Command;
 using Projectile.Command;
 using Geo.Command;
 
-public class WeaponObject : IWeapon
+public class WeaponObject : MonoBehaviour, IWeapon
 {
     /** Weapon Stats **/
     protected float FireRate;
     protected float Damage;
     protected float Piercing;
     protected float ProjectileLifetime;
-
-    /** Script variables **/
     // The owner of the weapon
     protected IGeo Owner;
-    // Projectile interface
+    // The bullet to fire
     protected IProjectile Projectile;
+
+    /** Script variables **/
     // Keeps track of the player's last input values.
     protected Vector3 lastMove;
     // Keeps track of the last time the weapon was shot.
     protected float shootCounter;
 
-    public WeaponObject(float rate = 0.125f, float dmg = 1, float pierce = 0, float lifetime = 2.5f)
+    public void init(IGeo GeoOwner, float Damage, float Pierce = 0, float Rate = 0.01f, float lifeTime = 2.5f)
     {
-        this.FireRate = rate;
-        this.Damage = dmg;
-        this.Piercing = pierce;
-        this.ProjectileLifetime = lifetime;
-        shootCounter = 0;
+        this.Owner = GeoOwner;
+        this.FireRate = Rate;
+        this.Damage = Damage;
+        this.Piercing = Pierce;
+        this.ProjectileLifetime = lifeTime;
+    }
+
+    public void Start()
+    {
+        
+    }
+
+    public void Update()
+    {
+        
     }
 
     public void SetDamage(float Damage, float Piercing)

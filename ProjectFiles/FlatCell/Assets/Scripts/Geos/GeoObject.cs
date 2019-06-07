@@ -1,10 +1,21 @@
-﻿using System.Collections;
+﻿// GeoObject.cs
+// Nick S.
+// Game Logic - AI
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 using Weapon.Command;
 using Geo.Command;
 using Projectile.Command;
+
+/*
+ * Geo Object
+ * 
+ * This is the base abastract class that implements the IGeo interface.
+ * You should *NOT* make Geo Objects directly.
+*/
 
 public class GeoObject : MonoBehaviour, IGeo
 {
@@ -19,6 +30,10 @@ public class GeoObject : MonoBehaviour, IGeo
     protected Shield shield;
     [SerializeField] protected float MaxShieldEnergy = 2.0f;
     protected List<IWeapon> weapon;
+
+    /** Dot stats **/
+    [SerializeField] protected float DotDamage = 1;
+    [SerializeField] protected float DotPiercing = 0;
 
     /** AI vars **/
     public Dictionary<string, int> killHistory;
@@ -66,24 +81,9 @@ public class GeoObject : MonoBehaviour, IGeo
         trail.time = 1.0f;
     }
 
-    // Start is called before the first frame update
-    public void Start()
+    Color ComputeRandomColor()
     {
-        weapon = new List<IWeapon>();
-
-        // Add components to game object.
-        gameObject.AddComponent<MeshFilter>();
-        gameObject.AddComponent<MeshRenderer>();
-
-        // Init values. 
-        currentSpeed = 0;
-        health = MaxHealth;
-
-        transform.forward = new Vector3(1, 0, 0);
-
-        // Set material
-        color = Color.clear;
-
+        Color color;
         var res = Random.Range(1, 100);
         if (1 <= res && res <= 33)
         {
@@ -97,6 +97,25 @@ public class GeoObject : MonoBehaviour, IGeo
         {
             color = Color.green;
         }
+        return color;
+    }
+
+    // Start is called before the first frame update
+    public void Start()
+    {
+        weapon = new List<IWeapon>();
+
+        // Add components to game object.
+        gameObject.AddComponent<MeshFilter>();
+        gameObject.AddComponent<MeshRenderer>();
+
+        // Init values. 
+        currentSpeed = 0;
+        health = MaxHealth;
+        transform.forward = new Vector3(1, 0, 0);
+
+        // Set material
+        color = ComputeRandomColor();
 
         rend = gameObject.GetComponent<MeshRenderer>();
         rend.material = Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
@@ -107,7 +126,8 @@ public class GeoObject : MonoBehaviour, IGeo
             AddTrail();
             trail.enabled = EnableTrail;
         }
-        shield = new Shield(MaxShieldEnergy);
+        shield = ScriptableObject.CreateInstance<Shield>();
+        shield.SetMaxEnergy(MaxShieldEnergy);
         lastHitBy = this.gameObject;
         killHistory = new Dictionary<string, int>();
         killHistory.Add("Dot", 0);
@@ -171,7 +191,7 @@ public class GeoObject : MonoBehaviour, IGeo
     {
         if (collision.gameObject.ToString().Contains("Projectile"))
         {
-            ProjectileObject bullet = collision.gameObject.GetComponent<ProjectileObject>();
+            DotBullet bullet = collision.gameObject.GetComponent<DotBullet>();
             if(bullet != null &&
                bullet.GetOwner() != null &&
                bullet.GetOwner().GetOwner() != null)
