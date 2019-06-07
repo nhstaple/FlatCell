@@ -285,6 +285,7 @@ MonoBehaviour:
   ArchetypeCount: 3
   SpawnOffset: 250
   SpawnLocation: {x: 0, y: 25, z: 0}
+  InitScale: {x: 25, y: 25, z: 25}
   EnableTrail: 1
   Speed: 50
   MaxHealth: 3
@@ -1213,7 +1214,7 @@ MonoBehaviour:
   DotPiercing: 0
   FireChance: 35
   ShieldChance: 35
-  ProjectileSpawnOffset: 20
+  ProjectileSpawnOffset: 25
   Push: 100
   trailDecay: 1
   EnableTrail: 1

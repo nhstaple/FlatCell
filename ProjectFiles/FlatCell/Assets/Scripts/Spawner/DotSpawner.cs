@@ -21,7 +21,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
 {
     [SerializeField] public int NumDots = 15;
     [SerializeField] public int ArchetypeCount = 3;
-    [SerializeField] public float SpawnOffset = 250f;
+    [SerializeField] public float SpawnOffset = 400f;
     [SerializeField] public Vector3 SpawnLocation = new Vector3(0, 25, 0);
     [SerializeField] public Vector3 InitScale = new Vector3(25, 25, 25);
     [SerializeField] public bool EnableTrail;

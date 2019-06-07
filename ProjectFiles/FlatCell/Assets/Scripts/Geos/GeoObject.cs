@@ -203,7 +203,7 @@ public class GeoObject : MonoBehaviour, IGeo
     {
         if (collision.gameObject.ToString().Contains("Projectile"))
         {
-            DotBullet bullet = collision.gameObject.GetComponent<DotBullet>();
+            DotProjectile bullet = collision.gameObject.GetComponent<DotProjectile>();
             if(bullet != null &&
                bullet.GetOwner() != null &&
                bullet.GetOwner().GetOwner() != null)
