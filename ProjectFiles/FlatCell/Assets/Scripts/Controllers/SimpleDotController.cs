@@ -26,8 +26,6 @@ public class SimpleDotController : DotObject
         movementDirection = new Vector3(xMovementDir, 0.0f, zMovementDir);
 
         shield.SetMaxEnergy(MaxShieldEnergy);
-        killHistory = new Dictionary<string, int>();
-        killHistory.Add("Dot", 0);
         initSpeed = Speed;
         initDamage = Damage;
     }
@@ -41,10 +39,8 @@ public class SimpleDotController : DotObject
         base.Update();
         const int maxKills = 10;
         const int killWeight = 5;
-        if(killHistory["Dot"] < maxKills)
+        if(GetScore() < maxKills)
         {
-            Debug.Log(gameObject.ToString());
-            Debug.Log(killHistory["Dot"]);
             Speed = initSpeed + killHistory["Dot"] * killWeight;
             Damage = initDamage + killHistory["Dot"] * 0.1f;
         }
@@ -73,13 +69,10 @@ public class SimpleDotController : DotObject
     new public void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
-        Debug.Log("collided with ");
-        Debug.Log(collision.gameObject.ToString());
 
         if (collision.gameObject.ToString().Contains("Dot") || 
             collision.gameObject.ToString().Contains("Player"))
         {
-            Debug.Log("interface match");
             movementDirection = new Vector3(0, 0.0f, 0);
         }
 

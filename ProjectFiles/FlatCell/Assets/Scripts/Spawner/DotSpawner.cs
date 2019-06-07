@@ -114,12 +114,13 @@ public class DotSpawner : MonoBehaviour, ISpawner
         {
             IGeo p = dead.GetComponent<PlayerController>();
             p.Respawn();
-            Debug.Log("You died! Fool");
+            Debug.Log("You died! Fool- score: " + p.GetScore());
             return;
         }
 
         /** Kill the dead object **/
         Alive.Remove(dead);
+        Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
         Destroy(dead);
     }
 }

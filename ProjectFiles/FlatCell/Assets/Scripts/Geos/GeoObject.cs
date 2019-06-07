@@ -168,6 +168,7 @@ public class GeoObject : MonoBehaviour, IGeo
         shield = new Shield(MaxShieldEnergy);
         lastHitBy = this.gameObject;
         killHistory = new Dictionary<string, int>();
+        killHistory.Add("Dot", 0);
     }
 
     public void FixedUpdate()
@@ -229,13 +230,8 @@ public class GeoObject : MonoBehaviour, IGeo
 
     public void OnCollisionEnter(Collision collision)
     {
-        
-        Debug.Log("collided with ");
-        Debug.Log(collision.gameObject.ToString());
-
         if (collision.gameObject.ToString().Contains("Projectile"))
         {
-            Debug.Log("interface match");
             Destroy(collision.gameObject, .1f);
             ProjectileObject bullet = collision.gameObject.GetComponent<ProjectileObject>();
             if (!shield.IsActve())
@@ -318,5 +314,15 @@ public class GeoObject : MonoBehaviour, IGeo
         {
             killHistory[name]++;
         }
+    }
+
+    public float GetScore()
+    {
+        float score = 0.0f;
+        foreach(KeyValuePair<string, int> killType in killHistory)
+        {
+            score += killType.Value;
+        }
+        return score;
     }
 }

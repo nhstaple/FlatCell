@@ -34,5 +34,7 @@ namespace Geo.Command
         void AddKill(string name);
 
         GameObject GetGameObject();
+
+        float GetScore();
     }
 }
