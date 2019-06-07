@@ -60,6 +60,8 @@ public class GeoObject : MonoBehaviour, IGeo
     const float colorRefreshPoll = 0.5f;
     protected float refreshCounter = 0;
 
+    private AudioSource source;
+
     public void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
     {
         this.Speed = Speed;
@@ -155,6 +157,7 @@ public class GeoObject : MonoBehaviour, IGeo
             trail.endColor = Color.black;
             refreshCounter = 0;
         }
+
     }
 
     /** IGeo methods **/
@@ -203,6 +206,13 @@ public class GeoObject : MonoBehaviour, IGeo
                 Hurt(bullet.GetDamage());
             }
             Destroy(collision.gameObject, .1f);
+            source = GetComponent<AudioSource>();
+            if (source == null)
+            {
+                source = gameObject.AddComponent<AudioSource>();
+            }
+            source.clip = Resources.Load<AudioClip>("Audio/Death Sound");
+            source.PlayOneShot(source.clip, 0.4F);
         }            
         return;
     }
@@ -248,6 +258,11 @@ public class GeoObject : MonoBehaviour, IGeo
         return false;
     }
 
+    public float GetHealth()
+    {
+        return health;
+    }
+
     public float GetMaxHealth()
     {
         return MaxHealth;
@@ -269,7 +284,7 @@ public class GeoObject : MonoBehaviour, IGeo
         const float upperBound = 0.75f;
         transform.position = new Vector3(0, 25, 0);
         health = MaxHealth;
-        if(killHistory.ContainsKey("Dot"))
+        if (killHistory.ContainsKey("Dot"))
         {
             var score = killHistory["Dot"];
             killHistory["Dot"] = (int)UnityEngine.Random.Range(score * lowerBound, score * upperBound);

@@ -26,6 +26,11 @@ public class PlayerController : DotObject
     private float initSpawnOffset;
     private bool GrowFlag = false;
 
+    private AudioSource source;
+    public AudioClip shootSound;
+    private float volLowRange = 0.5F;
+    private float volHighRange = 1.0F;
+
     new private void Start()
     {
         // Call parent class's method.
@@ -42,6 +47,7 @@ public class PlayerController : DotObject
     {
         transform.position = new Vector3(0, 25, 0);
         transform.localScale = new Vector3(25, 25, 25);
+        source = GetComponent<AudioSource>();
     }
 
     new void Update()
@@ -93,6 +99,10 @@ public class PlayerController : DotObject
         }
         else if (Input.GetButton("Fire1") && !shield.IsActve())
         {
+            // Add shooting sounds.
+            float vol = Random.Range(volLowRange, volHighRange);
+            source.PlayOneShot(shootSound, vol);
+
             // Fire me matey!
             Shoot(ProjectileSpawnOffset);
         }

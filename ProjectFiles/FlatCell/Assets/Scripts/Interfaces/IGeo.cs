@@ -36,6 +36,9 @@ namespace Geo.Command
         // Returns max health.
         float GetMaxHealth();
 
+        //Returns health.
+        float GetHealth();
+
         // Deals damage to the geo
         void Hurt(float d);
 
