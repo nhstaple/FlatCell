@@ -831,7 +831,7 @@ Camera:
   far clip plane: 500
   field of view: 60
   orthographic: 1
-  orthographic size: 125
+  orthographic size: 150
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1208,13 +1208,15 @@ MonoBehaviour:
   BoostFactor: 4
   MaxHealth: 5
   FireRate: 0.25
-  Damage: 0
+  Damage: 1
+  health: 0
+  armor: 0
   MaxShieldEnergy: 2
   DotDamage: 1
   DotPiercing: 0
   FireChance: 35
   ShieldChance: 35
-  ProjectileSpawnOffset: 25
+  ProjectileSpawnOffset: 30
   Push: 100
   trailDecay: 1
   EnableTrail: 1

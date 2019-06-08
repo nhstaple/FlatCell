@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DotBehaviour.Command;
+using Pickup.Command;
 
 /*
  * Simple Dot Controller

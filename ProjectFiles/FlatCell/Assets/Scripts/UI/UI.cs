@@ -45,7 +45,10 @@ public class UI : MonoBehaviour //, IGeo
     {
         player = GameObject.FindWithTag("Player");
         IGeo controller = player.GetComponent<PlayerController>();
-        myscore = controller.GetScore();
+        if(controller != null)
+        {
+            myscore = controller.GetScore();
+        }
         if (TimetoWatch >= Throttle)
         {
             //player = GameObject.FindWithTag("Player");

@@ -9,6 +9,7 @@ using UnityEngine;
 using Geo.Command;
 using Spawner.Command;
 using DotBehaviour.Command;
+using Pickup.Command;
 
 /*
  * Dot Spawner
@@ -71,7 +72,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
         int res = UnityEngine.Random.Range(1, ArchetypeCount + 1);
         if (res == 1)
         {
-            GameObject Dot = new GameObject("SimpleDot" + counter);
+            GameObject Dot = new GameObject("Geo Simple Dot" + counter);
             Dot.transform.position = Location;
             Dot.transform.localScale = InitScale;
 
@@ -81,7 +82,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
         }
         else if(res == 2)
         {
-            GameObject Dot = new GameObject("ShooterDot" + counter);
+            GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
             Dot.transform.position = Location;
             Dot.transform.localScale = InitScale;
 
@@ -93,7 +94,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
         }
         else
         {
-            GameObject Dot = new GameObject("ShieldDot" + counter);
+            GameObject Dot = new GameObject("Geo Shield Dot" + counter);
             Dot.transform.position = Location;
             Dot.transform.localScale = InitScale;
 
@@ -113,17 +114,17 @@ public class DotSpawner : MonoBehaviour, ISpawner
             dead.ToString().Contains("Dot") ||
             dead.ToString().Contains("Player")))
         {
-            if (killer.gameObject.ToString().Contains("SimpleDot"))
+            if (killer.gameObject.ToString().Contains("Simple Dot"))
             {
                 geo = killer.gameObject.GetComponent<DotController>();
                 geo.AddKill("Dot");
             }
-            else if (killer.gameObject.ToString().Contains("ShieldDot"))
+            else if (killer.gameObject.ToString().Contains("Shield Dot"))
             {
                 geo = killer.gameObject.GetComponent<DotController>();
                 geo.AddKill("Dot");
             }
-            else if (killer.gameObject.ToString().Contains("ShooterDot"))
+            else if (killer.gameObject.ToString().Contains("Shooter Dot"))
             {
                 geo = killer.gameObject.GetComponent<DotController>();
                 geo.AddKill("Dot");
@@ -148,6 +149,11 @@ public class DotSpawner : MonoBehaviour, ISpawner
         if(killer != null)
         {
             Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
+        }
+        IPickup pickup = dead.GetComponent<PickupObject>();
+        if(pickup != null)
+        {
+            pickup.Spawn(dead.transform.position + dead.transform.forward*10);
         }
         Destroy(dead);
     }

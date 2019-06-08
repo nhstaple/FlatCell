@@ -42,8 +42,16 @@ namespace Geo.Command
         //Returns health.
         float GetHealth();
 
+        float GetArmor();
+
+        float GetDamage();
+
         // Deals damage to the geo
         void Hurt(float d);
+        void Heal(float d);
+
+        void IncreaseArmor(float a);
+        void DecreaseArmor(float a);
 
         // Respawns the geo- used only for Player
         void Respawn();

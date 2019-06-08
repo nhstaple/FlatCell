@@ -9,6 +9,7 @@ using UnityEngine;
 using Weapon.Command;
 using Geo.Command;
 using Projectile.Command;
+using Pickup.Command;
 
 /*
  * Geo Object
@@ -25,11 +26,12 @@ public class GeoObject : MonoBehaviour, IGeo
     [SerializeField] protected float MaxHealth;
     [SerializeField] protected float FireRate;
     [SerializeField] protected float Damage;
-    protected float health;
-    protected float armor = 0.0f;
+    [SerializeField] protected float health;
+    [SerializeField] protected float armor = 0.0f;
     protected Shield shield;
     [SerializeField] protected float MaxShieldEnergy = 2.0f;
     protected List<IWeapon> weapon;
+    public IPickup pickup;
 
     /** Dot stats **/
     [SerializeField] protected float DotDamage = 1;
@@ -79,6 +81,11 @@ public class GeoObject : MonoBehaviour, IGeo
         this.ShieldChance = ShieldChance;
         AddTrail();
         trail.enabled = ShowTrail;
+        if (pickup == null)
+        {
+            pickup = gameObject.AddComponent<PickupObject>();
+            pickup.init(this, "Pickup");
+        }
     }
 
     private void AddTrail()
@@ -149,6 +156,12 @@ public class GeoObject : MonoBehaviour, IGeo
             rend.material.color = Color.white;
         }
         newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+
+        if(pickup == null)
+        {
+            pickup = gameObject.AddComponent<PickupObject>();
+            pickup.init(this, "Pickup");
+        }
     }
 
     public void FixedUpdate()
@@ -228,7 +241,12 @@ public class GeoObject : MonoBehaviour, IGeo
             }
             if (!shield.IsActve())
             {
-                Hurt(bullet.GetDamage());
+                float armorBuff = armor;
+                if(armorBuff > .5f)
+                {
+                    armorBuff = .5f;
+                }
+                Hurt(bullet.GetDamage()* (1 - armorBuff) );
             }
             Destroy(collision.gameObject, .1f);
             deathSource.PlayOneShot(deathSource.clip, 0.4f);
@@ -314,6 +332,28 @@ public class GeoObject : MonoBehaviour, IGeo
         }
     }
 
+    public void Heal(float h)
+    {
+        if (health == MaxHealth)
+        {
+            MaxHealth += h;
+            health = MaxHealth;
+        }
+        else if (health <= MaxHealth)
+        {
+            health += h;
+        }
+        if(health > MaxHealth)
+        {
+            health = MaxHealth;
+        }
+    }
+
+    public float GetArmor()
+    {
+        return armor;
+    }
+
     public void Respawn()
     {
         const float lowerBound = 0.50f;
@@ -335,12 +375,33 @@ public class GeoObject : MonoBehaviour, IGeo
         }
     }
 
+    public float GetDamage()
+    {
+        return Damage;
+    }
+
+    public void IncreaseArmor(float a)
+    {
+        armor += a;
+    }
+    public void DecreaseArmor(float a)
+    {
+        armor -= a;
+        if(armor <= 0)
+        {
+            armor = 0;
+        }
+    }
+
     public float GetScore()
     {
         float score = 0.0f;
-        foreach(KeyValuePair<string, int> killType in killHistory)
+        if(gameObject != null)
         {
-            score += killType.Value;
+            foreach (KeyValuePair<string, int> killType in killHistory)
+            {
+                score += killType.Value;
+            }
         }
         return score;
     }
