@@ -8,7 +8,7 @@ assisted by Arunpreet Sandhu during the Spring 2019 Quarter at University of Cal
 in size but thought was put into allowing the system to be expanded upon in the future through reusuable `interfaces` and
 object `inheritance`. 
 
-### The Team
+## The Team
 Inlcude our bios so Brian can include them in the press kit and remove them.
 
 ### Megan
