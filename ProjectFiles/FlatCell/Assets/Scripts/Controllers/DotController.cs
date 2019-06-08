@@ -27,7 +27,6 @@ public class DotController : DotObject
 
     protected float timer = 0.0f;
 
-    [SerializeField] protected float DotProjectilePush = 100;
     [SerializeField] protected float DirectionChangeTimer = 1f;
     [SerializeField] protected float DirectionChangeWeight = 10;
     protected float initSpeed;

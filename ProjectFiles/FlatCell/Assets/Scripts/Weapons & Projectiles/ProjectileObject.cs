@@ -82,7 +82,15 @@ namespace Projectile.Command
             rend.material = GameObject.Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
             rend.material.color = Owner.GetOwner().GetColor();
             rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-
+            Vector3 colorVector = new Vector3(rend.material.color.r, rend.material.color.g, rend.material.color.b);
+            if (rend.material.color == Color.clear)
+            {
+                rend.material.color = Color.white;
+            }
+            else if (colorVector.magnitude >= 1)
+            {
+                rend.material.color = Owner.GetOwner().GetColor();
+            }
             return proj;
         }
 

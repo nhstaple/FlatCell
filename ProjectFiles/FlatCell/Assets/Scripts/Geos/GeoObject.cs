@@ -133,6 +133,8 @@ public class GeoObject : MonoBehaviour, IGeo
         lastHitBy = this.gameObject;
         killHistory = new Dictionary<string, int>();
         killHistory.Add("Dot", 0);
+        source = gameObject.AddComponent<AudioSource>();
+        source.enabled = true;
     }
 
     public void FixedUpdate()
