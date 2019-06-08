@@ -70,7 +70,7 @@ public class PickupObject : MonoBehaviour, IPickup
         // Add collision components and set rotation constraints.
         pickup.AddComponent<BoxCollider>();
         Rigidbody body = pickup.AddComponent<Rigidbody>();
-        body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
+        body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
         pickup.transform.position = Location;
 
         // Set the size/
