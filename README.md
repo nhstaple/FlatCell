@@ -1,8 +1,9 @@
-# Flat Cell 
-### ECS189L Group Project
+# ECS 189L Group Project - FlatCell 
 ### Group members 
-#### Megan Brown, Brian Coe, David Lee, Kyle Catapusan, Nick Stapleton
-### Dr. Joshua A. McCoy
+##### Megan Brown, Brian Coe, David Lee, Kyle Catapusan, Nick Stapleton
+### Instructors 
+##### Dr. Joshua A. McCoy
+##### Arunpreet Sandhu
 ### ECS 189L Game Programming
 ### Due 6/11/19, 8am
 
