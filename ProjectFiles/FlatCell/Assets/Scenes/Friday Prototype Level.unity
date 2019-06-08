@@ -1219,7 +1219,6 @@ MonoBehaviour:
   trailDecay: 1
   EnableTrail: 1
   SpawnLocation: {x: 0, y: 25, z: 0}
-  shootSound: {fileID: 0}
 --- !u!1 &1054210534
 GameObject:
   m_ObjectHideFlags: 0

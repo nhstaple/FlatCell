@@ -56,11 +56,19 @@ public class GeoObject : MonoBehaviour, IGeo
     protected GameObject lastHitBy;
 
     protected Color color;
+    private float shieldLerpCounter = 0;
+    private float shieldLerpTime = 1f;
     protected Renderer rend;
     const float colorRefreshPoll = 0.5f;
     protected float refreshCounter = 0;
+    private Color newShieldColor;
 
-    protected AudioSource source;
+    /** Audio **/
+    const string Geo_Death_Sound = "Audio/Death Sound";
+    protected AudioClip deathSound;
+    protected float volLowRange = 0.5F;
+    protected float volHighRange = 1.0F;
+    protected AudioSource deathSource;
 
     public void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
     {
@@ -133,8 +141,14 @@ public class GeoObject : MonoBehaviour, IGeo
         lastHitBy = this.gameObject;
         killHistory = new Dictionary<string, int>();
         killHistory.Add("Dot", 0);
-        source = gameObject.AddComponent<AudioSource>();
-        source.enabled = true;
+        deathSource = gameObject.AddComponent<AudioSource>();
+        deathSource.enabled = true;
+        deathSource.clip = Resources.Load<AudioClip>(Geo_Death_Sound);
+        if (rend.material.color == null)
+        {
+            rend.material.color = Color.white;
+        }
+        newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
 
     public void FixedUpdate()
@@ -217,13 +231,7 @@ public class GeoObject : MonoBehaviour, IGeo
                 Hurt(bullet.GetDamage());
             }
             Destroy(collision.gameObject, .1f);
-            source = GetComponent<AudioSource>();
-            if (source == null)
-            {
-                source = gameObject.AddComponent<AudioSource>();
-            }
-            source.clip = Resources.Load<AudioClip>("Audio/Death Sound");
-            source.PlayOneShot(source.clip, 0.4F);
+            deathSource.PlayOneShot(deathSource.clip, 0.4f);
         }            
         return;
     }
@@ -245,8 +253,23 @@ public class GeoObject : MonoBehaviour, IGeo
     // Turn the shields on. Sets a flag and toggles emmision field on mat
     public void FlameOn()
     {
-        shield.TurnOn();
+        shieldLerpCounter += Time.deltaTime;
+        if(shieldLerpCounter >= shieldLerpTime)
+        {
+            shieldLerpCounter = 0;
+            newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+        }
+
+        Color oldColor = rend.material.GetColor("_EmissionColor");
+
+        Color c = Color.Lerp(oldColor,
+                             newShieldColor,
+                             shieldLerpCounter / shieldLerpTime);
+
+        rend.material.SetColor("_EmissionColor", c);
+
         rend.material.EnableKeyword("_EMISSION");
+        shield.TurnOn();
         shield.Drain(Time.deltaTime);
     }
 
@@ -254,8 +277,10 @@ public class GeoObject : MonoBehaviour, IGeo
     public void FlameOff()
     {
         shield.TurnOff();
-        shield.Charge(Time.deltaTime);
         rend.material.DisableKeyword("_EMISSION");
+        shieldLerpCounter = 0;
+        newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+        shield.Charge(Time.deltaTime);
     }
 
     public bool SetMaxHealth(float h)

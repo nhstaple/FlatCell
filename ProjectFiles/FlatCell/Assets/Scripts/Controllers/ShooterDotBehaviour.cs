@@ -7,8 +7,6 @@ namespace DotBehaviour.Command
 {
     class ShooterDotBehaviour : SimpleDotBehaviour
     {
-        private float period = 0.0f;
-
         new void Start()
         {
             base.Start();

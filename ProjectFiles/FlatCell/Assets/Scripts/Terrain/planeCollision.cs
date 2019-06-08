@@ -7,27 +7,26 @@ public class planeCollision : MonoBehaviour
 {
     GameObject player;
 
-    const float lerpTime = 5.0f;
-
     void Start()
     {
         player = GameObject.FindWithTag("Player");
     }
 
-    IEnumerator lerpColor(float tick)
+    IEnumerator lerpColorToPlayer(Material mat)
     {
+        const float lerpTime = 5.0f;
         float t = 0.0f;
         int count = 0;
         while (t <= lerpTime)
         {
             count++;
-            t += tick;
+            t += Time.deltaTime;
             Color c = Color.Lerp(GetComponent<Renderer>().material.color,
                                  player.GetComponent<PlayerController>().GetColor(),
                                  t / lerpTime);
 
-            GetComponent<Renderer>().material.color = c;
-            yield return new WaitForSeconds(tick);
+            mat.color = c;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
     }
 
@@ -35,7 +34,7 @@ public class planeCollision : MonoBehaviour
     {
         if(other.gameObject.ToString().Contains("Player") && !other.gameObject.ToString().Contains("Projectile"))
         {
-            StartCoroutine("lerpColor", Time.deltaTime);
+            StartCoroutine("lerpColorToPlayer", GetComponent<Renderer>().material);
         }
     }
 

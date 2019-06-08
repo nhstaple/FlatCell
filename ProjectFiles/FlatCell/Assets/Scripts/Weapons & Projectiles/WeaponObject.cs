@@ -27,18 +27,36 @@ public class WeaponObject : MonoBehaviour, IWeapon
     // Keeps track of the last time the weapon was shot.
     protected float shootCounter;
 
-    public void init(IGeo GeoOwner, float Damage, float Pierce = 0, float Rate = 0.01f, float lifeTime = 2.5f)
+    /** Audio **/
+    protected AudioClip shootSound;
+    protected float volLowRange = 0.5F;
+    protected float volHighRange = 1.0F;
+    protected AudioSource weaponSource;
+    protected float PlayerSoundPlayChance = 25;
+
+    public void init(IGeo GeoOwner, AudioClip Sound,
+                     float Damage = 1, float Pierce = 0, float Rate = 0.125f, float lifeTime = 2.5f)
     {
         this.Owner = GeoOwner;
         this.FireRate = Rate;
         this.Damage = Damage;
         this.Piercing = Pierce;
+        this.shootSound = Sound;
+        if(weaponSource == null)
+        {
+            weaponSource = gameObject.AddComponent<AudioSource>();
+            weaponSource.enabled = true;
+        }
         this.ProjectileLifetime = lifeTime;
     }
 
     public void Start()
     {
-        
+        if (weaponSource == null)
+        {
+            weaponSource = gameObject.AddComponent<AudioSource>();
+            weaponSource.enabled = true;
+        }
     }
 
     public void Update()
@@ -52,17 +70,28 @@ public class WeaponObject : MonoBehaviour, IWeapon
         this.Piercing = Piercing;
     }
 
+    protected void PlaySound()
+    {
+        if (Owner.ToString().Contains("Player"))
+        {
+            // 25% to play sound
+            if (Random.Range(1, 100) <= PlayerSoundPlayChance)
+            {
+                weaponSource.PlayOneShot(shootSound,
+                         Random.Range(volLowRange, volHighRange));
+            }
+        }
+        else
+        {
+            weaponSource.PlayOneShot(shootSound,
+                         Random.Range(0.1f, 0.35f));
+        }
+    }
+
     public void Fire(Vector3 movementDir, Vector3 pos, float push, float SpawnOffset)
     {
-        if (movementDir.magnitude > 0)
-        {
-            lastMove = movementDir;
-            if (lastMove.x > 0 && lastMove.z == 0) { lastMove.x = 1; }
-            if (lastMove.x < 0 && lastMove.z == 0) { lastMove.x = -1; }
-            if (lastMove.z > 0 && lastMove.x == 0) { lastMove.z = 1; }
-            if (lastMove.z < 0 && lastMove.x == 0) { lastMove.z = -1; }
-        }
         shootCounter += Time.deltaTime;
+        lastMove = movementDir;
         return;
     }
 

@@ -16,6 +16,8 @@ using Weapon.Command;
 
 public class DotObject : GeoObject
 {
+    const string Dot_Shoot_Soundfile = "Audio/Shoot Sound";
+
     /** Cosmetics **/
     private Mesh DotMesh;
 
@@ -26,9 +28,9 @@ public class DotObject : GeoObject
         base.Start();
 
         // Add the weapon.
-        DotWeapon dotGun = gameObject.AddComponent<DotWeapon>();  // DotWeapon(this, FireRate);
+        DotWeapon dotGun = gameObject.AddComponent<DotWeapon>();
 
-        dotGun.init(this, DotDamage, DotPiercing, FireRate);
+        dotGun.init(this, Resources.Load<AudioClip>(Dot_Shoot_Soundfile), DotDamage, DotPiercing, FireRate);
         weapon.Add(dotGun);
 
         // Add a sphere mesh and collider to the game object.
