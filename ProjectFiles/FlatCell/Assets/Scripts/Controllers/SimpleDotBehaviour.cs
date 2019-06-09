@@ -11,8 +11,7 @@ namespace DotBehaviour.Command
         protected IGeo owner;
 
         [SerializeField] protected float DotProjectilePush = 100;
-        [SerializeField] protected float DirectionChangeTimer = 1f;
-        [SerializeField] protected float DirectionChangeWeight = 10;
+        [SerializeField] protected float DirectionChangeTimer = 0.125f;
 
         protected float timer = 0.0f;
         protected float xMovementDir;
@@ -20,14 +19,22 @@ namespace DotBehaviour.Command
         protected Vector3 movementDirection;
         protected float initSpeed;
         protected float initDamage;
+        protected float moveMax = 0.5f;
 
         public string type;
 
         public void Start()
         {
-            xMovementDir = Random.Range(-1f, 1f);
-            zMovementDir = Random.Range(-1f, 1f);
-            movementDirection = new Vector3(xMovementDir, 0.0f, zMovementDir);
+            movementDirection = new Vector3(Random.Range(0.5f, 1f), 0.0f, Random.Range(0.5f, 1f));
+            // transform.LookAt(movementDirection, new Vector3(0, 1, 0));
+            Vector3 newDir = Vector3.RotateTowards(transform.forward, movementDirection, 360 * Mathf.Deg2Rad, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newDir);
+            float step = owner.GetSpeed() * Time.deltaTime;
+            Debug.Log("speed = " + owner.GetSpeed());
+            Vector3 target = transform.position + movementDirection * owner.GetSpeed();
+            owner.MoveTo(target, step);
+            // Rigidbody b = GetComponent<Rigidbody>();
+            // b.AddForce(movementDirection * Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
             type = "Simple Dot";
         }
 
@@ -52,20 +59,40 @@ namespace DotBehaviour.Command
             Move();
         }
 
+        public void Update()
+        {
+            CheckScore();
+            Move();
+        }
+
         public void Move()
         {
-            float step = owner.GetSpeed() * Time.deltaTime;
-            Vector3 newDir = Vector3.RotateTowards(transform.forward, new Vector3(movementDirection.x, 0, movementDirection.z), step, 0.0f);
-            // Move our position a step closer to the target.
-            transform.position = Vector3.MoveTowards(transform.position, transform.position + movementDirection * step, step);
-            transform.forward = newDir;
-
+            timer += Time.deltaTime;
             if (timer >= DirectionChangeTimer)
             {
                 timer = 0.0f;
-                movementDirection = new Vector3(Random.Range(-1, 1) * DirectionChangeWeight,
-                                                0.0f,
-                                                Random.Range(-1, 1) * DirectionChangeWeight);
+                movementDirection += new Vector3(Random.Range(-moveMax * Random.Range(0, 1f),
+                                                               moveMax * Random.Range(0, 1f)),
+                                                 0.0f,
+                                                 Random.Range(-moveMax * Random.Range(0, 1f),
+                                                               moveMax * Random.Range(0, 1f)));
+
+                if(movementDirection.x > 1)         { movementDirection.x = 1; }
+                else if (movementDirection.x < -1 ) { movementDirection.x = -1; }
+                if (movementDirection.z > 1)        { movementDirection.z = 1; }
+                else if (movementDirection.z < -1)  { movementDirection.z = -1; }
+
+                // Roatate the object.
+                Vector3 newDir = Vector3.RotateTowards(transform.forward, movementDirection, 360 * Mathf.Deg2Rad, 0.0f);
+                transform.rotation = Quaternion.LookRotation(newDir);
+
+                // Move the object.
+                Vector3 loc = owner.GetGameObject().transform.position;
+                float speed = Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed());
+                float step = speed * Time.deltaTime;
+                owner.MoveTo(loc + speed * movementDirection, step);
+                // Rigidbody b = GetComponent<Rigidbody>();
+                // b.AddForce(movementDirection * Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
             }
         }
 

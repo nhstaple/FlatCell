@@ -17,8 +17,13 @@ namespace DotBehaviour.Command
 
         new public void exec()
         {
-            CheckScore();
-            Move();
+            base.exec();
+            Shields();
+        }
+
+        new public void Update()
+        {
+            base.Update();
             Shields();
         }
 

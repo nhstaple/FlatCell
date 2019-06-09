@@ -15,6 +15,7 @@ namespace Geo.Command
     public interface IGeo
     {
 /** Player **/
+        void MoveTo(Vector3 Location, float Step);
         void Respawn();
         void AddColor(Color c);
         float GetMovementMagnitude();

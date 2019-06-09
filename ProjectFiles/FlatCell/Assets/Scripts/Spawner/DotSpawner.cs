@@ -10,6 +10,7 @@ using Geo.Command;
 using Spawner.Command;
 using DotBehaviour.Command;
 using Pickup.Command;
+using AI.Command;
 
 /*
  * Dot Spawner
@@ -78,8 +79,9 @@ public class DotSpawner : MonoBehaviour, ISpawner
 
         // Add a random Ai controller to the List
         int res = UnityEngine.Random.Range(1, ArchetypeCount + 1);
-        if (res == 1)
+        if (res == 1 && false)
         {
+            Debug.Log("Spawned simple dot ai");
             GameObject Dot = new GameObject("Geo Simple Dot" + counter);
             Dot.transform.position = Location;
             Dot.transform.localScale = InitScale;
@@ -90,26 +92,28 @@ public class DotSpawner : MonoBehaviour, ISpawner
         }
         else if(res == 2)
         {
+            Debug.Log("Spawned shield dot ai");
             GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
             Dot.transform.position = Location;
             Dot.transform.localScale = InitScale;
 
-            IGeo ai = Dot.AddComponent<DotController>();
-            ai.init(Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
+            IAI ai = Dot.AddComponent<DotController>();
             ShooterDotBehaviour b = Dot.AddComponent<ShooterDotBehaviour>();
             b.init(ai);
+            ai.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
             Alive.Add(Dot);
         }
         else
         {
+            Debug.Log("Spawned shooter dot ai");
             GameObject Dot = new GameObject("Geo Shield Dot" + counter);
             Dot.transform.position = Location;
             Dot.transform.localScale = InitScale;
 
-            IGeo ai = Dot.AddComponent<DotController>();
-            ai.init(Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
+            IAI ai = Dot.AddComponent<DotController>();
             ShieldDotBehaviour b = Dot.AddComponent<ShieldDotBehaviour>();
             b.init(ai);
+            ai.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
             Alive.Add(Dot);
         }
     }

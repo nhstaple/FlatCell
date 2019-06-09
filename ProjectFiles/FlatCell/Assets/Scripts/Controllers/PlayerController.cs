@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Geo.Command;
 
 /*
  * Player Controller
@@ -112,14 +113,9 @@ public class PlayerController : DotObject
             Debug.Log("Switching Weapons");
             SwitchWeapon();
         }
-
-        float step = modifiedSpeed * Time.deltaTime;
         movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-        Vector3 old = transform.position;
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, new Vector3(movementDirection.x, 0, movementDirection.z), step, 0.0f);
-        // Move our position a step closer to the target.
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + movementDirection * step, step);
-        transform.forward = newDir;
+        MoveTo(transform.position + movementDirection*modifiedSpeed,
+               modifiedSpeed * Time.deltaTime);
     }
 
     void SwitchWeapon()

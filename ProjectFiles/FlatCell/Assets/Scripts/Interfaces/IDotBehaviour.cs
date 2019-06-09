@@ -2,7 +2,7 @@
 
 namespace DotBehaviour.Command
 {
-    public interface IDotBehaviour
+    public interface IAIBehaviour
     {
         void init(IGeo geo);
 
@@ -17,5 +17,10 @@ namespace DotBehaviour.Command
         void Shields();
 
         void Fire();
+    }
+
+    public interface IDotBehaviour : IAIBehaviour
+    {
+
     }
 }
