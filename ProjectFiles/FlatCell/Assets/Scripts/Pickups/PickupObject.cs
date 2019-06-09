@@ -92,26 +92,26 @@ public class PickupObject : MonoBehaviour, IPickup
         // Add the script
         PickupObject p = pickup.AddComponent<PickupObject>();
         var res = Random.Range(1, 100);
-
-        const bool debugColor = true;
-
-        if(res <= 25 && !debugColor)
-        {
-            Debug.Log("Made a health drop!");
-            p.init(owner, "Health");
-            rend.material.color = Color.red;
-        }
-        else if(res > 25 && res < 50 && !debugColor)
+        const int ArmorChance = 10;
+        const int SpeedChance = 15 + ArmorChance ;
+        const int HealthChance = 25 + SpeedChance;
+        if(res <= 10)
         {
             Debug.Log("Made a armor drop!");
             p.init(owner, "Armor");
             rend.material.color = Color.yellow;
         }
-        else if (res > 50 && res < 75 && !debugColor)
+        else if (res <= 25)
         {
             Debug.Log("Made a speed drop!");
             p.init(owner, "Speed");
             rend.material.color = Color.cyan;
+        }
+        else if (res <= 50)
+        {
+            Debug.Log("Made a health drop!");
+            p.init(owner, "Health");
+            rend.material.color = Color.red;
         }
         else
         {
@@ -129,9 +129,13 @@ public class PickupObject : MonoBehaviour, IPickup
 
     public void OnCollisionEnter(Collision geo)
     {
-        if(!gameObject.ToString().Contains("Geo") &&
-            geo.gameObject.ToString().Contains("Player") &&
-           !geo.gameObject.ToString().Contains("Projectile"))
+        if(geo.gameObject.ToString().Contains("Projectile"))
+        {
+            Debug.Log("passed through!");
+            Physics.IgnoreCollision(geo.gameObject.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
+        }
+        else if(!gameObject.ToString().Contains("Geo") &&
+            geo.gameObject.ToString().Contains("Player"))
         {
             IGeo p = geo.gameObject.GetComponent<PlayerController>();
             if(p != null)

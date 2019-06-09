@@ -287,7 +287,7 @@ public class GeoObject : MonoBehaviour, IGeo
                 Hurt(bullet.GetDamage()* (1 - armorBuff) );
             }
             Destroy(collision.gameObject, .1f);
-            deathSource.PlayOneShot(deathSource.clip, 0.4f);
+            // deathSource.PlayOneShot(deathSource.clip, 0.4f);
         }            
         return;
     }
