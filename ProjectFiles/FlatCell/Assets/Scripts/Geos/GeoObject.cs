@@ -88,6 +88,7 @@ namespace Geo.Command
         /** Geo Stats **/
         [SerializeField] protected float DeathPenaltyLower = 0.5f;
         [SerializeField] protected float DeathPenaltyUpper = 0.75f;
+        [SerializeField] protected bool DrawDebugLine = false;
         [SerializeField] protected float Speed = 50;
         [SerializeField] protected float BoostFactor;
         [SerializeField] protected float MaxHealth = 3;
@@ -284,11 +285,14 @@ namespace Geo.Command
         // Update is called once per frame
         public void Update()
         {
-            Vector3 pos = gameObject.transform.position;
-            pos.y = 25;
-            Vector3 forw = transform.forward * 25;
-            forw.y = 0;
-            forwardLine.DrawLineInGameView(pos + transform.forward, pos + forw, Color.yellow*10);
+            if(DrawDebugLine)
+            {
+                Vector3 pos = gameObject.transform.position;
+                pos.y = 25;
+                Vector3 forw = transform.forward * 25;
+                forw.y = 0;
+                forwardLine.DrawLineInGameView(pos + transform.forward, pos + forw, Color.yellow*10);
+            }
             refreshCounter += Time.deltaTime;
             if (health <= 0)
             {

@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dc65245564919041b115471996eb71f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DeathPenaltyLower: 0.5
+  DeathPenaltyUpper: 0.75
+  DrawDebugLine: 1
   Speed: 100
   BoostFactor: 4
   MaxHealth: 5
@@ -53,8 +56,8 @@ MonoBehaviour:
   armor: 0
   color: {r: 0, g: 0, b: 0, a: 0}
   shield: {fileID: 252064358201996518, guid: 54d4ab565e1334397b1f4e3b0aff3e7d, type: 3}
-  FirstWeapon: {fileID: 7591519539128337603, guid: 41f5855e2de694af0bcbb2e50f7a771a,
-    type: 3}
+  InitWeapon: {fileID: 0}
+  ActiveGun: {fileID: 0}
   DotDamage: 1
   DotPiercing: 0
   FireChance: 35
@@ -64,6 +67,7 @@ MonoBehaviour:
   trailDecay: 1
   EnableTrail: 1
   SpawnLocation: {x: 0, y: 25, z: 0}
+  EnableBoost: 0
 --- !u!114 &4463196817797996642
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -70,9 +70,13 @@ public class DotController : DotObject, IAI
         }
     }
 
-    public void init(IDotBehaviour behaviour, float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
+    public void init(IDotBehaviour behaviour, float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail = false, bool DrawDebugLine = false)
     {
-        this.behaviour = behaviour;
+        if(behaviour != null)
+        {
+            this.behaviour = behaviour;
+        }
+        this.DrawDebugLine = DrawDebugLine;
         base.init(Speed, MaxHP, FireRate, FireChance, ShieldChance, ShowTrail);
     }
 

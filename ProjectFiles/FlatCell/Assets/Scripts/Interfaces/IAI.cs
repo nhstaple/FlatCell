@@ -15,6 +15,7 @@ namespace AI.Command
           float FireRate,          // The time to wait between firing bullets in seconds.
           float FireChance,        // 0-100 how likely the AI is to fire their gun.
           float ShieldChance,      // 0-100 how likely the AI is to turn on their shield.
-          bool ShowTrail);         // Display the trail of the geometry.
+          bool ShowTrail,
+          bool DrawDebugLine);         // Display the trail of the geometry.
     }
 }

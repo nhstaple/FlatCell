@@ -27,7 +27,8 @@ public class DotSpawner : MonoBehaviour, ISpawner
     [SerializeField] public float SpawnOffset = 400f;
     [SerializeField] public Vector3 SpawnLocation = new Vector3(0, 25, 0);
     [SerializeField] public Vector3 InitScale = new Vector3(25, 25, 25);
-    [SerializeField] public bool EnableTrail;
+    [SerializeField] public bool EnableTrail = true;
+    [SerializeField] public bool DrawDebugLine = true;
     [SerializeField] public float Speed = 50;
     [SerializeField] public float MaxHealth = 3;
     [SerializeField] public float FireRate = 0.05f;
@@ -86,8 +87,8 @@ public class DotSpawner : MonoBehaviour, ISpawner
             Dot.transform.position = Location;
             Dot.transform.localScale = InitScale;
 
-            IGeo ai = Dot.AddComponent<DotController>();
-            ai.init(Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
+            IAI ai = Dot.AddComponent<DotController>();
+            ai.init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
             Alive.Add(Dot);
         }
         else if(res == 2)
@@ -100,7 +101,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             IAI ai = Dot.AddComponent<DotController>();
             ShooterDotBehaviour b = Dot.AddComponent<ShooterDotBehaviour>();
             b.init(ai);
-            ai.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
+            ai.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
             Alive.Add(Dot);
         }
         else
@@ -113,7 +114,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             IAI ai = Dot.AddComponent<DotController>();
             ShieldDotBehaviour b = Dot.AddComponent<ShieldDotBehaviour>();
             b.init(ai);
-            ai.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail);
+            ai.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
             Alive.Add(Dot);
         }
     }
