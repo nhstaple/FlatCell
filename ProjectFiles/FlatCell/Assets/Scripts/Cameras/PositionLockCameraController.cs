@@ -17,6 +17,11 @@ namespace Obscura
             ManagedCamera = gameObject.GetComponent<Camera>();
             CameraLineRenderer = gameObject.GetComponent<LineRenderer>();
 
+            if(Target == null)
+            {
+                Target = GameObject.FindWithTag("Player");
+            }
+            /*
             // Move camera to player location.
             var targetPosition = Target.transform.position;
             var cameraPosition = ManagedCamera.transform.position;
@@ -24,12 +29,18 @@ namespace Obscura
             cameraPosition.y = targetPosition.y + cam_offset;
             cameraPosition.z = targetPosition.z;
             ManagedCamera.transform.position = cameraPosition;
+            */
         }
 
         //Use the LateUpdate message to avoid setting the camera's position before
         //GameObject locations are finalized.
         void LateUpdate()
         {
+            if (Target == null)
+            {
+                Target = GameObject.FindWithTag("Player");
+            }
+
             var targetPosition = Target.transform.position;
             var cameraPosition = ManagedCamera.transform.position;
 

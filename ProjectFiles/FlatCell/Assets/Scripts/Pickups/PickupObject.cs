@@ -118,7 +118,7 @@ public class PickupObject : MonoBehaviour, IPickup
                 }
                 else if (this.type == "Armor")
                 {
-                    p.IncreaseArmor(this.armor);
+                    p.ModifyArmor(this.armor);
                 }
                 else if (this.type == "Speed")
                 {

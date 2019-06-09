@@ -26,9 +26,9 @@ namespace DotBehaviour.Command
         public void Start()
         {
             xMovementDir = Random.Range(-1f, 1f);
-            zMovementDir = Random.Range(-0.5f, 0.5f);
+            zMovementDir = Random.Range(-1f, 1f);
             movementDirection = new Vector3(xMovementDir, 0.0f, zMovementDir);
-            type = "SimpleDot";
+            type = "Simple Dot";
         }
 
         new public string GetType()
@@ -76,7 +76,7 @@ namespace DotBehaviour.Command
 
         public void Fire()
         {
-
+            return;
         }
 
         public void CheckScore()

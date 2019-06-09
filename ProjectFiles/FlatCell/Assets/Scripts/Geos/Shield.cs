@@ -15,21 +15,32 @@ using UnityEngine;
 
 namespace Geo.Command
 {
-    public class Shield : ScriptableObject
+    public class Shield : MonoBehaviour // ScriptableObject
     {
-        private float energy = 0;
-        private bool ready = true;
-        private bool active = false;
-        private float max = 0;
+        // The shield's energy in seconds.
+        [SerializeField] private float energy = 0;
+
+        // If the shield is ready. If this is false then the shield must cooldown for @this.max seconds.
+        [SerializeField] private bool ready = true;
+
+        // Indicates if the shields are on.
+        [SerializeField] private bool active = false;
+
+        // The max value of the energy in seconds.
+        [SerializeField] public float MaxEnergy = 0;
 
         public void SetMaxEnergy(float f)
         {
-            energy = max = f;
+            energy = MaxEnergy = f;
         }
 
         public float GetPercent()
         {
-            return energy / max;
+            return energy / MaxEnergy;
+        }
+
+        public void Update()
+        {
         }
 
         // Drains energy from the shield.
@@ -49,9 +60,9 @@ namespace Geo.Command
         public void Charge(float e)
         {
             energy += e;
-            if (energy >= max)
+            if (energy >= MaxEnergy)
             {
-                energy = max;
+                energy = MaxEnergy;
                 ready = true;
             }
         }
@@ -73,7 +84,7 @@ namespace Geo.Command
 
         public float GetMaxEnergy()
         {
-            return max;
+            return MaxEnergy;
         }
 
         public bool IsReady()

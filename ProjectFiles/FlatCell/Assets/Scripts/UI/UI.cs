@@ -24,16 +24,30 @@ public class UI : MonoBehaviour //, IGeo
 
     public Text scoretext;
 
+    void GetPlayer()
+    {
+        player = GameObject.FindWithTag("Player");
+    }
+
     //public PlayerController p;
     // Start is called before the first frame update
     void Awake()
     {
         //        score = GetComponent<Text>();
         player = GameObject.FindWithTag("Player");
-        //p = player.GetComponent<PlayerController>();
-        IGeo controller = player.GetComponent<PlayerController>();
-        health = controller.GetHealth();
-        maxhealth = controller.GetMaxHealth();
+        if(player != null)
+        {
+            IGeo controller = player.GetComponent<PlayerController>();
+            if (controller != null)
+            {
+                health = controller.GetHealth();
+                maxhealth = controller.GetMaxHealth();
+            }
+            else
+            {
+                health = maxhealth = 1;
+            }
+        }
         this.RandomizeThrottle();
     }
     private void RandomizeThrottle()
@@ -43,7 +57,10 @@ public class UI : MonoBehaviour //, IGeo
     // Update is called once per frame
     void Update()
     {
-        player = GameObject.FindWithTag("Player");
+        if(player == null)
+        {
+            GetPlayer();
+        }
         IGeo controller = player.GetComponent<PlayerController>();
         if(controller != null)
         {
@@ -74,22 +91,29 @@ public class UI : MonoBehaviour //, IGeo
         }
         for (int i = 0; i < Numhearts.Length; i++)
         {
-            if (i < health)
+            if (Numhearts[i] != null)
             {
-                Numhearts[i].sprite = YesHeart;
-            }
-            else
-            {
-                Numhearts[i].sprite = NoHeart;
-            }
+                if (i < health)
+                {
+                    Numhearts[i].sprite = YesHeart;
+                }
+                else
+                {
+                    Numhearts[i].sprite = NoHeart;
+                }
 
-            if (i < maxhealth)
-            {
-                Numhearts[i].enabled = true;
-            }
+                if (i < maxhealth)
+                {
+                     Numhearts[i].enabled = true;
+                }
+                else
+                {
+                    Numhearts[i].enabled = false;
+                }
+            } 
             else
             {
-                Numhearts[i].enabled = false;
+                Debug.Log("UI Error!");
             }
         }
     }

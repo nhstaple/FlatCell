@@ -20,6 +20,7 @@ using Pickup.Command;
 
 public class DotSpawner : MonoBehaviour, ISpawner
 {
+    [SerializeField] public GameObject Player;
     [SerializeField] public int NumDots = 15;
     [SerializeField] public int ArchetypeCount = 3;
     [SerializeField] public float SpawnOffset = 400f;
@@ -33,12 +34,19 @@ public class DotSpawner : MonoBehaviour, ISpawner
     [SerializeField] public float ShieldChance = 25;
     [SerializeField] public float Damage = 1;
 
+
     private List<GameObject> Alive;
     private int counter = -1;
 
     public void Start()
     {
         Alive = new List<GameObject>();
+        transform.position = SpawnLocation;
+        if (Player != null)
+        {
+            var boop = GameObject.Instantiate(Player, transform);
+            boop.tag = "Player";
+        }
     }
 
     void Update()

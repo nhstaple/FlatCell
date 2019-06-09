@@ -52,7 +52,7 @@ public class DotController : DotObject
         zMovementDir = Random.Range(-0.5f, 0.5f);
         movementDirection = new Vector3(xMovementDir, 0.0f, zMovementDir);
 
-        shield.SetMaxEnergy(MaxShieldEnergy);
+        shield.SetMaxEnergy(InitMaxShieldEnergy);
         initSpeed = Speed;
         initDamage = Damage;
 
@@ -80,17 +80,17 @@ public class DotController : DotObject
         base.Update();
         if(behaviour != null)
         {
-            if (behaviour.GetType() == "SimpleDot")
+            if (behaviour.GetType() == "Simple Dot")
             {
                 SimpleDotBehaviour b = (SimpleDotBehaviour)behaviour;
                 b.exec();
             }
-            else if (behaviour.GetType() == "ShieldDot")
+            else if (behaviour.GetType() == "Shield Dot")
             {
                 ShieldDotBehaviour b = (ShieldDotBehaviour)behaviour;
                 b.exec();
             }
-            else if (behaviour.GetType() == "ShooterDot")
+            else if (behaviour.GetType() == "Shooter Dot")
             {
                 ShooterDotBehaviour b = (ShooterDotBehaviour)behaviour;
                 b.exec();

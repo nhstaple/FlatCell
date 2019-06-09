@@ -17,5 +17,6 @@ namespace Weapon.Command
 
         // Returns the IGeo owner of the weapon.
         IGeo GetOwner();
+        void SetOwner(IGeo geo);
     }
 }

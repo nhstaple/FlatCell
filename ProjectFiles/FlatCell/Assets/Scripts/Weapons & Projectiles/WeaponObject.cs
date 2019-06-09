@@ -11,28 +11,29 @@ using Geo.Command;
 
 public class WeaponObject : MonoBehaviour, IWeapon
 {
-    /** Weapon Stats **/
-    protected float FireRate;
-    protected float Damage;
-    protected float Piercing;
-    protected float ProjectileLifetime;
+/** Weapon Stats **/
+    [SerializeField] protected float FireRate;
+    [SerializeField] protected float Damage;
+    [SerializeField] protected float Piercing;
+    [SerializeField] protected float ProjectileLifetime;
     // The owner of the weapon
     protected IGeo Owner;
-    // The bullet to fire
-    protected IProjectile Projectile;
 
-    /** Script variables **/
+    // The bullet to fire
+    [SerializeField] protected IProjectile Projectile;
+
+/** Script variables **/
     // Keeps track of the player's last input values.
     protected Vector3 lastMove;
     // Keeps track of the last time the weapon was shot.
     protected float shootCounter;
 
-    /** Audio **/
-    protected AudioClip shootSound;
+/** Audio **/
+    [SerializeField] public AudioClip shootSound;
     protected float volLowRange = 0.5F;
     protected float volHighRange = 1.0F;
     protected AudioSource weaponSource;
-    protected float PlayerSoundPlayChance = 25;
+    [SerializeField] protected float PlayerSoundPlayChance = 25;
 
     public void init(IGeo GeoOwner, AudioClip Sound,
                      float Damage = 1, float Pierce = 0, float Rate = 0.125f, float lifeTime = 2.5f)
@@ -42,7 +43,11 @@ public class WeaponObject : MonoBehaviour, IWeapon
         this.Damage = Damage;
         this.Piercing = Pierce;
         this.shootSound = Sound;
-        if(weaponSource == null)
+        if (Owner == null)
+        {
+            this.Owner = this.gameObject.GetComponents<IGeo>()[0];
+        }
+        if (weaponSource == null)
         {
             weaponSource = gameObject.AddComponent<AudioSource>();
             weaponSource.enabled = true;
@@ -50,8 +55,17 @@ public class WeaponObject : MonoBehaviour, IWeapon
         this.ProjectileLifetime = lifeTime;
     }
 
+    public void SetOwner(IGeo geo)
+    {
+        Owner = geo;
+    }
+
     public void Start()
     {
+        if (Owner == null)
+        {
+            this.Owner = this.gameObject.GetComponents<IGeo>()[0];
+        }
         if (weaponSource == null)
         {
             weaponSource = gameObject.AddComponent<AudioSource>();
@@ -61,7 +75,6 @@ public class WeaponObject : MonoBehaviour, IWeapon
 
     public void Update()
     {
-        
     }
 
     public void SetDamage(float Damage, float Piercing)
@@ -72,10 +85,15 @@ public class WeaponObject : MonoBehaviour, IWeapon
 
     protected void PlaySound()
     {
+        if (Owner == null)
+        {
+            this.Owner = this.gameObject.GetComponent<PlayerController>();
+        }
         if (Owner.ToString().Contains("Player"))
         {
             // 25% to play sound
-            if (Random.Range(1, 100) <= PlayerSoundPlayChance)
+            if (Random.Range(1, 100) <= PlayerSoundPlayChance &&
+                shootSound != null)
             {
                 weaponSource.PlayOneShot(shootSound,
                          Random.Range(volLowRange, volHighRange));

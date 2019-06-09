@@ -20,7 +20,7 @@ using Pickup.Command;
 
 public class GeoObject : MonoBehaviour, IGeo
 {
-    /** Geo Stats **/
+/** Geo Stats **/
     [SerializeField] protected float Speed;
     [SerializeField] protected float BoostFactor;
     [SerializeField] protected float MaxHealth;
@@ -28,28 +28,31 @@ public class GeoObject : MonoBehaviour, IGeo
     [SerializeField] protected float Damage;
     [SerializeField] protected float health;
     [SerializeField] protected float armor = 0.0f;
-    protected Shield shield;
-    [SerializeField] protected float MaxShieldEnergy = 2.0f;
+    [SerializeField] protected Color color;
+    [SerializeField] protected Shield shield;
+    [SerializeField] public const float InitMaxShieldEnergy = 2.0f;
     protected List<IWeapon> weapon;
-    public IPickup pickup;
+    [SerializeField] public GameObject InitWeapon;
+    [SerializeField] protected GameObject ActiveGun;
+    [SerializeField] public IPickup pickup;
 
-    /** Dot stats **/
+/** Dot stats **/
     [SerializeField] protected float DotDamage = 1;
     [SerializeField] protected float DotPiercing = 0;
 
-    /** AI vars **/
+/** AI vars **/
     public Dictionary<string, int> killHistory;
     [SerializeField] protected float FireChance = 35;
     [SerializeField] protected float ShieldChance = 35;
 
-    /** Cosemetics **/
+/** Cosemetics **/
     // The force applied to the projectile. 
     [SerializeField] public float ProjectileSpawnOffset = 20f;
     [SerializeField] protected float Push = 100.0f;
     [SerializeField] protected float trailDecay = 1f;
     [SerializeField] protected bool EnableTrail;
 
-    /** Script variables **/
+/** Script variables **/
     protected TrailRenderer trail;
     protected Vector3 lastMovement;
     protected Vector3 movementDirection;
@@ -57,7 +60,6 @@ public class GeoObject : MonoBehaviour, IGeo
     protected Vector3 prevPos;
     protected GameObject lastHitBy;
 
-    protected Color color;
     private float shieldLerpCounter = 0;
     private float shieldLerpTime = 1f;
     protected Renderer rend;
@@ -65,7 +67,7 @@ public class GeoObject : MonoBehaviour, IGeo
     protected float refreshCounter = 0;
     private Color newShieldColor;
 
-    /** Audio **/
+/** Audio **/
     const string Geo_Death_Sound = "Audio/Death Sound";
     protected AudioClip deathSound;
     protected float volLowRange = 0.5F;
@@ -98,6 +100,18 @@ public class GeoObject : MonoBehaviour, IGeo
         trail.time = 1.0f;
     }
 
+    public void ModifyArmor(float a)
+    {
+        if(a < 0)
+        {
+            DecreaseArmor(a);
+        }
+        else
+        {
+            IncreaseArmor(a);
+        }
+    }
+
     Color ComputeRandomColor()
     {
         Color color;
@@ -122,6 +136,14 @@ public class GeoObject : MonoBehaviour, IGeo
     {
         weapon = new List<IWeapon>();
 
+        if(InitWeapon != null)
+        {
+            ActiveGun = Instantiate(InitWeapon);
+            IWeapon ptr = ActiveGun.GetComponents<IWeapon>()[0];
+            ptr.SetOwner(this);
+            weapon.Add(ptr);
+        }
+
         // Add components to game object.
         gameObject.AddComponent<MeshFilter>();
         gameObject.AddComponent<MeshRenderer>();
@@ -143,8 +165,11 @@ public class GeoObject : MonoBehaviour, IGeo
             AddTrail();
             trail.enabled = EnableTrail;
         }
-        shield = ScriptableObject.CreateInstance<Shield>();
-        shield.SetMaxEnergy(MaxShieldEnergy);
+        if(!shield)
+        {
+            shield = gameObject.AddComponent<Shield>();
+            shield.SetMaxEnergy(InitMaxShieldEnergy);
+        }
         lastHitBy = this.gameObject;
         killHistory = new Dictionary<string, int>();
         killHistory.Add("Dot", 0);
@@ -186,7 +211,6 @@ public class GeoObject : MonoBehaviour, IGeo
             trail.endColor = Color.black;
             refreshCounter = 0;
         }
-
     }
 
     /** IGeo methods **/

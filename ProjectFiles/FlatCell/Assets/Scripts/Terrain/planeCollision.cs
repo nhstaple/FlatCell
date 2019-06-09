@@ -35,6 +35,7 @@ public class planeCollision : MonoBehaviour
         if(other.gameObject.ToString().Contains("Player") && !other.gameObject.ToString().Contains("Projectile"))
         {
             StartCoroutine("lerpColorToPlayer", GetComponent<Renderer>().material);
+            // lerpColorToPlayer(GetComponent<Renderer>().material);
         }
     }
 

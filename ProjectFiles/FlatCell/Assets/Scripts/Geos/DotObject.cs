@@ -27,11 +27,14 @@ public class DotObject : GeoObject
         // Call parent class's method.
         base.Start();
 
-        // Add the weapon.
-        DotWeapon dotGun = gameObject.AddComponent<DotWeapon>();
-
-        dotGun.init(this, Resources.Load<AudioClip>(Dot_Shoot_Soundfile), DotDamage, DotPiercing, FireRate);
-        weapon.Add(dotGun);
+        if (ActiveGun == null)
+        {
+            // Add the weapon.
+            ActiveGun = Instantiate(Resources.Load("Player Items/Dot Gun")) as GameObject;
+            DotWeapon dotGun = ActiveGun.GetComponents<IWeapon>()[0] as DotWeapon;
+            dotGun.init(this, Resources.Load<AudioClip>(Dot_Shoot_Soundfile), DotDamage, DotPiercing, FireRate);
+            weapon.Add(dotGun);
+        }
 
         // Add a sphere mesh and collider to the game object.
         SphereCollider volume = gameObject.AddComponent<SphereCollider>();

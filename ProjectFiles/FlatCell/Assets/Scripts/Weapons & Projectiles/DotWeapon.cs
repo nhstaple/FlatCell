@@ -28,6 +28,13 @@ namespace Weapon.Command
             boopCoast.init(this, Damage, Piercing, ProjectileLifetime);
         }
 
+        void Start()
+        {
+            this.Projectile = gameObject.AddComponent<DotProjectile>();
+            DotProjectile boopCoast = (DotProjectile)this.Projectile;
+            boopCoast.init(this, Damage, Piercing, ProjectileLifetime);
+        }
+
         new public void Fire(Vector3 movementDir, Vector3 pos, float push, float SpawnOffset)
         {
             base.Fire(movementDir, pos, push, SpawnOffset);

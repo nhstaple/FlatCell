@@ -10,7 +10,7 @@ namespace DotBehaviour.Command
         new void Start()
         {
             base.Start();
-            type = "ShooterDot";
+            type = "Shooter Dot";
         }
 
         new public void exec()
