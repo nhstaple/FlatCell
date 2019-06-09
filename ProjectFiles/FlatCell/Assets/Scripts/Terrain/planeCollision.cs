@@ -16,8 +16,8 @@ public class planeCollision : MonoBehaviour
 
     void lerpWithoutThread(Color targetColor)
     {
-        const float refreshModifier = 32;
-        const float lerpTime = 5f;
+        const float refreshModifier = 16;
+        const float lerpTime = 2.5f;
         float t = 0.0f;
         int count = 0;
         Material mat = GetComponent<Renderer>().material;
@@ -31,12 +31,13 @@ public class planeCollision : MonoBehaviour
 
             mat.color = c;
         }
+        locked = false;
     }
 
     IEnumerator lerpColorToPlayer(Color targetColor)
     { 
-        const float refreshModifier = 32;
-        const float lerpTime = 5f;
+        const float refreshModifier = 16;
+        const float lerpTime = 2.5f;
         float t = 0.0f;
         int count = 0;
         Material mat = GetComponent<Renderer>().material;
@@ -49,8 +50,9 @@ public class planeCollision : MonoBehaviour
                                  t / lerpTime);
 
             mat.color = c;
-            yield return new WaitForSeconds(0.25f * refreshModifier * Time.deltaTime);
+            yield return new WaitForSeconds(refreshModifier * Time.deltaTime);
         }
+        locked = false;
     }
 
     void OnTriggerEnter(Collider other)
@@ -70,7 +72,6 @@ public class planeCollision : MonoBehaviour
                         locked = true;
                         StartCoroutine("lerpColorToPlayer", geo.GetColor());
                         // lerpWithoutThread(geo.GetColor());
-                        locked = false;
                     }
                 }
             }
