@@ -118,7 +118,9 @@ namespace Geo.Command
         [SerializeField] protected float Push = 100.0f;
         [SerializeField] protected float trailDecay = 1f;
         [SerializeField] protected bool EnableTrail;
-        LineDrawer lineDrawer;
+        LineDrawer forwardLine;
+        LineDrawer movementLine;
+        LineDrawer velocityLine;
 
         /** Script variables **/
         protected TrailRenderer trail;
@@ -161,7 +163,7 @@ namespace Geo.Command
 
         public void Kill()
         {
-            lineDrawer.Destroy();
+            forwardLine.Destroy();
         }
 
         public void AddColor(Color c)
@@ -222,7 +224,7 @@ namespace Geo.Command
                 ptr.SetOwner(this);
                 weapon.Add(ptr);
             }
-            lineDrawer = new LineDrawer();
+            forwardLine = new LineDrawer(1f);
             // Add components to game object.
             gameObject.AddComponent<MeshFilter>();
             gameObject.AddComponent<MeshRenderer>();
@@ -281,10 +283,10 @@ namespace Geo.Command
         public void Update()
         {
             Vector3 pos = gameObject.transform.position;
-            pos.y = 100;
-            Vector3 forw = transform.forward * 5;
-            forw.y = 100;
-            lineDrawer.DrawLineInGameView(pos, forw, Color.red);
+            pos.y = 25;
+            Vector3 forw = transform.forward * 25;
+            forw.y = 0;
+            forwardLine.DrawLineInGameView(pos + transform.forward, pos + forw, Color.yellow*10);
             refreshCounter += Time.deltaTime;
             if (health <= 0)
             {
