@@ -86,11 +86,13 @@ namespace Geo.Command
     public class GeoObject : MonoBehaviour, IGeo
     {
         /** Geo Stats **/
-        [SerializeField] protected float Speed;
+        [SerializeField] protected float DeathPenaltyLower = 0.5f;
+        [SerializeField] protected float DeathPenaltyUpper = 0.75f;
+        [SerializeField] protected float Speed = 50;
         [SerializeField] protected float BoostFactor;
-        [SerializeField] protected float MaxHealth;
-        [SerializeField] protected float FireRate;
-        [SerializeField] protected float Damage;
+        [SerializeField] protected float MaxHealth = 3;
+        [SerializeField] protected float FireRate = 0.125f;
+        [SerializeField] protected float Damage = 1;
         [SerializeField] protected float health;
         [SerializeField] protected float armor = 0.0f;
         [SerializeField] protected Color color = Color.clear;
@@ -155,6 +157,11 @@ namespace Geo.Command
                 pickup = gameObject.AddComponent<PickupObject>();
                 pickup.init(this, "Pickup");
             }
+        }
+
+        public void Kill()
+        {
+            lineDrawer.Destroy();
         }
 
         public void AddColor(Color c)
@@ -290,7 +297,7 @@ namespace Geo.Command
                 trail.startColor = this.color;
                 trail.endColor = Color.black;
                 refreshCounter = 0;
-            }
+            }   
         }
 
         /** IGeo methods **/
@@ -475,14 +482,17 @@ namespace Geo.Command
 
         public void Respawn()
         {
-            const float lowerBound = 0.50f;
-            const float upperBound = 0.75f;
+            float lowerBound = DeathPenaltyLower;float upperBound = DeathPenaltyUpper;
             transform.position = new Vector3(0, 25, 0);
             health = MaxHealth;
             if (killHistory.ContainsKey("Dot"))
             {
                 var score = killHistory["Dot"];
-                killHistory["Dot"] = (int)UnityEngine.Random.Range(score * lowerBound, score * upperBound);
+                var statPenalty = Random.Range(lowerBound, upperBound);
+
+                this.armor -= this.armor * statPenalty;
+                this.Speed -= this.Speed * statPenalty * 0.50f;
+                this.color -= this.color * statPenalty * 0.25f;
             }
         }
 

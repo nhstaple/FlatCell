@@ -158,6 +158,12 @@ public class DotSpawner : MonoBehaviour, ISpawner
 
         /** Kill the dead object **/
         Alive.Remove(dead);
+        IAI[] res = dead.GetComponents<IAI>();
+        if(res.Length > 0)
+        {
+            IAI ai = res[0];
+            ai.Kill();
+        }
         if(killer != null)
         {
             Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
