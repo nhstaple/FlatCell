@@ -113,7 +113,7 @@ public class UI : MonoBehaviour //, IGeo
             } 
             else
             {
-                Debug.Log("UI Error!");
+                // Debug.Log("UI Error!");
             }
         }
     }

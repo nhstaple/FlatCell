@@ -14,25 +14,41 @@ namespace Obscura
 
         private void Awake()
         {
+            if (Target == null)
+            {
+                Target = GameObject.FindWithTag("Player");
+            }
             this.ManagedCamera = this.gameObject.GetComponent<Camera>();
             this.CameraLineRenderer = this.gameObject.GetComponent<LineRenderer>();
         }
 
         private void OnEnable()
         {
-            // Move camera to player position.
-            var targetPosition = this.Target.transform.position;
-            var cameraPosition = this.ManagedCamera.transform.position;
-            cameraPosition.x = targetPosition.x;
-            cameraPosition.y = targetPosition.y;
-            this.ManagedCamera.transform.position = cameraPosition;
-            previousLoc = this.Target.transform.position;
+            if (Target == null)
+            {
+                Target = GameObject.FindWithTag("Player");
+            }
+            if(Target != null)
+            {
+                // Move camera to player position.
+                var targetPosition = this.Target.transform.position;
+                var cameraPosition = this.ManagedCamera.transform.position;
+                cameraPosition.x = targetPosition.x;
+                cameraPosition.y = targetPosition.y;
+                this.ManagedCamera.transform.position = cameraPosition;
+                previousLoc = this.Target.transform.position;
+            }
         }
 
         //Use the LateUpdate message to avoid setting the camera's position before
         //GameObject locations are finalized.
         void LateUpdate()
         {
+            if (Target == null)
+            {
+                Target = GameObject.FindWithTag("Player");
+            }
+
             var cameraPosition = this.ManagedCamera.transform.position;
 
             if(this.Target.transform.hasChanged)
@@ -48,8 +64,8 @@ namespace Obscura
                 timeCounter += Time.deltaTime;
             }
 
-            var adjust = Vector2.Lerp(new Vector2(cameraPosition.x, cameraPosition.y), new Vector2(previousLoc.x, previousLoc.y), timeCounter/ LerpDuration);
-            cameraPosition = new Vector3(adjust.x, adjust.y, cameraPosition.z);
+            var adjust = Vector2.Lerp(new Vector2(cameraPosition.x, cameraPosition.z), new Vector2(previousLoc.x, previousLoc.z), timeCounter/ LerpDuration);
+            cameraPosition = new Vector3(adjust.x, cameraPosition.y, adjust.y);
 
             this.ManagedCamera.transform.position = cameraPosition;
 

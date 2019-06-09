@@ -28,7 +28,7 @@ public class GeoObject : MonoBehaviour, IGeo
     [SerializeField] protected float Damage;
     [SerializeField] protected float health;
     [SerializeField] protected float armor = 0.0f;
-    [SerializeField] protected Color color;
+    [SerializeField] protected Color color = Color.clear;
     [SerializeField] protected Shield shield;
     [SerializeField] public const float InitMaxShieldEnergy = 2.0f;
     protected List<IWeapon> weapon;
@@ -76,6 +76,7 @@ public class GeoObject : MonoBehaviour, IGeo
 
     public void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
     {
+        this.color = ComputeRandomColor();
         this.Speed = Speed;
         this.MaxHealth = MaxHP;
         this.FireRate = FireRate;
@@ -88,6 +89,11 @@ public class GeoObject : MonoBehaviour, IGeo
             pickup = gameObject.AddComponent<PickupObject>();
             pickup.init(this, "Pickup");
         }
+    }
+
+    public void AddColor(Color c)
+    {
+        color = new Color(color.r + c.r, color.g + c.g, color.b + c.b, color.a);
     }
 
     private void AddTrail()
@@ -154,7 +160,10 @@ public class GeoObject : MonoBehaviour, IGeo
         transform.forward = new Vector3(1, 0, 0);
 
         // Set material
-        color = ComputeRandomColor();
+        if(color == Color.clear)
+        {
+            color = ComputeRandomColor();
+        }
 
         rend = gameObject.GetComponent<MeshRenderer>();
         rend.material = Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
@@ -222,6 +231,11 @@ public class GeoObject : MonoBehaviour, IGeo
     public Vector3 GetMovementDirection()
     {
         return movementDirection;
+    }
+
+    public float GetMovementMagnitude()
+    {
+        return movementDirection.magnitude;
     }
 
     public Color GetColor()
@@ -309,7 +323,7 @@ public class GeoObject : MonoBehaviour, IGeo
                              shieldLerpCounter / shieldLerpTime);
 
         rend.material.SetColor("_EmissionColor", c);
-
+        rend.material.color = Color.grey;
         rend.material.EnableKeyword("_EMISSION");
         shield.TurnOn();
         shield.Drain(Time.deltaTime);
@@ -320,6 +334,7 @@ public class GeoObject : MonoBehaviour, IGeo
     {
         shield.TurnOff();
         rend.material.DisableKeyword("_EMISSION");
+        rend.material.color = this.color;
         shieldLerpCounter = 0;
         newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
         shield.Charge(Time.deltaTime);

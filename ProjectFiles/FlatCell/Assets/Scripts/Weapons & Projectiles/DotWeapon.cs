@@ -17,8 +17,8 @@ namespace Weapon.Command
     public class DotWeapon : WeaponObject
     {
         const float PlayerChargeChance = 10;
-        const float ChargeMinMod = 3;
-        const float ChargeMaxMod = 5;
+        const float ChargeMinMod = 0f;
+        const float ChargeMaxMod = 1f;
 
         public new void init(IGeo GeoOwner, AudioClip Sound, float Damage, float Pierce = 0, float Rate = 0.01f, float lifeTime = 2.5f)
         {
@@ -50,16 +50,19 @@ namespace Weapon.Command
                 bullet_rigidbody = bullet.GetComponent<Rigidbody>();
                 if (Owner.ToString().Contains("Player"))
                 {
+                    Debug.Log("Value: " + Owner.GetMovementMagnitude());
                     float modified = 1;
                     if (Random.Range(1, 100) < PlayerChargeChance)
                     {
                         modified = Random.Range(ChargeMinMod, ChargeMaxMod);
                     }
-                    bullet_rigidbody.AddRelativeForce(lastMove * (push*modified + Owner.GetCurrentSpeed()), ForceMode.Impulse);
+                    // bullet_rigidbody.AddRelativeForce(lastMove * (push*modified + Owner.GetCurrentSpeed()), ForceMode.Impulse);
+                    bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + modified + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
                 }
                 else
                 {
-                    bullet_rigidbody.AddRelativeForce(lastMove * (push + Owner.GetCurrentSpeed()), ForceMode.Impulse);
+                    // bullet_rigidbody.AddRelativeForce(lastMove * (push + Owner.GetCurrentSpeed()), ForceMode.Impulse);
+                    bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
                 }
             }
         }

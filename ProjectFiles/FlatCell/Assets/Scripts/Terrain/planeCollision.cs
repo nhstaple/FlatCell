@@ -1,40 +1,73 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Geo.Command;
 
 public class planeCollision : MonoBehaviour
 {
     GameObject player;
+
+    bool locked = false;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player");
     }
 
-    IEnumerator lerpColorToPlayer(Material mat)
+    void lerpWithoutThread(Color targetColor)
     {
-        const float lerpTime = 5.0f;
+        const float refreshModifier = 32;
+        const float lerpTime = 5f;
         float t = 0.0f;
         int count = 0;
+        Material mat = GetComponent<Renderer>().material;
         while (t <= lerpTime)
         {
             count++;
-            t += Time.deltaTime;
-            Color c = Color.Lerp(GetComponent<Renderer>().material.color,
-                                 player.GetComponent<PlayerController>().GetColor(),
+            t += refreshModifier * Time.deltaTime;
+            Color c = Color.Lerp(mat.color,
+                                 targetColor,
                                  t / lerpTime);
 
             mat.color = c;
-            yield return new WaitForSeconds(Time.deltaTime);
+        }
+    }
+
+    IEnumerator lerpColorToPlayer(Color targetColor)
+    { 
+        const float refreshModifier = 32;
+        const float lerpTime = 5f;
+        float t = 0.0f;
+        int count = 0;
+        Material mat = GetComponent<Renderer>().material;
+        while (t <= lerpTime)
+        {
+            count++;
+            t += refreshModifier * Time.deltaTime;
+            Color c = Color.Lerp(mat.color,
+                                 targetColor,
+                                 t / lerpTime);
+
+            mat.color = c;
+            yield return new WaitForSeconds(0.25f * refreshModifier * Time.deltaTime);
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.ToString().Contains("Player") && !other.gameObject.ToString().Contains("Projectile"))
+        // if(other.gameObject.ToString().Contains("Player") && !other.gameObject.ToString().Contains("Projectile"))
+        if (!other.gameObject.ToString().Contains("Projectile"))
         {
-            StartCoroutine("lerpColorToPlayer", GetComponent<Renderer>().material);
+            IGeo[] res = other.gameObject.GetComponents<IGeo>();
+            if(res.Length > 0)
+            {
+                IGeo geo = res[0];
+                if (geo != null)
+                {
+                    StartCoroutine("lerpColorToPlayer", geo.GetColor());
+                    // lerpWithoutThread(geo.GetColor());
+                }
+            }
             // lerpColorToPlayer(GetComponent<Renderer>().material);
         }
     }

@@ -16,6 +16,8 @@ namespace Geo.Command
     {
 /** Player **/
         void Respawn();
+        void AddColor(Color c);
+        float GetMovementMagnitude();
 
 /** AI **/
     // Constructors

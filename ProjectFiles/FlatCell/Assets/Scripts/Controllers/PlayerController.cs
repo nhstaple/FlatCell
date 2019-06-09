@@ -18,6 +18,7 @@ public class PlayerController : DotObject
     [SerializeField] Vector3 SpawnLocation = new Vector3(0, 25, 0);
 
     /** Script variables **/
+    [SerializeField] public bool EnableBoost = false;
     private float modifiedSpeed;
     // Added to track the 3 moves we can use
     private int weaponSelect;
@@ -81,7 +82,7 @@ public class PlayerController : DotObject
 
         modifiedSpeed = Speed;
 
-        if (Input.GetButton("Jump"))
+        if (Input.GetButton("Jump") && EnableBoost)
         {
             modifiedSpeed *= BoostFactor;
             trail.widthMultiplier = BoostFactor;

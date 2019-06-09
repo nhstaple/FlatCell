@@ -13,9 +13,11 @@ public class PickupObject : MonoBehaviour, IPickup
     public float damage = 0;
     public float piercing = 0;
     public float lifeTime = 3;
-    public Vector3 scale = new Vector3(5f, 5f, 5f);
+    public Color color;
+    public Vector3 scale = new Vector3(10f, 10f, 10f);
     protected float LowRange = 0.25f;
     protected float HighRange = 0.50f;
+    protected float ColorIntensity = 100f;
 
     /** Script variables **/
     protected float counter = -1;
@@ -31,17 +33,24 @@ public class PickupObject : MonoBehaviour, IPickup
         armor = Random.Range(LowRange, HighRange)/4;
         damage = 1 * Random.Range(LowRange, HighRange);
         speed = owner.GetSpeed() * Random.Range(LowRange, HighRange);
+        color = owner.GetColor() * Random.Range(0.01f, 0.10f);
     }
     // Start is called before the first frame update
     void Start()
     {
-
+        if(owner != null)
+        {
+            color = owner.GetColor() * Random.Range(0.01f, 0.10f);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (owner != null)
+        {
+            color = owner.GetColor() * Random.Range(0.01f, 0.10f);
+        }
     }
 
     public string GetType()
@@ -83,20 +92,35 @@ public class PickupObject : MonoBehaviour, IPickup
         // Add the script
         PickupObject p = pickup.AddComponent<PickupObject>();
         var res = Random.Range(1, 100);
-        if(res <= 33)
+
+        const bool debugColor = true;
+
+        if(res <= 25 && !debugColor)
         {
+            Debug.Log("Made a health drop!");
             p.init(owner, "Health");
             rend.material.color = Color.red;
         }
-        else if(res > 33 && res < 66)
+        else if(res > 25 && res < 50 && !debugColor)
         {
+            Debug.Log("Made a armor drop!");
             p.init(owner, "Armor");
             rend.material.color = Color.yellow;
         }
-        else
+        else if (res > 50 && res < 75 && !debugColor)
         {
+            Debug.Log("Made a speed drop!");
             p.init(owner, "Speed");
             rend.material.color = Color.cyan;
+        }
+        else
+        {
+            Debug.Log("Made a color drop!");
+            Debug.Log(this.color);
+            p.init(owner, "Color");
+            rend.material.color = Color.grey;
+            rend.material.SetColor("_EmissionColor", this.color * ColorIntensity);
+            rend.material.EnableKeyword("_EMISSION");
         }
 
         Destroy(pickup, lifeTime);
@@ -123,6 +147,10 @@ public class PickupObject : MonoBehaviour, IPickup
                 else if (this.type == "Speed")
                 {
                     p.SetSpeed(p.GetSpeed() + this.speed);
+                }
+                else if (this.type == "Color")
+                {
+                    p.AddColor(this.color);
                 }
                 Destroy(this.gameObject);
             }
