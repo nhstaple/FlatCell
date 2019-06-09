@@ -43,8 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d86102ea7bd3ed240a7bc092dfa9fb13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energy: 2
+  energy: 100
   ready: 1
   active: 0
-  MaxEnergy: 2
-  ForceShield: 0
+  MaxEnergy: 100
