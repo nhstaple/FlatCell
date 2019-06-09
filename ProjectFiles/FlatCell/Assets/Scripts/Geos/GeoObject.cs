@@ -402,47 +402,53 @@ namespace Geo.Command
         }
 
         // Turn the shields on. Sets a flag and toggles emmision field on mat
+        // Called every frame.
         public void FlameOn()
         {
-            shieldLerpCounter += Time.deltaTime;
-            if (shieldLerpCounter >= shieldLerpTime)
-            {
-                shieldLerpCounter = 0;
-                newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) * Random.Range(1f, 2f);
-            }
-
-            Color oldColor = rend.material.GetColor("_EmissionColor");
-
-            Color c = Color.Lerp(oldColor,
-                                 newShieldColor,
-                                 shieldLerpCounter / shieldLerpTime);
-
-            rend.material.SetColor("_EmissionColor", c);
-     
-            if(!shield.IsActve())
+            if (!shield.IsActve() && shield.IsReady())
             {
                 shield.TurnOn();
-                rend.material.SetColor("_EmissionColor", c);
                 rend.material.EnableKeyword("_EMISSION");
-                // anim.lerpColorWithoutThread(1.5f, rend.material, Color.grey);
+                rend.material.color = Color.grey;
+            }
+            else if(shield.IsActve())
+            {
+                shieldLerpCounter += Time.deltaTime;
+                if (shieldLerpCounter >= shieldLerpTime)
+                {
+                    shieldLerpCounter = 0;
+                    newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) * Random.Range(1f, 2f);
+                }
+                Color oldColor = rend.material.GetColor("_EmissionColor");
+
+                Color c = Color.Lerp(oldColor,
+                                     newShieldColor,
+                                     shieldLerpCounter / shieldLerpTime);
+
+                rend.material.SetColor("_EmissionColor", c);
             }
             shield.Drain(Time.deltaTime);
-            rend.material.color = Color.grey;
         }
 
         // Turn the shields off. Clears a flag and toggles emmision field on mat
+        // Called every frame.
         public void FlameOff()
         {
-            shield.TurnOff();
-            rend.material.DisableKeyword("_EMISSION");
-            // rend.material.color = this.color;
-            shieldLerpCounter = 0;
-            newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-            shield.Charge(Time.deltaTime);
-            if(rend.material.color != this.color)
+            if (shield.IsActve())
             {
-                anim.lerpColorWithoutThread(2.5f, rend.material, this.color);
+                shield.TurnOff();
+                rend.material.DisableKeyword("_EMISSION");
+                shieldLerpCounter = 0;
+                newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+                /*
+                if (rend.material.color != this.color)
+                {
+                    anim.lerpColorWithoutThread(2.5f, rend.material, this.color);
+                }
+                */
+                rend.material.color = this.color;
             }
+            shield.Charge(Time.deltaTime);
         }
 
         public bool SetMaxHealth(float h)

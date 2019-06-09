@@ -288,7 +288,7 @@ MonoBehaviour:
   SpawnLocation: {x: 0, y: 25, z: 0}
   InitScale: {x: 25, y: 25, z: 25}
   EnableTrail: 1
-  DrawDebugLine: 0
+  DrawDebugLine: 1
   Speed: 50
   MaxHealth: 3
   FireRate: 0.05
@@ -834,7 +834,7 @@ Camera:
   far clip plane: 500
   field of view: 60
   orthographic: 1
-  orthographic size: 150
+  orthographic size: 200
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

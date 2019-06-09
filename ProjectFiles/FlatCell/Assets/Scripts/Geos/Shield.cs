@@ -48,7 +48,7 @@ namespace Geo.Command
         public void Drain(float e)
         {
             energy -= e;
-            if (energy <= 0)
+            if (energy < 0 && ready)
             {
                 energy = 0;
                 ready = false;
@@ -89,7 +89,16 @@ namespace Geo.Command
 
         public bool IsReady()
         {
-            return ready;
+            if(energy <=0 && ready)
+            {
+                ready = false;
+                energy = 0;
+                return ready;
+            }
+            else
+            {
+                return ready;
+            }
         }
 
         public bool IsActve()

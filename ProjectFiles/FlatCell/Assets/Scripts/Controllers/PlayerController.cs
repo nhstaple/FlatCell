@@ -88,7 +88,7 @@ public class PlayerController : DotObject
             modifiedSpeed *= BoostFactor;
             trail.widthMultiplier = BoostFactor;
         }
-        else if (Input.GetButton("Fire2") && shield.GetEnergy() >= 0 && shield.IsReady())
+        else if (Input.GetButton("Fire2") && shield.IsReady())
         {
             // Shields on.
             FlameOn();
