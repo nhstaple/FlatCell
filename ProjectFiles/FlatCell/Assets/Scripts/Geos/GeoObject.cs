@@ -121,6 +121,8 @@ namespace Geo.Command
         LineDrawer forwardLine;
         LineDrawer movementLine;
         LineDrawer velocityLine;
+        Animation anim = new Animation();
+        private bool locked = false;
 
         /** Script variables **/
         protected TrailRenderer trail;
@@ -402,7 +404,7 @@ namespace Geo.Command
             if (shieldLerpCounter >= shieldLerpTime)
             {
                 shieldLerpCounter = 0;
-                newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+                newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) * Random.Range(1f, 2f);
             }
 
             Color oldColor = rend.material.GetColor("_EmissionColor");
@@ -412,10 +414,16 @@ namespace Geo.Command
                                  shieldLerpCounter / shieldLerpTime);
 
             rend.material.SetColor("_EmissionColor", c);
-            rend.material.color = Color.grey;
-            rend.material.EnableKeyword("_EMISSION");
-            shield.TurnOn();
+     
+            if(!shield.IsActve())
+            {
+                shield.TurnOn();
+                rend.material.SetColor("_EmissionColor", c);
+                rend.material.EnableKeyword("_EMISSION");
+                // anim.lerpColorWithoutThread(1.5f, rend.material, Color.grey);
+            }
             shield.Drain(Time.deltaTime);
+            rend.material.color = Color.grey;
         }
 
         // Turn the shields off. Clears a flag and toggles emmision field on mat
@@ -423,10 +431,14 @@ namespace Geo.Command
         {
             shield.TurnOff();
             rend.material.DisableKeyword("_EMISSION");
-            rend.material.color = this.color;
+            // rend.material.color = this.color;
             shieldLerpCounter = 0;
             newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
             shield.Charge(Time.deltaTime);
+            if(rend.material.color != this.color)
+            {
+                anim.lerpColorWithoutThread(2.5f, rend.material, this.color);
+            }
         }
 
         public bool SetMaxHealth(float h)

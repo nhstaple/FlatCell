@@ -40,8 +40,9 @@ namespace DotBehaviour.Command
             if (period >= 0 && shield.IsReady())
             {
                 owner.FlameOn();
+                period -= Time.deltaTime;
             }
-            else
+            else if (!shield.IsReady())
             {
                 owner.FlameOff();
             }

@@ -11,7 +11,7 @@ namespace DotBehaviour.Command
         protected IGeo owner;
 
         [SerializeField] protected float DotProjectilePush = 100;
-        [SerializeField] protected float DirectionChangeTimer = 0.125f;
+        [SerializeField] protected float DirectionChangeTimer = 0.5f;
 
         protected float timer = 0.0f;
         protected float xMovementDir;
