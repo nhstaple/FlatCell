@@ -64,8 +64,14 @@ public class planeCollision : MonoBehaviour
                 IGeo geo = res[0];
                 if (geo != null)
                 {
-                    StartCoroutine("lerpColorToPlayer", geo.GetColor());
-                    // lerpWithoutThread(geo.GetColor());
+                    // a primitive synch lock
+                    if(locked == false)
+                    {
+                        locked = true;
+                        StartCoroutine("lerpColorToPlayer", geo.GetColor());
+                        // lerpWithoutThread(geo.GetColor());
+                        locked = false;
+                    }
                 }
             }
             // lerpColorToPlayer(GetComponent<Renderer>().material);
