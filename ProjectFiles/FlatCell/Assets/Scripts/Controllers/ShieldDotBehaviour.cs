@@ -8,11 +8,13 @@ namespace DotBehaviour.Command
     class ShieldDotBehaviour : SimpleDotBehaviour
     {
         private float period = 0.0f;
+        private Shield shield;
 
         new void Start()
         {
             base.Start();
             type = "Shield Dot";
+            shield = owner.GetShield();
         }
 
         new public void exec()
@@ -29,23 +31,29 @@ namespace DotBehaviour.Command
 
         new public void Shields()
         {
-            Shield shield = owner.GetShield();
-            if (!shield.IsActve() && Random.Range(0, 100) <= owner.GetShieldChance())
+            if(shield == null)
+            {
+                shield = owner.GetShield();
+            }
+
+            if (Random.Range(0, 100) <= owner.GetShieldChance())
             {
                 if (Random.Range(0, 100) <= owner.GetShieldChance() * 2)
                 {
-                    period = Random.Range(0, shield.GetMaxEnergy());
+                    period = Random.Range(0, shield.MaxEnergy);
                 }
             }
-            if (period >= 0 && shield.IsReady())
+
+            if (period >= 0 && !shield.IsCharging())
             {
                 owner.FlameOn();
-                period -= Time.deltaTime;
             }
-            else if (!shield.IsReady())
+            else if (shield.IsCharging())
             {
                 owner.FlameOff();
             }
+
+            period -= Time.deltaTime;
         }
     }
 }

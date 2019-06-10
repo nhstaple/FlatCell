@@ -91,9 +91,10 @@ public class DotSpawner : MonoBehaviour, ISpawner
             ai.init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
             Alive.Add(Dot);
         }
-        else if(res == 2)
+        // else if(res == 2)
+        if(false)
         {
-            Debug.Log("Spawned shield dot ai");
+            Debug.Log("Spawned shooter dot ai");
             GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
             Dot.transform.position = Location;
             Dot.transform.localScale = InitScale;
@@ -106,7 +107,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
         }
         else
         {
-            Debug.Log("Spawned shooter dot ai");
+            Debug.Log("Spawned shield dot ai");
             GameObject Dot = new GameObject("Geo Shield Dot" + counter);
             Dot.transform.position = Location;
             Dot.transform.localScale = InitScale;

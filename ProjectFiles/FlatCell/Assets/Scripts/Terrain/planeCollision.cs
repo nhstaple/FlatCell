@@ -3,45 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 using Geo.Command;
 
-struct Animation
+class Animation
 {
-    public void lerpColorWithoutThread(float lerpTime, Material mat, Color targetColor, bool locked = false)
-    {
-        const float refreshModifier = 16;
-        float t = 0.0f;
-        int count = 0;
-        while (t <= lerpTime)
-        {
-            count++;
-            t += refreshModifier * Time.deltaTime;
-            Color c = Color.Lerp(mat.color,
-                                 targetColor,
-                                 t / lerpTime);
+    public bool busy { get; private set; } = false;
 
-            mat.color = c;
-        }
-        locked = false;
+    public Animation()
+    {
+        busy = false;
     }
 
-    public IEnumerator lerpColor(float lerpTime, Material mat, Color targetColor, bool locked = false)
+    public void lerpColorWithoutThread(float lerpTime, Material mat, Color targetColor, float frameMulti = 2f)
     {
-        const float refreshModifier = 4f;
-        float t = 0.0f;
-        int count = 0;
-        while (t <= lerpTime)
+        if(busy == false)
         {
-            count++;
-            float roll = Random.Range(1f, 2f);
-            float tick = roll * refreshModifier * Time.deltaTime;
-            t += tick;
-            Color c = Color.Lerp(mat.color,
-                                 targetColor,
-                                 t / lerpTime);
+            busy = true;
+            float t = 0.0f;
+            int count = 0;
+            while (t <= lerpTime)
+            {
+                count++;
+                t += frameMulti * Time.deltaTime;
+                Color c = Color.Lerp(mat.color,
+                                     targetColor,
+                                     t / lerpTime);
 
-            mat.color = c;
-            yield return new WaitForSeconds(tick);
+                mat.color = c;
+            }
+            busy = false;
         }
-        locked = false;
+    }
+
+    public IEnumerator lerpColor(float lerpTime, Material mat, Color targetColor, float frameMulti = 2f, float juiceLowerRange = 1f, float juiceUpperRange = 2f)
+    {
+        Debug.Log("busy?");
+        Debug.Log(busy);
+        if(busy == false)
+        {
+            busy = true;
+            float t = 0.0f;
+            int count = 0;
+            while (t <= lerpTime)
+            {
+                count++;
+                float roll = Random.Range(juiceLowerRange, juiceUpperRange);
+                float tick = roll * frameMulti * Time.deltaTime;
+                t += tick;
+                Color c = Color.Lerp(mat.color,
+                                     targetColor,
+                                     t / lerpTime);
+
+                mat.color = c;
+                yield return new WaitForSeconds(tick);
+            }
+            busy = false;
+        }
     }
 
 }

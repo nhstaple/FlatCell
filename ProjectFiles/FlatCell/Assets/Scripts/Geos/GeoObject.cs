@@ -56,8 +56,6 @@ namespace Geo.Command
             {
                 init(0.2f);
             }
-            Debug.Log(start);
-            Debug.Log(end);
             //Set color
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
@@ -299,13 +297,13 @@ namespace Geo.Command
                 GameObject spawner = GameObject.FindWithTag("Spawner");
                 spawner.GetComponent<DotSpawner>().Kill(this.gameObject, lastHitBy);
             }
-            if (refreshCounter >= colorRefreshPoll)
+            if (refreshCounter >= colorRefreshPoll && !shield.active)
             {
-                rend.material.color = this.color;
+                anim.lerpColorWithoutThread(1f, rend.material, this.color);
                 trail.startColor = this.color;
                 trail.endColor = Color.black;
                 refreshCounter = 0;
-            }   
+            }  
         }
 
         /** IGeo methods **/
@@ -372,7 +370,7 @@ namespace Geo.Command
                 {
                     lastHitBy = bullet.GetOwner().GetOwner().GetGameObject();
                 }
-                if (!shield.IsActve())
+                if (!shield.active)
                 {
                     float armorBuff = armor;
                     if (armorBuff > .5f)
@@ -401,53 +399,64 @@ namespace Geo.Command
             return null;
         }
 
+        private float geoColorLerpCounter = 0f;
+        public float geoColorLerpTime = 0.5f;
+
         // Turn the shields on. Sets a flag and toggles emmision field on mat
         // Called every frame.
         public void FlameOn()
         {
-            if (!shield.IsActve() && shield.IsReady())
+            if (!shield.active)
             {
                 shield.TurnOn();
                 rend.material.EnableKeyword("_EMISSION");
-                rend.material.color = Color.grey;
             }
-            else if(shield.IsActve())
+
+            if (shield.active)
             {
                 shieldLerpCounter += Time.deltaTime;
+                geoColorLerpCounter += Time.deltaTime;
+
+                Color oldColor = rend.material.GetColor("_EmissionColor");
+                // Shield color
+                Color c = Color.Lerp(oldColor,
+                                     newShieldColor,
+                                     shieldLerpCounter / shieldLerpTime);
+
+                // If the geo hasn't updated its color
+                if(rend.material.color != Color.gray)
+                {
+                    // Geo color.
+                    rend.material.color = Color.Lerp(this.color,
+                                                     Color.grey,
+                                                     geoColorLerpCounter / geoColorLerpTime);
+                }
+
+                rend.material.SetColor("_EmissionColor", c);
+
                 if (shieldLerpCounter >= shieldLerpTime)
                 {
                     shieldLerpCounter = 0;
                     newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) * Random.Range(1f, 2f);
                 }
-                Color oldColor = rend.material.GetColor("_EmissionColor");
 
-                Color c = Color.Lerp(oldColor,
-                                     newShieldColor,
-                                     shieldLerpCounter / shieldLerpTime);
-
-                rend.material.SetColor("_EmissionColor", c);
+                shield.Drain(Time.deltaTime);
             }
-            shield.Drain(Time.deltaTime);
         }
 
         // Turn the shields off. Clears a flag and toggles emmision field on mat
         // Called every frame.
         public void FlameOff()
         {
-            if (shield.IsActve())
+            if (shield.active)
             {
                 shield.TurnOff();
                 rend.material.DisableKeyword("_EMISSION");
                 shieldLerpCounter = 0;
+                geoColorLerpCounter = 0f;
                 newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-                /*
-                if (rend.material.color != this.color)
-                {
-                    anim.lerpColorWithoutThread(2.5f, rend.material, this.color);
-                }
-                */
-                rend.material.color = this.color;
             }
+
             shield.Charge(Time.deltaTime);
         }
 
