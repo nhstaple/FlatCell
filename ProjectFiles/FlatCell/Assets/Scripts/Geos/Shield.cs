@@ -54,12 +54,10 @@ namespace Geo.Command
         {
             if(active && !charging)
             {
-                if(DebugPrint) { Debug.Log("Shield active."); }
                 Drain(Time.deltaTime);
             }
             else if(charging)
             {
-                if (DebugPrint) { Debug.Log("Shield charging."); }
                 Charge(Time.deltaTime);
             }
             else

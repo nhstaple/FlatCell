@@ -35,8 +35,6 @@ class Animation
 
     public IEnumerator lerpColor(float lerpTime, Material mat, Color targetColor, float frameMulti = 2f, float juiceLowerRange = 1f, float juiceUpperRange = 2f)
     {
-        Debug.Log("busy?");
-        Debug.Log(busy);
         if(busy == false)
         {
             busy = true;

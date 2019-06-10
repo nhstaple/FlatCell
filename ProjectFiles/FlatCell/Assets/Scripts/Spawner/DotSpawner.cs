@@ -79,8 +79,8 @@ public class DotSpawner : MonoBehaviour, ISpawner
         Location.z = UnityEngine.Random.Range(-SpawnOffset, SpawnOffset);
 
         // Add a random Ai controller to the List
-        int res = UnityEngine.Random.Range(1, ArchetypeCount + 1);
-        if (res == 1 && false)
+        int res = UnityEngine.Random.Range(1, 100);
+        if (res < 33)
         {
             Debug.Log("Spawned simple dot ai");
             GameObject Dot = new GameObject("Geo Simple Dot" + counter);
@@ -91,8 +91,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             ai.init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
             Alive.Add(Dot);
         }
-        // else if(res == 2)
-        if(false)
+        else if(res < 66)
         {
             Debug.Log("Spawned shooter dot ai");
             GameObject Dot = new GameObject("Geo Shooter Dot" + counter);

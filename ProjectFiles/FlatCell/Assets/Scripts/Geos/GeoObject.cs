@@ -345,10 +345,10 @@ namespace Geo.Command
             }
         }
 
-        public void MoveTo(Vector3 Location, float Step)
+        public void MoveTo(Vector3 Location, Vector3 Forward, float Step)
         {
-            movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-            Vector3 newDir = Vector3.RotateTowards(transform.forward, movementDirection, 360 * Mathf.Deg2Rad, 0.0f);
+            // movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+            Vector3 newDir = Vector3.RotateTowards(transform.forward, Forward, 360 * Mathf.Deg2Rad, 0.0f);
             // Move our position a step closer to the target.
             transform.position = Vector3.MoveTowards(transform.position, Location, Step);
             transform.rotation = Quaternion.LookRotation(newDir); ;
@@ -381,6 +381,23 @@ namespace Geo.Command
                 }
                 Destroy(collision.gameObject, .1f);
                 // deathSource.PlayOneShot(deathSource.clip, 0.4f);
+            }
+            else if(collision.gameObject.tag == "Boundary")
+            {
+                Debug.Log("Hit the wall!");
+                movementDirection.x *= -1;
+                movementDirection.y *= -1;
+                Vector3 pos = -1 * transform.position;
+                pos.y = 0;
+                pos.Normalize();
+
+                Rigidbody body = GetComponent<Rigidbody>();
+                body.AddForce(25f * pos, ForceMode.Impulse);
+                // MoveTo(pos, movementDirection, Speed*Time.deltaTime);
+            } 
+            else
+            {
+                Debug.Log("Hit a: " + collision.gameObject.tag);
             }
             return;
         }

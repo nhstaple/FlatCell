@@ -116,8 +116,7 @@ public class PlayerController : DotObject
             SwitchWeapon();
         }
         movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-        MoveTo(transform.position + movementDirection*modifiedSpeed,
-               modifiedSpeed * Time.deltaTime);
+        MoveTo(transform.position + movementDirection*modifiedSpeed, movementDirection, modifiedSpeed * Time.deltaTime);
     }
 
     void SwitchWeapon()

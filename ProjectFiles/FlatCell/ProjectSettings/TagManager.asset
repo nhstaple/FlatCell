@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DotSpawner
   - Spawner
+  - Boundary
   layers:
   - Default
   - TransparentFX

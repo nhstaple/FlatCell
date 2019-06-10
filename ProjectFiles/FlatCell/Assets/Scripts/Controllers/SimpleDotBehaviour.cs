@@ -19,22 +19,20 @@ namespace DotBehaviour.Command
         protected Vector3 movementDirection;
         protected float initSpeed;
         protected float initDamage;
-        protected float moveMax = 0.5f;
+        protected float moveMax = 1f;
 
         public string type;
 
         public void Start()
         {
-            movementDirection = new Vector3(Random.Range(0.5f, 1f), 0.0f, Random.Range(0.5f, 1f));
+            movementDirection = new Vector3(Random.Range(-1f, 1f), 0.0f, Random.Range(-1f, 1f));
             // transform.LookAt(movementDirection, new Vector3(0, 1, 0));
             Vector3 newDir = Vector3.RotateTowards(transform.forward, movementDirection, 360 * Mathf.Deg2Rad, 0.0f);
             transform.rotation = Quaternion.LookRotation(newDir);
-            float step = owner.GetSpeed() * Time.deltaTime;
             Debug.Log("speed = " + owner.GetSpeed());
-            Vector3 target = transform.position + movementDirection * owner.GetSpeed();
-            owner.MoveTo(target, step);
-            // Rigidbody b = GetComponent<Rigidbody>();
-            // b.AddForce(movementDirection * Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
+            Vector3 target = transform.position + movementDirection * 100 * owner.GetSpeed();
+            Rigidbody b = GetComponent<Rigidbody>();
+            b.AddForce(movementDirection * Random.Range(0.25f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
             type = "Simple Dot";
         }
 
@@ -71,16 +69,25 @@ namespace DotBehaviour.Command
             if (timer >= DirectionChangeTimer)
             {
                 timer = 0.0f;
-                movementDirection += new Vector3(Random.Range(-moveMax * Random.Range(0, 1f),
-                                                               moveMax * Random.Range(0, 1f)),
+                movementDirection =  new Vector3(Random.Range(-moveMax * Random.Range(-1f, 1f),
+                                                               moveMax * Random.Range(-1f, 1f)),
                                                  0.0f,
-                                                 Random.Range(-moveMax * Random.Range(0, 1f),
-                                                               moveMax * Random.Range(0, 1f)));
+                                                 Random.Range(-moveMax * Random.Range(-1f, 1f),
+                                                               moveMax * Random.Range(-1f, 1f)));
 
                 if(movementDirection.x > 1)         { movementDirection.x = 1; }
                 else if (movementDirection.x < -1 ) { movementDirection.x = -1; }
                 if (movementDirection.z > 1)        { movementDirection.z = 1; }
                 else if (movementDirection.z < -1)  { movementDirection.z = -1; }
+
+                if(Random.Range(0, 100f) <= 1)
+                {
+                    movementDirection.x *= -1;
+                }
+                if (Random.Range(0, 100f) <= 1)
+                {
+                    movementDirection.z *= -1;
+                }
 
                 // Roatate the object.
                 Vector3 newDir = Vector3.RotateTowards(transform.forward, movementDirection, 360 * Mathf.Deg2Rad, 0.0f);
@@ -90,7 +97,7 @@ namespace DotBehaviour.Command
                 Vector3 loc = owner.GetGameObject().transform.position;
                 float speed = Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed());
                 float step = speed * Time.deltaTime;
-                owner.MoveTo(loc + speed * movementDirection, step);
+                owner.MoveTo(loc + speed * movementDirection, movementDirection, step);
                 // Rigidbody b = GetComponent<Rigidbody>();
                 // b.AddForce(movementDirection * Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
             }
