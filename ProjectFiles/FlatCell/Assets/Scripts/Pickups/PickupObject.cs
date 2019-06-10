@@ -166,7 +166,7 @@ public class PickupObject : MonoBehaviour, IPickup
 
     public void OnCollisionEnter(Collision geo)
     {
-        if(geo.gameObject.ToString().Contains("Projectile") || gameObject.ToString().Contains("Geo"))
+        if(geo.gameObject.ToString().Contains("Projectile"))
         {
             Debug.Log("passed through pickup!");
             Physics.IgnoreCollision(geo.gameObject.GetComponent<Collider>(), gameObject.GetComponent<Collider>());

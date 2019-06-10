@@ -228,6 +228,50 @@ namespace Geo.Command
         protected float volHighRange = 1.0F;
         protected AudioSource deathSource;
 
+        public void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.ToString().Contains("Projectile") && (
+                collision.gameObject.tag != "Player" && this.gameObject.tag != "Player"
+                ))
+            {
+                IProjectile bullet = collision.gameObject.GetComponent<DotProjectile>();
+                if(!shield.active && 
+                   bullet != null &&
+                   bullet.GetOwner() != null &&
+                   bullet.GetOwner().GetOwner() != null)
+                {
+                    lastHitBy = bullet.GetOwner().GetOwner().GetGameObject();
+                    float armorBuff = armor;
+                    if (armorBuff > .5f)
+                    {
+                        armorBuff = .5f;
+                    }
+                    Hurt(bullet.GetDamage() * (1 - armorBuff));
+                }
+                Destroy(collision.gameObject, .1f);
+                // deathSource.PlayOneShot(deathSource.clip, 0.4f);
+            }
+            else if (collision.gameObject.tag == "Boundary")
+            {
+                Debug.Log("Hit the wall!");
+                movementDirection.x *= -1;
+                movementDirection.y *= -1;
+                Vector3 pos = -1 * transform.position;
+                pos.y = 0;
+                pos.Normalize();
+
+                Rigidbody body = GetComponent<Rigidbody>();
+                body.AddForce(25f * pos, ForceMode.Impulse);
+                // MoveTo(pos, movementDirection, Speed*Time.deltaTime);
+            }
+            else
+            {
+                Debug.Log("Hit a: " + collision.gameObject.tag);
+            }
+            return;
+        }
+
+
         // Start is called before the first frame update
         public void Start()
         {
@@ -481,49 +525,7 @@ namespace Geo.Command
             return transform.forward;
         }
 
-        public void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.ToString().Contains("Projectile"))
-            {
-                DotProjectile bullet = collision.gameObject.GetComponent<DotProjectile>();
-                if (bullet != null &&
-                   bullet.GetOwner() != null &&
-                   bullet.GetOwner().GetOwner() != null)
-                {
-                    lastHitBy = bullet.GetOwner().GetOwner().GetGameObject();
-                }
-                if (!shield.active)
-                {
-                    float armorBuff = armor;
-                    if (armorBuff > .5f)
-                    {
-                        armorBuff = .5f;
-                    }
-                    Hurt(bullet.GetDamage() * (1 - armorBuff));
-                }
-                Destroy(collision.gameObject, .1f);
-                // deathSource.PlayOneShot(deathSource.clip, 0.4f);
-            }
-            else if(collision.gameObject.tag == "Boundary")
-            {
-                Debug.Log("Hit the wall!");
-                movementDirection.x *= -1;
-                movementDirection.y *= -1;
-                Vector3 pos = -1 * transform.position;
-                pos.y = 0;
-                pos.Normalize();
-
-                Rigidbody body = GetComponent<Rigidbody>();
-                body.AddForce(25f * pos, ForceMode.Impulse);
-                // MoveTo(pos, movementDirection, Speed*Time.deltaTime);
-            } 
-            else
-            {
-                Debug.Log("Hit a: " + collision.gameObject.tag);
-            }
-            return;
-        }
-
+       
         public Shield GetShield()
         {
             return shield;
