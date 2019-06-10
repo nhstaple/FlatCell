@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Geo.Command;
 
 /*
  * Player Controller
@@ -18,6 +19,7 @@ public class PlayerController : DotObject
     [SerializeField] Vector3 SpawnLocation = new Vector3(0, 25, 0);
 
     /** Script variables **/
+    [SerializeField] public bool EnableBoost = false;
     private float modifiedSpeed;
     // Added to track the 3 moves we can use
     private int weaponSelect;
@@ -25,10 +27,6 @@ public class PlayerController : DotObject
     /** Evolution variables **/
     private float initSpawnOffset;
     private bool GrowFlag = false;
-
-    public AudioClip shootSound;
-    private float volLowRange = 0.5F;
-    private float volHighRange = 1.0F;
 
     new private void Start()
     {
@@ -39,14 +37,12 @@ public class PlayerController : DotObject
         weaponSelect = 1;
         initSpawnOffset = ProjectileSpawnOffset;
         this.color = Color.clear;
-        // this.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
 
     void Awake()
     {
         transform.position = new Vector3(0, 25, 0);
         transform.localScale = new Vector3(25, 25, 25);
-        source = GetComponent<AudioSource>();
     }
 
     new void Update()
@@ -86,27 +82,25 @@ public class PlayerController : DotObject
 
         modifiedSpeed = Speed;
 
-        if (Input.GetButton("Jump"))
+        if (Input.GetButton("Jump") && EnableBoost)
         {
             modifiedSpeed *= BoostFactor;
             trail.widthMultiplier = BoostFactor;
         }
-        else if (Input.GetButton("Fire2") && shield.GetEnergy() >= 0 && shield.IsReady())
+        else if (Input.GetButton("Fire2") && !shield.IsCharging())
         {
+            Debug.Log("Flame On, Flame On!");
             // Shields on.
             FlameOn();
         }
-        else if (Input.GetButton("Fire1") && !shield.IsActve())
+        else if (Input.GetButton("Fire1") && !shield.active)
         {
-            // Add shooting sounds.
-            float vol = Random.Range(volLowRange, volHighRange);
-            source.PlayOneShot(shootSound, vol);
-
             // Fire me matey!
             Shoot(ProjectileSpawnOffset);
         }
         else
         {
+            // Debug.Log("Oh man I need some water.");
             // Shields off.
             FlameOff();
             if (trail.widthMultiplier >= 1.0f)
@@ -120,14 +114,8 @@ public class PlayerController : DotObject
             Debug.Log("Switching Weapons");
             SwitchWeapon();
         }
-
-        float step = modifiedSpeed * Time.deltaTime;
         movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-        Vector3 old = transform.position;
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, new Vector3(movementDirection.x, 0, movementDirection.z), step, 0.0f);
-        // Move our position a step closer to the target.
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + movementDirection * step, step);
-        transform.forward = newDir;
+        MoveTo(transform.position + movementDirection*modifiedSpeed, movementDirection, modifiedSpeed * Time.deltaTime);
     }
 
     void SwitchWeapon()

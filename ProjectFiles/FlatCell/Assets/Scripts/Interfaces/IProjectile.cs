@@ -1,3 +1,7 @@
+// IProjectile.cs
+// Nick S.
+// Game Logic - Combat
+
 using UnityEngine;
 using Weapon.Command;
 

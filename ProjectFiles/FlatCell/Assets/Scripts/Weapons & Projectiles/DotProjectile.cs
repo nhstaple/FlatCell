@@ -23,6 +23,7 @@ namespace Projectile.Command
 
         new public GameObject Spawn(Vector3 Location)
         {
+            // Spawn the basic projectile.
             GameObject projectile = base.Spawn(Location);
 
             // For damage calc

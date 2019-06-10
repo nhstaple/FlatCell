@@ -1,6 +1,6 @@
 ﻿// Shield.cs
 // Nick S. & Kyle C.
-// Game Logic - AI
+// Game Logic - Combat
 
 using System.Collections;
 using System.Collections.Generic;
@@ -11,36 +11,81 @@ using UnityEngine;
  * 
  * This is an abstraction for the geometry's shield.
  * 
+ Public
+   void SetMaxEnergy(float f)
+   // Returns ernergy/max
+   float GetPercent()
+   // Adds the energy to this.energy. +/- is handle internally.
+   void AddEnergy(float e)
+  
+   // Turns the shields on or off. ie, sets this.active
+   void TurnOn()
+   void TurnOff()
+   
+ Private
+   void Drain(float e)
+   void Charge(float e)
 */
 
 namespace Geo.Command
 {
-    public class Shield : ScriptableObject
+    public class Shield : MonoBehaviour // ScriptableObject
     {
-        private float energy = 0;
-        private bool ready = true;
-        private bool active = false;
-        private float max = 0;
+        public bool DebugPrint = true;
+
+        // The shield's energy in seconds.
+        [SerializeField] public float energy = 0;
+
+        // Indicates if the shield is charging.
+        [SerializeField] public bool charging { get; private set; } = false;
+
+        // Indicates if the shields are on.
+        [SerializeField] public bool active { get; private set; } = false;
+
+        // The max value of the energy in seconds.
+        [SerializeField] public float MaxEnergy = 2;
+
+        public void Start()
+        {
+            energy = MaxEnergy;
+        }
+
+        public void Update()
+        {
+            if(active && !charging)
+            {
+                Drain(Time.deltaTime);
+            }
+            else if(charging)
+            {
+                Charge(Time.deltaTime);
+            }
+            else
+            {
+
+            }
+        }
 
         public void SetMaxEnergy(float f)
         {
-            energy = max = f;
+            energy = MaxEnergy = f;
         }
 
         public float GetPercent()
         {
-            return energy / max;
+            return energy / MaxEnergy;
         }
 
         // Drains energy from the shield.
         // If the energy is empty, then the shield needs to cooldown.
         public void Drain(float e)
         {
-            energy -= e;
-            if (energy <= 0)
+            if(e > 0) { e *= -1;  }
+            energy += e;
+            if (energy < 0)
             {
                 energy = 0;
-                ready = false;
+                charging = true;
             }
         }
 
@@ -49,10 +94,24 @@ namespace Geo.Command
         public void Charge(float e)
         {
             energy += e;
-            if (energy >= max)
+            if (energy >= MaxEnergy)
             {
-                energy = max;
-                ready = true;
+                energy = MaxEnergy;
+                charging = false;
+            }
+        }
+
+        public bool IsCharging()
+        {
+            if(energy <= 0)
+            {
+                charging = true;
+                energy = 0;
+                return charging;
+            }
+            else
+            {
+                return charging;
             }
         }
 
@@ -64,26 +123,6 @@ namespace Geo.Command
         public void TurnOff()
         {
             active = false;
-        }
-
-        public float GetEnergy()
-        {
-            return energy;
-        }
-
-        public float GetMaxEnergy()
-        {
-            return max;
-        }
-
-        public bool IsReady()
-        {
-            return ready;
-        }
-
-        public bool IsActve()
-        {
-            return active;
         }
     }
 }

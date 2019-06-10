@@ -73,24 +73,22 @@ namespace Projectile.Command
             body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
             proj.transform.position = Location;
 
-            // Destroys projectile after LifeTime seconds.
-            GameObject.Destroy(proj, LifeTime);
-
             // Set the size/
             proj.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
 
             rend.material = GameObject.Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
-            rend.material.color = Owner.GetOwner().GetColor();
             rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            Vector3 colorVector = new Vector3(rend.material.color.r, rend.material.color.g, rend.material.color.b);
-            if (rend.material.color == Color.clear)
-            {
-                rend.material.color = Color.white;
-            }
-            else if (colorVector.magnitude >= 1)
+            if (Owner.GetOwner().GetColor().maxColorComponent > 100)
             {
                 rend.material.color = Owner.GetOwner().GetColor();
             }
+            else
+            {
+                rend.material.color = Color.white;
+            }
+
+            // Destroys projectile after LifeTime seconds.
+            GameObject.Destroy(proj, LifeTime);
             return proj;
         }
 
@@ -108,7 +106,6 @@ namespace Projectile.Command
         {
             return this.Piercing;
         }
-
 
         public void SetLifeTime(float time)
         {
