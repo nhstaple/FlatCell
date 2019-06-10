@@ -115,7 +115,7 @@ namespace Geo.Command
         // The force applied to the projectile. 
         [SerializeField] public float ProjectileSpawnOffset = 20f;
         [SerializeField] protected float Push = 100.0f;
-        [SerializeField] protected float trailDecay = 1f;
+        [SerializeField] protected float trailDecay = 5f;
         [SerializeField] protected bool EnableTrail;
         LineDrawer forwardLine;
         LineDrawer movementLine;
@@ -124,7 +124,7 @@ namespace Geo.Command
         private bool locked = false;
 
         /** Script variables **/
-        protected TrailRenderer trail;
+        [SerializeField] public TrailRenderer trail;
         protected Vector3 lastMovement;
         protected Vector3 movementDirection;
         protected float currentSpeed;
@@ -153,6 +153,7 @@ namespace Geo.Command
             this.FireRate = FireRate;
             this.FireChance = FireChance;
             this.ShieldChance = ShieldChance;
+            this.EnableTrail = ShowTrail;
             AddTrail();
             trail.enabled = ShowTrail;
             if (pickup == null)
@@ -175,11 +176,19 @@ namespace Geo.Command
         private void AddTrail()
         {
             trail = gameObject.AddComponent<TrailRenderer>();
-            trail.startColor = this.color;
-            trail.endColor = Color.white;
+            trail.startColor = Color.white;
+            trail.endColor = this.color;
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                new GradientColorKey[] { new GradientColorKey(trail.startColor, 0.75f), new GradientColorKey(trail.endColor, 1.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(0.75f, 0.0f), new GradientAlphaKey(1, 1.0f) }
+            );
+            trail.colorGradient = gradient;
             trail.material = new Material(Resources.Load("TrailShader", typeof(Shader)) as Shader);
             trail.enabled = true;
             trail.time = 1.0f;
+            trail.startWidth = trail.startWidth * 10;
+            trail.endWidth = 0;
         }
 
         public void ModifyArmor(float a)
@@ -265,6 +274,7 @@ namespace Geo.Command
             {
                 rend.material.color = Color.white;
             }
+            color.a = 255;
             newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
 
             if (pickup == null)
@@ -299,10 +309,22 @@ namespace Geo.Command
             }
             if (refreshCounter >= colorRefreshPoll && !shield.active)
             {
-                anim.lerpColorWithoutThread(1f, rend.material, this.color);
-                trail.startColor = this.color;
-                trail.endColor = Color.black;
-                refreshCounter = 0;
+                float time = 1f;
+                // Lerp the material
+                StartCoroutine(anim.lerpColor(time, rend.material, this.color, locked));
+                // Set the callback
+                StartCoroutine(anim.WaitForSecondsThenExecute(() => {
+                    this.color.a = 255;
+                    refreshCounter = 0;
+                    trail.startColor = Color.white;
+                    trail.endColor = this.color;
+                    Gradient gradient = new Gradient();
+                    gradient.SetKeys(
+                        new GradientColorKey[] { new GradientColorKey(trail.startColor, 1f), new GradientColorKey(trail.endColor, 0.25f) },
+                        new GradientAlphaKey[] { new GradientAlphaKey(0.9f, 1f), new GradientAlphaKey(0.8f, 1f) }
+                    );
+                    trail.colorGradient = gradient;
+                }, time));
             }  
         }
 
@@ -427,6 +449,7 @@ namespace Geo.Command
             {
                 shield.TurnOn();
                 rend.material.EnableKeyword("_EMISSION");
+                geoColorLerpCounter = 0f;
             }
 
             if (shield.active)

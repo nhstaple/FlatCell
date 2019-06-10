@@ -54,7 +54,7 @@ MonoBehaviour:
   Damage: 1
   health: 0
   armor: 0
-  color: {r: 1, g: 1, b: 1, a: 0}
+  color: {r: 1, g: 0, b: 0, a: 0}
   shield: {fileID: 252064358201996518, guid: 54d4ab565e1334397b1f4e3b0aff3e7d, type: 3}
   InitWeapon: {fileID: 0}
   ActiveGun: {fileID: 0}
@@ -66,6 +66,7 @@ MonoBehaviour:
   Push: 100
   trailDecay: 1
   EnableTrail: 1
+  geoColorLerpTime: 0.5
   SpawnLocation: {x: 0, y: 25, z: 0}
   EnableBoost: 0
 --- !u!114 &4463196817797996642
