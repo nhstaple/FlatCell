@@ -1,8 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// SimpleDotBehaviour.cs
+// Nick S.
+// Game Logic - AI
+
 using UnityEngine;
 using Geo.Command;
 
+/*
+ * DotBehaviour - The implemntation of the IDotBehaviour interface.
+ * 
+ * This script will be attached to an IAI object and control it's movement,
+ * guns, shields, movement, etc.
+ * 
+ Public
+   // Returns the beheviour type. Ie, "Simple Dot", "Shield Dot", ...
+   string GetType()
+
+   // Initializes the script.
+   void init(IGeo geo)
+
+   // The Move logic.
+   void Move()
+
+   // The Firing logic.
+   void Fire()
+
+   // Checks' the AI kill record and update's its stats accordingly.
+   // This is how AI "get stronger."
+   void CheckScore()
+   
+*/
 namespace DotBehaviour.Command
 {
     class SimpleDotBehaviour : MonoBehaviour, IDotBehaviour
@@ -12,6 +38,8 @@ namespace DotBehaviour.Command
 
         [SerializeField] protected float DotProjectilePush = 100;
         [SerializeField] protected float DirectionChangeTimer = 0.5f;
+        [SerializeField] protected int maxKills = 10;
+        [SerializeField] protected int killWeight = 5;
 
         protected float timer = 0.0f;
         protected float xMovementDir;
@@ -44,17 +72,11 @@ namespace DotBehaviour.Command
         public void init(IGeo geo)
         {
             owner = geo;
-            if(owner != null)
+            if (owner != null)
             {
                 initSpeed = owner.GetSpeed();
                 initDamage = owner.GetSpeed();
             }
-        }
-
-        public void exec()
-        {
-            CheckScore();
-            Move();
         }
 
         public void Update()
@@ -80,6 +102,7 @@ namespace DotBehaviour.Command
                 if (movementDirection.z > 1)        { movementDirection.z = 1; }
                 else if (movementDirection.z < -1)  { movementDirection.z = -1; }
 
+
                 if(Random.Range(0, 100f) <= 1)
                 {
                     movementDirection.x *= -1;
@@ -98,6 +121,7 @@ namespace DotBehaviour.Command
                 float speed = Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed());
                 float step = speed * Time.deltaTime;
                 owner.MoveTo(loc + speed * movementDirection, movementDirection, step);
+
                 // Rigidbody b = GetComponent<Rigidbody>();
                 // b.AddForce(movementDirection * Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
             }
@@ -115,17 +139,15 @@ namespace DotBehaviour.Command
 
         public void CheckScore()
         {
-            const int maxKills = 10;
-            const int killWeight = 5;
-            if (owner.GetScore() < maxKills)
+            if(owner != null)
+            {
+                initSpeed = owner.GetSpeed();
+                initDamage = owner.GetDamage();
+            }
+            if (owner.GetScore() <= maxKills)
             {
                 owner.SetSpeed(initSpeed + owner.GetScore() * killWeight);
                 owner.SetDamage(initDamage + owner.GetScore() * 0.1f);
-            }
-            else
-            {
-                owner.SetSpeed(initSpeed + maxKills * killWeight);
-                owner.SetDamage(initDamage + maxKills * 0.1f);
             }
         }
     }

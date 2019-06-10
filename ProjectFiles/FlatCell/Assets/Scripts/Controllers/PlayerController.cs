@@ -37,7 +37,6 @@ public class PlayerController : DotObject
         weaponSelect = 1;
         initSpawnOffset = ProjectileSpawnOffset;
         this.color = Color.clear;
-        // this.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
 
     void Awake()

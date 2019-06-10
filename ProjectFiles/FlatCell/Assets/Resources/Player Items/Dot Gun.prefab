@@ -43,11 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73ebd36ca1babee41a4e0975aebd09f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FireRate: 0.125
+  FireRate: 0.25
   Damage: 1
   Piercing: 0
   ProjectileLifetime: 2.5
-  WeaponOwner: {fileID: 4463196817797996641, guid: 47d588308289b4dec8b4208a5b087f0d,
-    type: 3}
   shootSound: {fileID: 8300000, guid: a130c623994381541beda8fdec960131, type: 3}
   PlayerSoundPlayChance: 25

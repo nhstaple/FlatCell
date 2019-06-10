@@ -2,8 +2,6 @@
 // Nick S.
 // Game Logic - AI
 
-using System.Collections;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Geo.Command;
@@ -16,12 +14,22 @@ using AI.Command;
  * Dot Spawner
  * 
  * Spawns Dots as enemies. The serialized fields are passed to the AI's constructors.
- * 
+ *
+ Public
+   // Randomly kills an AI. This mimics Darwainism.
+   void Lottery()
+
+   // Spawns a new Dot.
+   void Spawn()
+
+   // Kills a dot- removes it from the list and updates the killer's info.
+   void Kill(GameObject dead, GameObject killer = null)
 */
 
 public class DotSpawner : MonoBehaviour, ISpawner
 {
     [SerializeField] public GameObject Player;
+    /** Spawner Stats **/
     [SerializeField] public int NumDots = 15;
     [SerializeField] public int ArchetypeCount = 3;
     [SerializeField] public float SpawnOffset = 400f;
@@ -29,6 +37,8 @@ public class DotSpawner : MonoBehaviour, ISpawner
     [SerializeField] public Vector3 InitScale = new Vector3(25, 25, 25);
     [SerializeField] public bool EnableTrail = true;
     [SerializeField] public bool DrawDebugLine = true;
+    
+    /** Dot AI Stats **/
     [SerializeField] public float Speed = 50;
     [SerializeField] public float MaxHealth = 3;
     [SerializeField] public float FireRate = 0.05f;
@@ -36,8 +46,10 @@ public class DotSpawner : MonoBehaviour, ISpawner
     [SerializeField] public float ShieldChance = 25;
     [SerializeField] public float Damage = 1;
 
-
+    // Container of alive objects.
     private List<GameObject> Alive;
+
+    // Global counter to keep track of unique dots.
     private int counter = -1;
 
     public void Start()
@@ -169,6 +181,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
         {
             Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
         }
+        // Spawn the stat drop.
         IPickup pickup = dead.GetComponent<PickupObject>();
         if(pickup != null)
         {

@@ -1,7 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// ShooterDotBehaviour.cs
+// Nick S.
+// Game Logic - AI
+
 using UnityEngine;
-using Weapon.Command;
+
+/*
+ * ShieldDotBehaviour - A Shooter Dot
+ * 
+ * This behaviour script extends the functionality of SimpleDotBehaviour.cs.
+ * 
+ * This AI will move and fire it's weapon. That's about it.
+ * 
+*/
 
 namespace DotBehaviour.Command
 {
@@ -11,12 +21,6 @@ namespace DotBehaviour.Command
         {
             base.Start();
             type = "Shooter Dot";
-        }
-
-        new public void exec()
-        {
-            base.exec();
-            Fire();
         }
 
         new public void Update()
@@ -29,10 +33,7 @@ namespace DotBehaviour.Command
         {
             if (Random.Range(0, 100) <= owner.GetFireChance())
             {
-                if (Random.Range(0, 100) <= owner.GetFireChance() * owner.GetFireChance() / 2)
-                {
-                    owner.Shoot();
-                }
+                owner.Shoot();
             }
         }
     }

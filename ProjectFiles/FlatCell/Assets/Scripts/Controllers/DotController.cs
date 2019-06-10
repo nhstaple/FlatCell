@@ -2,11 +2,8 @@
 // Nick S.
 // Game Logic - AI
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DotBehaviour.Command;
-using Pickup.Command;
 using AI.Command;
 using Geo.Command;
 
@@ -24,7 +21,7 @@ using Geo.Command;
    - Simple : Move (Default behaviour)
    - Shield : Move, Toggle Shields
    - Shoot  : Move, Toggle Weapon
- *
+ 
  * All IDotBehaviours set to this object need to be set with init after attaching.
  * For example, from DotSpawner.Spawn()
 
@@ -39,15 +36,17 @@ using Geo.Command;
    ShooterDotBehaviour b = Dot.AddComponent<ShooterDotBehaviour>();
    b.init(ai); 
 
- * Public:
- * 
- * // Removes the currents ai beaviour and updates to the input.
- * // @b needs to be initialized with IDotBehaviour.init(IGeo geo)
- * void SetBehaviour(IDotBehaviour b)
- * 
- * // If this ai collides with the player or another geo,
- * // set velocity to 0.
- * void OnCollisionEnter(Collision collision)
+ Public:
+   // Removes the currents ai beaviour and updates to the input.
+   // @b needs to be initialized with IDotBehaviour.init(IGeo geo)
+   void SetBehaviour(IDotBehaviour b)
+   
+   // If this ai collides with the player or another geo,
+   // set velocity to 0.
+   void OnCollisionEnter(Collision collision)
+
+ Private
+
 */
 
 public class DotController : DotObject, IAI
@@ -99,26 +98,6 @@ public class DotController : DotObject, IAI
     new public void Update()
     {
         base.Update();
-        /*
-        if(behaviour != null)
-        {
-            if (behaviour.GetType() == "Simple Dot")
-            {
-                SimpleDotBehaviour b = (SimpleDotBehaviour)behaviour;
-                b.exec();
-            }
-            else if (behaviour.GetType() == "Shield Dot")
-            {
-                ShieldDotBehaviour b = (ShieldDotBehaviour)behaviour;
-                b.exec();
-            }
-            else if (behaviour.GetType() == "Shooter Dot")
-            {
-                ShooterDotBehaviour b = (ShooterDotBehaviour)behaviour;
-                b.exec();
-            }
-        }
-        */
     }
 
     new public void OnCollisionEnter(Collision collision)

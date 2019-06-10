@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Weapon.Command;
-using Geo.Command;
 using Projectile.Command;
 using Pickup.Command;
 
@@ -16,11 +15,88 @@ using Pickup.Command;
  * 
  * This is the base abastract class that implements the IGeo interface.
  * You should *NOT* make Geo Objects directly.
+ * 
+ 
+ Public
+    // Init's the AI.
+    void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
+    
+    // Respawns the player.
+    void Respawn()
+
+ AI
+
+    // Moves to the position. Also updates the forward vector.
+    void MoveTo(Vector3 Location, Vector3 Forward, float Step)
+    
+    // Shoots a bullet away from the transform.position @ Offset in transform.forward direction.
+    void Shoot(float Offset)
+
+    // Adds a kill to the goe's kill record.
+    void AddKill(string name)
+
+    // Returns the AI's fire chance
+    float GetFireChance()
+
+    // Return's the AI's shield chance
+    float GetShieldChance()
+
+    // Kills the AI, also applies a penalty to the goe's stats.
+    void Kill()
+
+    // Turns the shields on.
+    void FlameOn()
+    
+    // Turns the shields off.
+    void FlameOff()
+
+    // Deals d damage.
+    void Hurt(float d)
+
+    // Heals h damage.
+    void Heal(float h)
+
+ Scripting
+    float GetCurrentSpeed()
+    Vector3 GetMovementDirection()
+    float GetMovementMagnitude()
+    IWeapon GetWeapon()
+    Vector3 GetForward()
+    void OnCollisionEnter(Collision collision)
+    Shield GetShield()
+    GameObject GetGameObject()
+
+ Stats
+    // Get
+    float GetDamage()
+    float GetArmor()
+    float GetHealth()
+    float GetMaxHealth()
+    Color GetColor()
+    float GetScore()
+    float GetSpeed()
+    // Set
+    void AddColor(Color c)
+    bool SetMaxHealth(float h)
+    void ModifyArmor(float a)
+    void SetDamage(float d)
+    void SetSpeed(float s)
+    void SetDamage(float d)
+
+ Private
+    // Adds a trail to the geo.
+    void AddTrail()
+
+    // Used for init AI colors.
+    private Color ComputeRandomColor()
+
+    void IncreaseArmor(float a)
+    void DecreaseArmor(float a)
 */
 
 namespace Geo.Command
 {
-
+    // Used to draw debug line.
     public struct LineDrawer
     {
         private LineRenderer lineRenderer;
@@ -81,18 +157,20 @@ namespace Geo.Command
         }
     }
 
+
     public class GeoObject : MonoBehaviour, IGeo
     {
-        /** Geo Stats **/
-        [SerializeField] protected float DeathPenaltyLower = 0.5f;
-        [SerializeField] protected float DeathPenaltyUpper = 0.75f;
+    /** Geo Stats **/
+        [SerializeField] private float DeathPenaltyLower = 0.5f;
+        [SerializeField] private float DeathPenaltyUpper = 0.75f;
         [SerializeField] protected bool DrawDebugLine = false;
-        [SerializeField] protected float Speed = 50;
+        [SerializeField] protected float Speed = 75;
+        [SerializeField] protected float MaxSpeed = 200;
         [SerializeField] protected float BoostFactor;
         [SerializeField] protected float MaxHealth = 3;
-        [SerializeField] protected float FireRate = 0.125f;
+        [SerializeField] protected float FireRate = 0.25f;
         [SerializeField] protected float Damage = 1;
-        [SerializeField] protected float health;
+        [SerializeField] protected float health = 0;
         [SerializeField] protected float armor = 0.0f;
         [SerializeField] protected Color color = Color.clear;
         [SerializeField] protected Shield shield;
@@ -102,28 +180,38 @@ namespace Geo.Command
         [SerializeField] protected GameObject ActiveGun;
         [SerializeField] public IPickup pickup;
 
-        /** Dot stats **/
+    /** Dot stats **/
         [SerializeField] protected float DotDamage = 1;
         [SerializeField] protected float DotPiercing = 0;
 
-        /** AI vars **/
+    /** AI vars **/
         public Dictionary<string, int> killHistory;
         [SerializeField] protected float FireChance = 35;
         [SerializeField] protected float ShieldChance = 35;
 
-        /** Cosemetics **/
+    /** Cosemetics **/
         // The force applied to the projectile. 
         [SerializeField] public float ProjectileSpawnOffset = 20f;
         [SerializeField] protected float Push = 100.0f;
         [SerializeField] protected float trailDecay = 5f;
         [SerializeField] protected bool EnableTrail;
+        // Used for debugging.
         LineDrawer forwardLine;
         LineDrawer movementLine;
         LineDrawer velocityLine;
+        //
+        // Animation manager.
         Animation anim = new Animation();
         private bool locked = false;
+        [SerializeField] protected float colorRefreshPoll = 0.5f;
+        [SerializeField] protected float shieldLerpTime = 1f;
+        private float shieldLerpCounter = 0;
+        [SerializeField] protected float geoColorLerpTime = 0.5f;
+        private float geoColorLerpCounter = 0f;
+        protected float refreshCounter = 0;
+        private Color newShieldColor;
 
-        /** Script variables **/
+    /** Script variables **/
         [SerializeField] public TrailRenderer trail;
         protected Vector3 lastMovement;
         protected Vector3 movementDirection;
@@ -131,96 +219,14 @@ namespace Geo.Command
         protected Vector3 prevPos;
         protected GameObject lastHitBy;
 
-        private float shieldLerpCounter = 0;
-        private float shieldLerpTime = 1f;
         protected Renderer rend;
-        const float colorRefreshPoll = 0.5f;
-        protected float refreshCounter = 0;
-        private Color newShieldColor;
 
-        /** Audio **/
+    /** Audio **/
         const string Geo_Death_Sound = "Audio/Death Sound";
         protected AudioClip deathSound;
         protected float volLowRange = 0.5F;
         protected float volHighRange = 1.0F;
         protected AudioSource deathSource;
-
-        public void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
-        {
-            this.color = ComputeRandomColor();
-            this.Speed = Speed;
-            this.MaxHealth = MaxHP;
-            this.FireRate = FireRate;
-            this.FireChance = FireChance;
-            this.ShieldChance = ShieldChance;
-            this.EnableTrail = ShowTrail;
-            AddTrail();
-            trail.enabled = ShowTrail;
-            if (pickup == null)
-            {
-                pickup = gameObject.AddComponent<PickupObject>();
-                pickup.init(this, "Pickup");
-            }
-        }
-
-        public void Kill()
-        {
-            forwardLine.Destroy();
-        }
-
-        public void AddColor(Color c)
-        {
-            color = new Color(color.r + c.r, color.g + c.g, color.b + c.b, color.a);
-        }
-
-        private void AddTrail()
-        {
-            trail = gameObject.AddComponent<TrailRenderer>();
-            trail.startColor = Color.white;
-            trail.endColor = this.color;
-            Gradient gradient = new Gradient();
-            gradient.SetKeys(
-                new GradientColorKey[] { new GradientColorKey(trail.startColor, 0.75f), new GradientColorKey(trail.endColor, 1.0f) },
-                new GradientAlphaKey[] { new GradientAlphaKey(0.75f, 0.0f), new GradientAlphaKey(1, 1.0f) }
-            );
-            trail.colorGradient = gradient;
-            trail.material = new Material(Resources.Load("TrailShader", typeof(Shader)) as Shader);
-            trail.enabled = true;
-            trail.time = 1.0f;
-            trail.startWidth = trail.startWidth * 10;
-            trail.endWidth = 0;
-        }
-
-        public void ModifyArmor(float a)
-        {
-            if (a < 0)
-            {
-                DecreaseArmor(a);
-            }
-            else
-            {
-                IncreaseArmor(a);
-            }
-        }
-
-        Color ComputeRandomColor()
-        {
-            Color color;
-            var res = Random.Range(1, 100);
-            if (1 <= res && res <= 33)
-            {
-                color = Color.red;
-            }
-            else if (res > 33 && res < 66)
-            {
-                color = Color.blue;
-            }
-            else
-            {
-                color = Color.green;
-            }
-            return color;
-        }
 
         // Start is called before the first frame update
         public void Start()
@@ -282,6 +288,7 @@ namespace Geo.Command
                 pickup = gameObject.AddComponent<PickupObject>();
                 pickup.init(this, "Pickup");
             }
+            refreshCounter = colorRefreshPoll;
         }
 
         public void FixedUpdate()
@@ -293,13 +300,13 @@ namespace Geo.Command
         // Update is called once per frame
         public void Update()
         {
-            if(DrawDebugLine)
+            if (DrawDebugLine)
             {
                 Vector3 pos = gameObject.transform.position;
                 pos.y = 25;
                 Vector3 forw = transform.forward * 25;
                 forw.y = 0;
-                forwardLine.DrawLineInGameView(pos + transform.forward, pos + forw, Color.yellow*10);
+                forwardLine.DrawLineInGameView(pos + transform.forward, pos + forw, Color.yellow * 10);
             }
             refreshCounter += Time.deltaTime;
             if (health <= 0)
@@ -309,6 +316,11 @@ namespace Geo.Command
             }
             if (refreshCounter >= colorRefreshPoll && !shield.active)
             {
+                refreshCounter = 0;
+                if(this.Speed >= MaxSpeed)
+                {
+                    Speed = MaxSpeed;
+                }
                 float time = 1f;
                 // Lerp the material
                 StartCoroutine(anim.lerpColor(time, rend.material, this.color, locked));
@@ -325,7 +337,95 @@ namespace Geo.Command
                     );
                     trail.colorGradient = gradient;
                 }, time));
-            }  
+            }
+        }
+
+
+        public void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
+        {
+            this.color = ComputeRandomColor();
+            this.Speed = Speed;
+            this.MaxHealth = MaxHP;
+            this.FireRate = FireRate;
+            this.FireChance = FireChance;
+            this.ShieldChance = ShieldChance;
+            this.EnableTrail = ShowTrail;
+            AddTrail();
+            trail.enabled = ShowTrail;
+            if (pickup == null)
+            {
+                pickup = gameObject.AddComponent<PickupObject>();
+                pickup.init(this, "Pickup");
+            }
+        }
+
+        public void Kill()
+        {
+            if (killHistory.ContainsKey("Dot"))
+            {
+                var score = killHistory["Dot"];
+                float lowerBound = DeathPenaltyLower;
+                float upperBound = DeathPenaltyUpper;
+                var statPenalty = Random.Range(lowerBound, upperBound);
+                this.armor -= this.armor * statPenalty;
+                this.Speed -= this.Speed * statPenalty * 0.50f;
+                this.color -= this.color * statPenalty * 0.25f;
+            }
+            forwardLine.Destroy();
+        }
+
+        public void AddColor(Color c)
+        {
+            color = new Color(color.r + c.r, color.g + c.g, color.b + c.b, color.a);
+        }
+
+        private void AddTrail()
+        {
+            trail = gameObject.AddComponent<TrailRenderer>();
+            trail.startColor = Color.white;
+            trail.endColor = this.color;
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                new GradientColorKey[] { new GradientColorKey(trail.startColor, 0.75f), new GradientColorKey(trail.endColor, 1.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(0.75f, 0.0f), new GradientAlphaKey(1, 1.0f) }
+            );
+            trail.colorGradient = gradient;
+            trail.material = new Material(Resources.Load("TrailShader", typeof(Shader)) as Shader);
+            trail.enabled = true;
+            trail.time = 1.0f;
+            trail.startWidth = trail.startWidth * 10;
+            trail.endWidth = 0;
+        }
+
+        public void ModifyArmor(float a)
+        {
+            if (a < 0)
+            {
+                DecreaseArmor(a);
+            }
+            else
+            {
+                IncreaseArmor(a);
+            }
+        }
+
+        private Color ComputeRandomColor()
+        {
+            Color color;
+            var res = Random.Range(1, 100);
+            if (1 <= res && res <= 33)
+            {
+                color = Color.red;
+            }
+            else if (res > 33 && res < 66)
+            {
+                color = Color.blue;
+            }
+            else
+            {
+                color = Color.green;
+            }
+            return color;
         }
 
         /** IGeo methods **/
@@ -438,9 +538,6 @@ namespace Geo.Command
             return null;
         }
 
-        private float geoColorLerpCounter = 0f;
-        public float geoColorLerpTime = 0.5f;
-
         // Turn the shields on. Sets a flag and toggles emmision field on mat
         // Called every frame.
         public void FlameOn()
@@ -450,6 +547,7 @@ namespace Geo.Command
                 shield.TurnOn();
                 rend.material.EnableKeyword("_EMISSION");
                 geoColorLerpCounter = 0f;
+                trail.enabled = false;
             }
 
             if (shield.active)
@@ -492,6 +590,7 @@ namespace Geo.Command
             {
                 shield.TurnOff();
                 rend.material.DisableKeyword("_EMISSION");
+                trail.enabled = true;
                 shieldLerpCounter = 0;
                 geoColorLerpCounter = 0f;
                 newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
@@ -555,18 +654,9 @@ namespace Geo.Command
 
         public void Respawn()
         {
-            float lowerBound = DeathPenaltyLower;float upperBound = DeathPenaltyUpper;
+            Kill();
             transform.position = new Vector3(0, 25, 0);
             health = MaxHealth;
-            if (killHistory.ContainsKey("Dot"))
-            {
-                var score = killHistory["Dot"];
-                var statPenalty = Random.Range(lowerBound, upperBound);
-
-                this.armor -= this.armor * statPenalty;
-                this.Speed -= this.Speed * statPenalty * 0.50f;
-                this.color -= this.color * statPenalty * 0.25f;
-            }
         }
 
         public void AddKill(string name)

@@ -73,9 +73,6 @@ namespace Projectile.Command
             body.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY;
             proj.transform.position = Location;
 
-            // Destroys projectile after LifeTime seconds.
-            GameObject.Destroy(proj, LifeTime);
-
             // Set the size/
             proj.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
 
@@ -89,6 +86,9 @@ namespace Projectile.Command
             {
                 rend.material.color = Color.white;
             }
+
+            // Destroys projectile after LifeTime seconds.
+            GameObject.Destroy(proj, LifeTime);
             return proj;
         }
 
@@ -106,7 +106,6 @@ namespace Projectile.Command
         {
             return this.Piercing;
         }
-
 
         public void SetLifeTime(float time)
         {

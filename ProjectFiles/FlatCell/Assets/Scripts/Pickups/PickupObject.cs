@@ -1,9 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// Pickup.cs
+// Nick S.
+// Game Logic - AI
+
 using UnityEngine;
 using Pickup.Command;
 using Geo.Command;
 
+/*
+ * There's one pickup object for all types of stat drops.
+ * The 
+ * 
+ void init(IGeo geo, string t)
+ string GetType()
+ void SetType(string t)
+ GameObject Spawn(Vector3 Location)
+ void OnCollisionEnter(Collision geo)
+ void Destroy()
+ * 
+ * Usage
+ //* From GeoObject.Start()
+ if (pickup == null)
+ {
+     pickup = gameObject.AddComponent<PickupObject>();
+     pickup.init(this, "Pickup");
+ }
+
+ //* From Spawner.Kill()
+ // Spawn the stat drop.
+ IPickup pickup = dead.GetComponent<PickupObject>();
+ if(pickup != null)
+ {
+     pickup.Spawn(dead.transform.position + dead.transform.forward*10);
+ }
+
+ *
+ * 
+*/
 public class PickupObject : MonoBehaviour, IPickup
 {
     public string type;
@@ -24,6 +56,9 @@ public class PickupObject : MonoBehaviour, IPickup
 
     protected Renderer rend;
     protected IGeo owner;
+
+    private float colorRefresh = 0.25f;
+    private float refreshCounter = 0f;
 
     public void init(IGeo geo, string t)
     {
@@ -47,8 +82,10 @@ public class PickupObject : MonoBehaviour, IPickup
     // Update is called once per frame
     void Update()
     {
-        if (owner != null)
+        refreshCounter += Time.deltaTime;
+        if (owner != null && refreshCounter >= colorRefresh)
         {
+            refreshCounter = 0f;
             color = owner.GetColor() * Random.Range(0.01f, 0.10f);
         }
     }
@@ -129,13 +166,13 @@ public class PickupObject : MonoBehaviour, IPickup
 
     public void OnCollisionEnter(Collision geo)
     {
-        if(geo.gameObject.ToString().Contains("Projectile"))
+        if(geo.gameObject.ToString().Contains("Projectile") || gameObject.ToString().Contains("Geo"))
         {
-            Debug.Log("passed through!");
+            Debug.Log("passed through pickup!");
             Physics.IgnoreCollision(geo.gameObject.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         }
         else if(!gameObject.ToString().Contains("Geo") &&
-            geo.gameObject.ToString().Contains("Player"))
+                 geo.gameObject.ToString().Contains("Player"))
         {
             IGeo p = geo.gameObject.GetComponent<PlayerController>();
             if(p != null)

@@ -2,18 +2,27 @@
 // Nick S.
 // Game Logic - AI
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Geo.Command;
 using DotBehaviour.Command;
 
 /*
  * IAI - AI Interface
  * 
- * This is the interface for all AI.
- * 
-*/ 
+ * This is the interface for all AI. Usage, from DotSpawner.cs
+  
+   // Spawns a Simple Dot. Sets name to a list of tags delim by " ",
+   // query with gameObject.ToString.Contains("tag")
+   GameObject Dot = new GameObject("Geo Simple Dot" + counter);
+   IAI ai1 = Dot.AddComponent<DotController>();
+   ai1.init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
+ 
+   // Spawns a Shooter Dot.
+   GameObject Dot = new GameObject("Geo Shield Dot" + counter);
+   IAI ai2 = Dot.AddComponent<DotController>();
+   ShooterDotBehaviour b = Dot.AddComponent<ShooterDotBehaviour>();
+   b.init(ai);
+   ai2.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
+*/
 
 namespace AI.Command
 {

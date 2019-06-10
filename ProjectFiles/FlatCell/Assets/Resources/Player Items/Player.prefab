@@ -47,16 +47,18 @@ MonoBehaviour:
   DeathPenaltyLower: 0.5
   DeathPenaltyUpper: 0.75
   DrawDebugLine: 1
-  Speed: 100
+  Speed: 75
+  MaxSpeed: 200
   BoostFactor: 4
-  MaxHealth: 5
+  MaxHealth: 3
   FireRate: 0.25
   Damage: 1
   health: 0
   armor: 0
-  color: {r: 1, g: 0, b: 0, a: 0}
+  color: {r: 1, g: 1, b: 1, a: 0}
   shield: {fileID: 252064358201996518, guid: 54d4ab565e1334397b1f4e3b0aff3e7d, type: 3}
-  InitWeapon: {fileID: 0}
+  InitWeapon: {fileID: 7591519539128337603, guid: 41f5855e2de694af0bcbb2e50f7a771a,
+    type: 3}
   ActiveGun: {fileID: 0}
   DotDamage: 1
   DotPiercing: 0
@@ -66,7 +68,10 @@ MonoBehaviour:
   Push: 100
   trailDecay: 1
   EnableTrail: 1
+  colorRefreshPoll: 0.5
+  shieldLerpTime: 1
   geoColorLerpTime: 0.5
+  trail: {fileID: 0}
   SpawnLocation: {x: 0, y: 25, z: 0}
   EnableBoost: 0
 --- !u!114 &4463196817797996642

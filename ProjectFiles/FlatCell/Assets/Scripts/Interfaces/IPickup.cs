@@ -1,5 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// IPickup.cs
+// Nick S.
+// Game Logic - AI
+
 using UnityEngine;
 using Geo.Command;
 

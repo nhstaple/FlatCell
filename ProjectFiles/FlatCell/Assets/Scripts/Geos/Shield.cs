@@ -1,6 +1,6 @@
 ﻿// Shield.cs
 // Nick S. & Kyle C.
-// Game Logic - AI
+// Game Logic - Combat
 
 using System.Collections;
 using System.Collections.Generic;
@@ -11,20 +11,20 @@ using UnityEngine;
  * 
  * This is an abstraction for the geometry's shield.
  * 
- * Pubilic
- * void SetMaxEnergy(float f)
- * // Returns ernergy/max
- * float GetPercent()
- * // Adds the energy to this.energy. +/- is handle internally.
- * void AddEnergy(float e)
- * 
- * // Turns the shields on or off. ie, sets this.active
- * void TurnOn()
- * void TurnOff()
- * 
- * Private
- * void Drain(float e)
- * void Charge(float e)
+ Public
+   void SetMaxEnergy(float f)
+   // Returns ernergy/max
+   float GetPercent()
+   // Adds the energy to this.energy. +/- is handle internally.
+   void AddEnergy(float e)
+  
+   // Turns the shields on or off. ie, sets this.active
+   void TurnOn()
+   void TurnOff()
+   
+ Private
+   void Drain(float e)
+   void Charge(float e)
 */
 
 namespace Geo.Command

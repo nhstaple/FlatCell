@@ -1,3 +1,9 @@
+// planeCollision.cs
+// Brian C.
+// Game Physics
+// Nick S.
+// Game Feel - Animation Manager
+
 using System.Collections;
 using System;
 using System.Collections.Generic;
@@ -6,60 +12,62 @@ using Geo.Command;
 
 public class Animation
 {
-    bool busy = false;
+    // Indicates if the animator is currently busy with a thread.
+    bool busy;
+
     public Animation()
     {
+        busy = false;
     }
 
-    public void lerpColorWithoutThread(float lerpTime, Material mat, bool locked,  Color targetColor, float frameMulti = 2f)
+    // Lerps material's color to value without threads.
+    // FrameMulti skips frames
+    // ie, frameMulti = 4 means color will be set 4 times less than normal lerp. This is to increase performance.
+    public void lerpColorWithoutThread(float lerpTime, Material mat, Color targetColor, bool locked = false, float frameMulti = 2f)
     {
         if(locked == false && !busy)
         {
             locked = true;
             busy = true;
             float t = 0.0f;
-            int count = 0;
             while (t <= lerpTime)
             {
-                count++;
                 t += frameMulti * Time.deltaTime;
-                Color c = Color.Lerp(mat.color,
+                mat.color = Color.Lerp(mat.color,
                                      targetColor,
                                      t / lerpTime);
-
-                mat.color = c;
             }
             locked = false;
             busy = false;
         }
     }
 
+    // Runs a function after waitTime.
+    // Used for calls backs 
     public IEnumerator WaitForSecondsThenExecute(Action method, float waitTime)
     {
-        Debug.Log("execute delegate coroutine!");
+        // Debug.Log("execute delegate coroutine!");
         yield return new WaitForSeconds(waitTime);
         method();
     }
 
-    public IEnumerator lerpColor(float lerpTime, Material mat, Color targetColor, bool locked, float frameMulti = 2f, float juiceLowerRange = 1f, float juiceUpperRange = 2f)
+    // Changing the upper and lower bounds will increase the spread at which this coroutine yields.
+    // Ie, makes it look different.
+    public IEnumerator lerpColor(float lerpTime, Material mat, Color targetColor, bool locked = false, float frameMulti = 2f, float juiceLowerRange = 1f, float juiceUpperRange = 2f)
     {
         if(locked == false && !busy)
         {
             locked = true;
             busy = true;
             float t = 0.0f;
-            int count = 0;
             while (t <= lerpTime)
             {
-                count++;
-                float roll = UnityEngine.Random.Range(juiceLowerRange, juiceUpperRange);
-                float tick = roll * frameMulti * Time.deltaTime;
+                float tick = UnityEngine.Random.Range(juiceLowerRange, juiceUpperRange) * frameMulti * Time.deltaTime;
                 t += tick;
-                Color c = Color.Lerp(mat.color,
+                mat.color = Color.Lerp(mat.color,
                                      targetColor,
                                      t / lerpTime);
 
-                mat.color = c;
                 yield return new WaitForSeconds(tick);
             }
             locked = false;
@@ -75,7 +83,8 @@ public class planeCollision : MonoBehaviour
 {
     GameObject player;
 
-    bool locked = false;
+    bool animLock = false;
+    float animTime = 2.5f;
 
     [SerializeField] public Animation anim = new Animation();
     IEnumerator coroutine;
@@ -83,6 +92,7 @@ public class planeCollision : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        animTime = UnityEngine.Random.Range(1f, 2f);
     }
 
 
@@ -98,9 +108,9 @@ public class planeCollision : MonoBehaviour
                 if (geo != null)
                 {
                     // a primitive synch lock
-                    if (locked == false)
+                    if (animLock == false)
                     {
-                        coroutine = anim.lerpColor(2.5f, GetComponent<Renderer>().material, geo.GetColor(), locked);
+                        coroutine = anim.lerpColor(animTime, GetComponent<Renderer>().material, geo.GetColor(), animLock);
                         StartCoroutine(coroutine);
                         // lerpWithoutThread(geo.GetColor());
                     }

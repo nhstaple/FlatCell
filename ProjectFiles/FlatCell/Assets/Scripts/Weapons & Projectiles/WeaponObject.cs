@@ -2,8 +2,6 @@
 // Nick S.
 // Game Logic - Combat
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Weapon.Command;
 using Projectile.Command;
@@ -71,6 +69,10 @@ public class WeaponObject : MonoBehaviour, IWeapon
             weaponSource = gameObject.AddComponent<AudioSource>();
             weaponSource.enabled = true;
         }
+        if(shootSound == null)
+        {
+            shootSound = Resources.Load("Audio/Shoot Sound") as AudioClip;
+        }
     }
 
     public void Update()
@@ -85,6 +87,11 @@ public class WeaponObject : MonoBehaviour, IWeapon
 
     protected void PlaySound()
     {
+        if (weaponSource == null)
+        {
+            weaponSource = gameObject.AddComponent<AudioSource>();
+            weaponSource.enabled = true;
+        }
         if (Owner == null)
         {
             this.Owner = this.gameObject.GetComponent<PlayerController>();
