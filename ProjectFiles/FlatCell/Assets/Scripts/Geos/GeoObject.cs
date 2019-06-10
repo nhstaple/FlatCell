@@ -206,7 +206,7 @@ namespace Geo.Command
         [SerializeField] protected float colorRefreshPoll = 0.5f;
         [SerializeField] protected float shieldLerpTime = 1f;
         private float shieldLerpCounter = 0;
-        [SerializeField] protected float geoColorLerpTime = 0.5f;
+        [SerializeField] protected float geoColorLerpTime = 1f;
         private float geoColorLerpCounter = 0f;
         protected float refreshCounter = 0;
         private Color newShieldColor;
@@ -365,22 +365,26 @@ namespace Geo.Command
                 {
                     Speed = MaxSpeed;
                 }
-                float time = 1f;
-                // Lerp the material
-                StartCoroutine(anim.lerpColor(time, rend.material, this.color, locked));
-                // Set the callback
-                StartCoroutine(anim.WaitForSecondsThenExecute(() => {
-                    this.color.a = 255;
-                    refreshCounter = 0;
-                    trail.startColor = Color.white;
-                    trail.endColor = this.color;
-                    Gradient gradient = new Gradient();
-                    gradient.SetKeys(
-                        new GradientColorKey[] { new GradientColorKey(trail.startColor, 1f), new GradientColorKey(trail.endColor, 0.25f) },
-                        new GradientAlphaKey[] { new GradientAlphaKey(0.9f, 1f), new GradientAlphaKey(0.8f, 1f) }
-                    );
-                    trail.colorGradient = gradient;
-                }, time));
+                if (!locked)
+                {
+                    geoColorLerpCounter = 0f;
+                    float time = 1f;
+                    // Lerp the material
+                    StartCoroutine(anim.lerpColor(time, rend.material, this.color, locked));
+                    // Set the callback
+                    StartCoroutine(anim.WaitForSecondsThenExecute(() => {
+                        this.color.a = 255;
+                        refreshCounter = 0;
+                        trail.startColor = Color.white;
+                        trail.endColor = this.color;
+                        Gradient gradient = new Gradient();
+                        gradient.SetKeys(
+                            new GradientColorKey[] { new GradientColorKey(trail.startColor, 1f), new GradientColorKey(trail.endColor, 0.25f) },
+                            new GradientAlphaKey[] { new GradientAlphaKey(0.9f, 1f), new GradientAlphaKey(0.8f, 1f) }
+                        );
+                        trail.colorGradient = gradient;
+                    }, time*1.1f));
+                }
             }
         }
 
@@ -554,9 +558,6 @@ namespace Geo.Command
 
             if (shield.active)
             {
-                shieldLerpCounter += Time.deltaTime;
-                geoColorLerpCounter += Time.deltaTime;
-
                 Color oldColor = rend.material.GetColor("_EmissionColor");
                 // Shield color
                 Color c = Color.Lerp(oldColor,
@@ -564,12 +565,16 @@ namespace Geo.Command
                                      shieldLerpCounter / shieldLerpTime);
 
                 // If the geo hasn't updated its color
-                if(rend.material.color != Color.gray)
+                if(rend.material.color != Color.gray && !locked)
                 {
+                    geoColorLerpCounter += Time.deltaTime * 0.25f;
+                    shieldLerpCounter += Time.deltaTime;
+                    locked = true;
                     // Geo color.
                     rend.material.color = Color.Lerp(this.color,
                                                      Color.grey,
                                                      geoColorLerpCounter / geoColorLerpTime);
+                    locked = false;
                 }
 
                 rend.material.SetColor("_EmissionColor", c);
@@ -594,7 +599,6 @@ namespace Geo.Command
                 rend.material.DisableKeyword("_EMISSION");
                 trail.enabled = true;
                 shieldLerpCounter = 0;
-                geoColorLerpCounter = 0f;
                 newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
             }
 
