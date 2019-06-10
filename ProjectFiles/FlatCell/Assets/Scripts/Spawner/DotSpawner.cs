@@ -65,7 +65,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
 
     void Update()
     {
-        Lottery();
+        Lottery(1000f);
 
         if(Alive.Count < NumDots)
         {
@@ -74,9 +74,9 @@ public class DotSpawner : MonoBehaviour, ISpawner
     }
 
     // .1% to kill a random dot
-    public void Lottery()
+    public void Lottery(float cap)
     {
-        if (UnityEngine.Random.Range(0, 1000) <= 1 && Alive.Count > 0)
+        if (UnityEngine.Random.Range(0, cap) <= 1 && Alive.Count > 0)
         {
             int index = UnityEngine.Random.Range(0, Alive.Count - 1);
             Kill(Alive[index]);

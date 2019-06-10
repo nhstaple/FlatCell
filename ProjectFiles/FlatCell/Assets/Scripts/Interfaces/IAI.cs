@@ -8,6 +8,9 @@ using DotBehaviour.Command;
 /*
  * IAI - AI Interface
  * 
+ * The abstact interface that handles all AI logic. More functions should be added here if we ant the AI
+ * to do more special things.
+ * 
  * This is the interface for all AI. Usage, from DotSpawner.cs
   
    // Spawns a Simple Dot. Sets name to a list of tags delim by " ",

@@ -24,8 +24,8 @@ namespace Weapon.Command
         {
             base.init(GeoOwner, Sound, Damage, Pierce, Rate, lifeTime);
             this.Projectile = gameObject.AddComponent<DotProjectile>();
-            DotProjectile boopCoast = (DotProjectile) this.Projectile;
-            boopCoast.init(this, Damage, Piercing, ProjectileLifetime);
+            DotProjectile boopCast = (DotProjectile) this.Projectile;
+            boopCast.init(this, Damage, Piercing, ProjectileLifetime);
         }
 
         void Start()

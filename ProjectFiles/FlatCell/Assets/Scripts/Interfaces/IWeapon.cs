@@ -13,11 +13,10 @@ using Geo.Command;
  * If you want to make special ammunition, new weapons, etc., see DotProjectile.cs for
  * an example.
  * 
- Public
-   // AI
-   void init(IGeo GeoOwner, AudioClip Sound, float Damage = 1, float Pierce = 0, float Rate = 0.125f, float lifeTime = 2.5f);
+
  * 
 */
+
 namespace Weapon.Command
 {
     public interface IWeapon
@@ -33,6 +32,8 @@ namespace Weapon.Command
 
         // Returns the IGeo owner of the weapon.
         IGeo GetOwner();
+
+        // Sets the owner of the weapon.
         void SetOwner(IGeo geo);
     }
 }

@@ -2,8 +2,6 @@
 // Nick S. & Kyle C.
 // Game Logic - Combat
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /*
@@ -12,9 +10,12 @@ using UnityEngine;
  * This is an abstraction for the geometry's shield.
  * 
  Public
+   // Sets the max energy
    void SetMaxEnergy(float f)
+
    // Returns ernergy/max
    float GetPercent()
+
    // Adds the energy to this.energy. +/- is handle internally.
    void AddEnergy(float e)
   
@@ -23,7 +24,13 @@ using UnityEngine;
    void TurnOff()
    
  Private
+ 
+   // Drains energy from the shield.
+   // If the energy is empty, then the shield needs to cooldown.
    void Drain(float e)
+
+   // Adds energy back to the shield.
+   // If the energy exceeds max then cap it and clear the cooldown flag
    void Charge(float e)
 */
 
@@ -31,10 +38,8 @@ namespace Geo.Command
 {
     public class Shield : MonoBehaviour // ScriptableObject
     {
-        public bool DebugPrint = true;
-
         // The shield's energy in seconds.
-        [SerializeField] public float energy = 0;
+        [SerializeField] public float energy { get; private set; }  = 0;
 
         // Indicates if the shield is charging.
         [SerializeField] public bool charging { get; private set; } = false;
@@ -43,7 +48,7 @@ namespace Geo.Command
         [SerializeField] public bool active { get; private set; } = false;
 
         // The max value of the energy in seconds.
-        [SerializeField] public float MaxEnergy = 2;
+        [SerializeField] public float MaxEnergy { get; private set; }  = 2;
 
         public void Start()
         {

@@ -8,7 +8,7 @@ using AI.Command;
 using Geo.Command;
 
 /*
- * Simple Dot Controller - dot AI that just moves
+ * Dot Controller - dot AI that just moves
  * 
  * This is a basic AI controller for a Dot object. I chose to use inheritence
  * (C++ what up) to derive: Geo -> DotObject -> DotController.

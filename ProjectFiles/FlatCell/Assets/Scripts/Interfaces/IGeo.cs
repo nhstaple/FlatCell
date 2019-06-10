@@ -6,7 +6,13 @@ using UnityEngine;
 using Weapon.Command;
 
 /*
- * IGeo - geo object interface
+ * IGeo - Geo Object Interface
+ * 
+ * This is the base interface for all geometric objects in the game, ie all AI and the player.
+ * 
+ * GameObjects are constructed programatically rather than through prefabs. This approach was
+ * taken because the design approach to his game was to use as many built-in Unity tools as 
+ * possible to create Flat Cell.
  * 
 */
 

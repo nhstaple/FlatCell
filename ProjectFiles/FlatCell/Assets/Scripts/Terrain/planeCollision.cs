@@ -44,6 +44,7 @@ public class Animation
 
     // Runs a function after waitTime.
     // Used for calls backs 
+    // source https://answers.unity.com/questions/516798/executing-an-action-after-a-coroutine-has-finished.html
     public IEnumerator WaitForSecondsThenExecute(Action method, float waitTime)
     {
         // Debug.Log("execute delegate coroutine!");
