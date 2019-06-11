@@ -91,9 +91,9 @@ I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/Flat
 I was also the _git master_ for this assignment.
 
 ### Asset Generation
-#### [Projectiles](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Weapons%20%26%20Projectiles/ProjectileObject.cs#L55)
-#### [Dots](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/DotObject.cs#L28)
 I made the use of interfaces that call `GameObject Spawn(Vector3 Loc)` to programmatically generate assets through `new GameObject()`.
+* [Projectiles](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Weapons%20%26%20Projectiles/ProjectileObject.cs#L55)
+* [Dots](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/DotObject.cs#L28)
 
 ### [Inheritance](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/GeoObject.cs#L163)
 All `geo`s derive from a base `GeoObject` class. This class implmenets the `IGeo` interfaces, which means all `geo` objects can be added to `GameObjects` and references via a `IGeo` interfaces via its methods.
