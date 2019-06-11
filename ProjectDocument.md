@@ -90,18 +90,18 @@ Boost – Joystick Button 3; correlates to Triangle on Playstation Controller an
 
 I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev). I was responsible for the [Interfaces](https://github.com/nhstaple/FlatCell/wiki/Interfaces), [Spawner](https://github.com/nhstaple/FlatCell/wiki/Spawner), AI, shooting, programmatic asset generation, ... Here is a brief overview of what I handled as Game Logician. For more information about the technical details see the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev).
 
-##### Asset Generation
-###### [Projectiles](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Weapons%20%26%20Projectiles/ProjectileObject.cs#L55)
-###### [Dots](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/DotObject.cs#L28)
+### Asset Generation
+#### [Projectiles](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Weapons%20%26%20Projectiles/ProjectileObject.cs#L55)
+#### [Dots](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/DotObject.cs#L28)
 I made the use of interfaces that call `GameObject Spawn(Vector3 Loc)` to programmatically generate assets through `new GameObject()`.
 
-##### Inheritance
+### Inheritance
 All `geo`s derive from a base `GeoObject` class. This class implmenets the `IGeo` interfaces, which means all `geo` objects can be added to `GameObjects` and references via a `IGeo` interfaces via its methods.
 
-##### Factories
+### Factories
 The `ISpawner` interfaces acts as a factory for spawning AI. We have one spawner that a `DotSpawner.cs` is attached to. The ideas was to have n spawners attached to it to handle the different types of `geo`s, ie `dot`, `line`, `triangle`, etc.
 
-##### AI Stats and Evolution
+### AI Stats and Evolution
 Each `geo` has a pointer referencing what hit it last. When that AI dies, the pointer is called and the killer's `killHistory<string, int>` hash table is updated. When the kills are updated that's when the AI's stats are mutated to become stronger.
 
 # Sub-Roles
