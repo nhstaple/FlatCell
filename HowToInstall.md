@@ -5,7 +5,7 @@
 These instructions will get you the most recent version of `dev`.
 #### Command line
 ```
-git clone https://github.com/nhstaple/ECS189L-Group-Project
+git clone https://github.com/nhstaple/FlatCell
 cd ECS189L-Group-Project
 git branch dev
 git checkout dev
