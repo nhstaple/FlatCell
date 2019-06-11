@@ -105,6 +105,11 @@ To handle the firing mechanic I abstracted the game as follows:
 ### [Inheritance](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/GeoObject.cs#L163)
 All `geo`s derive from a base `GeoObject` class. This class implmenets the `IGeo` interfaces, which means all `geo` objects can be added to `GameObjects` and references via a `IGeo` interfaces via its methods.
 
+### AI Beheavior
+All AI spawn with a `DotController` that inherits from `DotObject`. They have an `IAIBehaviour` script attached to them that dictate their behaviour. The idea was to mimic the worker commands from the first programming assignment. All of the AI inhereit from `SimpleDotBehaviour.cs`. `ShooterDotBehaviour.cs` and `ShieldDotBehaviour.cs` do the same things as `SimpleDot` except they have their respective `Shoot()`, `Shield()`, and `Update()` methods functioning as intended.
+
+[See the wiki for more info.](https://github.com/nhstaple/FlatCell/wiki/IAIBehaviour)
+
 ### [Factories](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Spawner/DotSpawner.cs#L68)
 The `ISpawner` interfaces acts as a factory for spawning AI. We have one spawner that a `DotSpawner.cs` is attached to. The ideas was to have n spawners attached to it to handle the different types of `geo`s, ie `dot`, `line`, `triangle`, etc. Due to the reduced scope we only have the `dot` spawner available.
 
