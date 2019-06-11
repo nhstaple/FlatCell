@@ -49,7 +49,7 @@ The NPC's movement is generated randomly and would be developed further in later
 ## Input
 
 
-# The default input configuration is as follows:
+#### The default input configuration is as follows:
 
 Fire1 (Shooting) – Left Mouse Click
 
@@ -62,7 +62,7 @@ Boost – Space Bar
 Pause Menu – Escape Key
 
 
-# The second input configuration is as follows:
+#### The second input configuration is as follows:
 
 Fire1 (Shooting) – Left CTRL
 
@@ -75,7 +75,7 @@ Boost – Space Bar
 Pause Menu – Escape Key
 
 
-# We have also managed to get inputs mapped accordingly for Playstation 4 and Xbox One controllers when they are connected with a cable.
+#### We have also managed to get inputs mapped accordingly for Playstation 4 and Xbox One controllers when they are connected with a cable.
 
 Movement – left joystick of Xbox or Playstation controller
 
