@@ -86,7 +86,7 @@ Boost – Joystick Button 3; correlates to Triangle on Playstation Controller an
 ## Game Logic
 #### Nick S.
 
-I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev). I was responsible for the [Interfaces](https://github.com/nhstaple/FlatCell/wiki/Interfaces), [Spawner](https://github.com/nhstaple/FlatCell/wiki/Spawner), AI, shooting, programmatic asset generation, ... Here is a brief overview of what I handled as Game Logician. For more information about the technical details see the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev).
+I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev). I was responsible for the [Interfaces](https://github.com/nhstaple/FlatCell/wiki/Interfaces), [Spawner](https://github.com/nhstaple/FlatCell/wiki/Spawner), [AI](https://github.com/nhstaple/FlatCell/blob/dev/ProjectFiles/FlatCell/Assets/Scripts/Controllers/SimpleDotBehaviour.cs), [shooting](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Weapons%20%26%20Projectiles/DotWeapon.cs#L38), programmatic asset generation, ... Here is a brief overview of what I handled as Game Logician. For more information about the technical details see the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev).
 
 I was also the _git master_ for this assignment.
 
