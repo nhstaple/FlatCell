@@ -46,6 +46,10 @@ Inlcude our bios so Brian can include them in the press kit and remove them.
 ### Roles - Input, Gameplay Testing
 ### Graduating
 
+For my major role, I assisted with ensuring that the correct inputs worked for keyboard default layouts and for external controller layouts. I made sure that mappings for the same shooting, shield, and boost buttons correlated in the same ways or in similar fashions between keyboard or controller inputs and that they were logical so that the users wouldn't be uncomfortable using buttons.
+
+For my minor role, I introduced the game demo to playtesters and then asked them for feedback regarding the pros and cons of the game so far. These were used to further develop and polish the game for its final state.
+
 ## Nick
 ### Roles- Game Logic, Narrative Design.
 ### Expected Summer 2020
