@@ -87,6 +87,12 @@ Boost – Joystick Button 3; correlates to Triangle on Playstation Controller an
 
 I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev). I was responsible for the [Interfaces](https://github.com/nhstaple/FlatCell/wiki/Interfaces), [Spawner](https://github.com/nhstaple/FlatCell/wiki/Spawner), and AI.
 
+##### Inheritance
+All `geo`s derive from a base `GeoObject` class.
+
+##### Factories
+The `ISpawner` interfaces acts as a factory for spawning AI.
+
 # Sub-Roles
 
 ## Audio
