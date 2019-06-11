@@ -6,7 +6,7 @@ These instructions will get you the most recent version of `dev`.
 #### Command line
 ```
 git clone https://github.com/nhstaple/FlatCell
-cd ECS189L-Group-Project
+cd FlatCell
 git branch dev
 git checkout dev
 git pull origin dev
