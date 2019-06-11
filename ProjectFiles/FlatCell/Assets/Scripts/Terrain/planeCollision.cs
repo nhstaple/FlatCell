@@ -23,7 +23,7 @@ public class Animation
     // Lerps material's color to value without threads.
     // FrameMulti skips frames
     // ie, frameMulti = 4 means color will be set 4 times less than normal lerp. This is to increase performance.
-    public void lerpColorWithoutThread(float lerpTime, Material mat, Color targetColor, bool locked = false, float frameMulti = 2f)
+    public void lerpColorWithoutThread(float lerpTime, Material mat, Color targetColor, ref bool locked, float frameMulti = 2f)
     {
         if(locked == false && !busy)
         {
@@ -111,9 +111,10 @@ public class planeCollision : MonoBehaviour
                     // a primitive synch lock
                     if (animLock == false)
                     {
-                        coroutine = anim.lerpColor(animTime, GetComponent<Renderer>().material, geo.GetColor(), animLock);
+                        coroutine = anim.lerpColor(UnityEngine.Random.Range(1f, 2f) * animTime, GetComponent<Renderer>().material, geo.GetColor(), animLock);
                         StartCoroutine(coroutine);
-                        // lerpWithoutThread(geo.GetColor());
+                        // float time = UnityEngine.Random.Range(1f, 2f) * animTime;
+                        // anim.lerpColorWithoutThread(time, GetComponent<Renderer>().material, geo.GetColor(), ref animLock);
                     }
                 }
             }

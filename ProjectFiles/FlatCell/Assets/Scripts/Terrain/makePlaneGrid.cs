@@ -14,20 +14,20 @@ public class makePlaneGrid : MonoBehaviour
 
     private void Awake()
     {
+        
         Physics.gravity = new Vector3(0, -5.0F, 0);
         Generate();
-
         source = gameObject.AddComponent<AudioSource>();
         source.PlayOneShot(backgroundSound, 0.4F);
     }
 
     private void Generate()
     {
-        for (int i = 0; i < gridSize; i++)
+        for (int i = 0; i < gridSize+15; i++)
         {
-            for (int j = 0; j < gridSize; j++)
+            for (int j = 0; j < gridSize+15; j++)
             {
-                if (i == gridSize - 1 || j == gridSize - 1)
+                if ((i == gridSize - 1 && j <= gridSize - 1) || (j == gridSize - 1 && i <= gridSize - 1))
                 {
                     Instantiate(boundary, new Vector3(i * planeSize * 10, 0, j * planeSize * 10), Quaternion.identity).transform.localScale
                         = new Vector3(planeSize * 10, 100, planeSize * 10);
