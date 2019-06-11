@@ -1,4 +1,5 @@
 # ECS 189L Group Project - FlatCell 
+### University of California, Davis
 ### Group members 
 ##### Megan Brown, Brian Coe, David Lee, Kyle Catapusan, Nick Stapleton
 ### Instructors 
