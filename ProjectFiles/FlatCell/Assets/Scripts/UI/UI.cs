@@ -15,6 +15,7 @@ public class UI : MonoBehaviour
     public float health;
     public float maxhealth;
     public float myscore;
+    public float shieldperc;
 
     private float TimetoWatch = 0.5f;
     private float Throttle;
@@ -22,18 +23,22 @@ public class UI : MonoBehaviour
     GameObject player;
     public Text scoretext;
 
+    //Nick's stuff for shield Fill
+    IGeo p;
+    Shield shieldCopy;
+    public float fillPercent;
+
+    public Image ShieldBar;
+
     void GetPlayer()
     {
         player = GameObject.FindWithTag("Player");
     }
 
-    Color ogColor;
-
     //public PlayerController p;
     // Start is called before the first frame update
     void Start()
     {
-        ogColor = Numhearts[0].color;
         //        score = GetComponent<Text>();
         if (player != null)
         {
@@ -42,6 +47,13 @@ public class UI : MonoBehaviour
             {
                 health = controller.GetHealth();
                 maxhealth = controller.GetMaxHealth();
+                p = player.GetComponent<PlayerController>();
+                if (p != null)
+                {
+                    shieldCopy = p.GetShield();
+                    fillPercent = shieldCopy.GetPercent();
+                    ShieldBar.fillAmount = fillPercent;
+                }
             }
             else
             {
@@ -57,7 +69,7 @@ public class UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player == null)
+        if(player == null)
         {
             GetPlayer();
         }
@@ -72,12 +84,22 @@ public class UI : MonoBehaviour
             //PlayerController controller = player.GetComponent<PlayerController>();
         health = controller.GetHealth();
         maxhealth = controller.GetMaxHealth();
-            //myscore = controller.killHistory["Dot"];
-            //if (scoretext != null)
-            //{
-            //    scoretext.text = "Score: " + myscore.ToString();
-            //}
-            //Debug.Log(myscore);
+
+        if (controller != null)
+        {
+            fillPercent = controller.GetShield().GetPercent();
+            Debug.Log(fillPercent);
+            if (ShieldBar != null)
+            {
+                ShieldBar.fillAmount = fillPercent;
+            }
+        }
+        //myscore = controller.killHistory["Dot"];
+        //if (scoretext != null)
+        //{
+        //    scoretext.text = "Score: " + myscore.ToString();
+        //}
+        //Debug.Log(myscore);
         //}
 
         if (scoretext != null)
@@ -91,33 +113,31 @@ public class UI : MonoBehaviour
         }
         for (int i = 0; i < Numhearts.Length; i++)
         {
-            Debug.Log(health);
+            //Debug.Log(health);
+            //if (Numhearts[i] != null)
+            //{
+                if (i < health)
+                {
+                    Numhearts[i].sprite = YesHeart;
+                }
+                else
+                {
+                    Numhearts[i].sprite = NoHeart;
+                }
 
-            if(player.GetComponent<PlayerController>().GetShield().active)
-            {
-                Numhearts[i].color = Color.blue;
-            }
-            else
-            {
-                Numhearts[i].color = ogColor;
-            }
-            if (i < health)
-            {
-                Numhearts[i].sprite = YesHeart;
-            }
-            else
-            {
-                Numhearts[i].sprite = NoHeart;
-            }
-
-            if (i < maxhealth)
-            {
-                Numhearts[i].enabled = true;
-            }
-            else
-            {
-                Numhearts[i].enabled = false;
-            }
+                if (i < maxhealth)
+                {
+                    Numhearts[i].enabled = true;
+                }
+                else
+                {
+                    Numhearts[i].enabled = false;
+                }
+            //} 
+            //else
+            //{
+                // Debug.Log("UI Error!");
+            //}
         }
     }
 }
