@@ -45,6 +45,9 @@ The NPC's movement is generated randomly and would be developed further in later
 
 ##### Nick S.
 * Programmatically made player, projectiles, and AI assets available through Unity in-engine tools. See **Game Logic** section for more information.
+* Made the `Animation` class and stole the `LineDrawer` class.
+* Added lerping to the plane collision.
+* Added lerping and change of color to the shields.
 
 ## Input
 #### The default input configuration is as follows:
