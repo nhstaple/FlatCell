@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 using Spawner.Command;
 using Geo.Command;
@@ -18,7 +19,7 @@ public class UI : MonoBehaviour
     public float shieldperc;
 
     private float TimetoWatch = 0.5f;
-    private float Throttle;
+    private float Throttle;// = Random.Range(0.0f,1.0f);
 
     GameObject player;
     public Text scoretext;
@@ -39,7 +40,6 @@ public class UI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //        score = GetComponent<Text>();
         if (player != null)
         {
             IGeo controller = player.GetComponent<PlayerController>();
@@ -61,12 +61,14 @@ public class UI : MonoBehaviour
             }
             ogColor = Color.white;
         }   
-        //this.RandomizeThrottle();
+        this.RandomizeThrottle();
     }
-    //private void RandomizeThrottle()
-    //{
-    //   Throttle = Random.Range(0.4f, 0.5f);
-   //}
+
+
+    private void RandomizeThrottle()
+    {
+       Throttle = Random.Range(0.0f, 1.0f);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -79,12 +81,13 @@ public class UI : MonoBehaviour
         {
             myscore = controller.GetScore();
         }
-        //if (TimetoWatch >= Throttle)
-        //{
+        if (TimetoWatch >= Throttle)
+        {
             //player = GameObject.FindWithTag("Player");
             //PlayerController controller = player.GetComponent<PlayerController>();
-        health = controller.GetHealth();
-        maxhealth = controller.GetMaxHealth();
+            health = controller.GetHealth();
+            maxhealth = controller.GetMaxHealth();
+        }
 
         if (controller != null)
         {
@@ -95,28 +98,21 @@ public class UI : MonoBehaviour
                 ShieldBar.fillAmount = fillPercent;
             }
         }
-        //myscore = controller.killHistory["Dot"];
-        //if (scoretext != null)
-        //{
-        //    scoretext.text = "Score: " + myscore.ToString();
-        //}
-        //Debug.Log(myscore);
-        //}
 
         if (scoretext != null)
         {
             scoretext.text = "Score: " + myscore.ToString();
         }
-
+        if (myscore >= 20.0f)
+        {
+            SceneManager.LoadScene("WIN");
+        }
         if (health > maxhealth)
         {
             health = maxhealth;
         }
         for (int i = 0; i < Numhearts.Length; i++)
         {
-            //Debug.Log(health);
-            //if (Numhearts[i] != null)
-            //{
             if (player.GetComponent<PlayerController>().GetShield().active)
             {
 
@@ -143,11 +139,7 @@ public class UI : MonoBehaviour
                 {
                     Numhearts[i].enabled = false;
                 }
-            //} 
-            //else
-            //{
-                // Debug.Log("UI Error!");
-            //}
+            
         }
     }
 }
