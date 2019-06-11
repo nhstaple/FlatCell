@@ -181,7 +181,7 @@ The terrain is mutable and reacts to the the actions of the world's inhabitants.
 The AI are independent (at the moment purely random with no intelligence) and increase their stats the more kills that they acquire. This mimics evolution which allows the AI to improve as the game simulation runs.
 
 ### Player Color
-The player's color starts off as nil. Only the AI have color and the player changes their color by killing enemy AI, which drop a portion of their stats for the player to pickup and evolve.
+The player's color starts off as nil. Only the AI have color and the player changes their color by killing enemy AI, which drop a portion of their stats for the player to pickup and evolve. This represents knowledge/experience in every day life which is acquired through interacting with other entities and people.
 
 ### Evolution *Not Implmented*
 The player and enemy AI can morph from `dot` -> `line` -> `triangle` -> `square` ... all the way to a `sphere`. Do to the scope, and a bug in Unity's collider scaling, we reduced the scope to just implement the `dot` stage of evolution. However I did [implement Speed and Damage levelling up.](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Controllers/SimpleDotBehaviour.cs#L140)
