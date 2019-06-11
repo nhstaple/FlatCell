@@ -163,6 +163,7 @@ The player's color starts off as nil. Only the AI have color and the player chan
 [Trailer](https://drive.google.com/file/d/1ZeWCKp4-XdzLmZKqq_mUUkho9-X4_tfr/view?usp=sharing)
 
 The trailer for the game ended up being a 2 minute video of gameplay. We ran out of time due to finalizing and fixing bugs for the game so there wasn't enough time to edit the video from the final build.
+The trailer included the Title Screen, Player, NPCs, Attack, Shield, Boost, Color change mechanics, and the win screen.
 The Press Kit is spread across a couple pages in the github and unfortunately we ran out of time to consolidate it together.
 
 ## Game Feel
