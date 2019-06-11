@@ -95,11 +95,18 @@ I made the use of interfaces that call `GameObject Spawn(Vector3 Loc)` to progra
 * [Projectiles](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Weapons%20%26%20Projectiles/ProjectileObject.cs#L55)
 * [Dots](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/DotObject.cs#L28)
 
+### Firing
+To handle the firing mechanic I abstracted the game as follows:
+
+* [Player/AI has a `IWeapon` object.](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/GeoObject.cs#L180) We set the code up to handle multiple types of weapons but were only able to implment the basic `dot weapon` due to time.
+* [`IWeapon`](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Weapons%20%26%20Projectiles/WeaponObject.cs#L21) objects have an [`IProjectile`](https://github.com/nhstaple/FlatCell/blob/dev/ProjectFiles/FlatCell/Assets/Scripts/Interfaces/IProjectile.cs) object dectated the type of ammunition to spawn.
+* Player calls a [`void IGeo.Shoot()`](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/GeoObject.cs#L536) function, calls [`void IWeapon.Fire()`](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Interfaces/IWeapon.cs#L31), then calls [`GameObject IProjectile.Spawn()`](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Interfaces/IProjectile.cs#L31).
+
 ### [Inheritance](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/GeoObject.cs#L163)
 All `geo`s derive from a base `GeoObject` class. This class implmenets the `IGeo` interfaces, which means all `geo` objects can be added to `GameObjects` and references via a `IGeo` interfaces via its methods.
 
 ### [Factories](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Spawner/DotSpawner.cs#L68)
-The `ISpawner` interfaces acts as a factory for spawning AI. We have one spawner that a `DotSpawner.cs` is attached to. The ideas was to have n spawners attached to it to handle the different types of `geo`s, ie `dot`, `line`, `triangle`, etc.
+The `ISpawner` interfaces acts as a factory for spawning AI. We have one spawner that a `DotSpawner.cs` is attached to. The ideas was to have n spawners attached to it to handle the different types of `geo`s, ie `dot`, `line`, `triangle`, etc. Due to the reduced scope we only have the `dot` spawner available.
 
 ### [AI Stats and Evolution](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Controllers/SimpleDotBehaviour.cs#L84)
 Each `geo` has a pointer referencing what hit it last. When that AI dies, the pointer is called and the killer's `killHistory<string, int>` hash table is updated. Each from the AI's score is checked and their stats are updated accordingly.
