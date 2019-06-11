@@ -26,7 +26,7 @@ You should replay any **bold text** with your own relevant information. Liberall
 
 ## User Interface
 
-**Describe your user interface and how it relates to gameplay. This can be done via the template.**
+In the User Interface there exists a canvas that contains all the hearts, shield bar, and score that keeps track of the player kills. The hearts in this case keep track of whether the user gets hit by a projectile by the enemies called dots. The player’s projectiles cannot affect the player’s health and therefore the health will not get affected by getting hit by your own projectiles. The shield bar is on the canvas named WorldOverlay and it keeps track of the Fill Percent and is updated on UI.cs where in void Update () the display shows the FillPercent. This is then attached to the Shield Image and therefore we can see the blue bar decreasing when using the shield and increasing if not used. This was implemented by Kyle Catapuscan and helped by me. The last part Score just keeps track of Myscore and increments when player kills an enemy Dot. There is a title screen and pause screen that you can change back and forth and once score = 20 then you win the game. It’s a straight forward UI with visual representation of the player. I also implemented a throttle when updating health similar to that of the Pikmini Spawner in Homework 3.
 
 ## Movement/Physics -Brian
 
@@ -79,9 +79,9 @@ Pause Menu – Escape Key
 
 Movement – left joystick of Xbox or Playstation controller
 
-Shooting – Joystick Button 4; correlates to L1 on Playstation Controller and LB (left bumper) on Xbox controller
+Shield – Joystick Button 4; correlates to L1 on Playstation Controller and LB (left bumper) on Xbox controller
 
-Shield – Joystick Button 5; correlates to R1 on Playstation Controller and RB (right bumper) on Xbox controller
+Shooting – Joystick Button 5; correlates to R1 on Playstation Controller and RB (right bumper) on Xbox controller
 
 Boost – Joystick Button 3; correlates to Triangle on Playstation Controller and Y button on Xbox controller
 
@@ -140,4 +140,4 @@ The playtesters typically praised some of the simple visuals and basic movement 
 
 ## Game Feel
 
-**Document what you added to and how you tweaked your game to improve its game feel.**
+A lerp change of color on grid was added to the game. This means that the time that the tiles change is random. In addition, I made the heart change color to blue when the shield is pressed and reverted to red once the shield is depleted. There is also a trail that follows the Player to keep track of the player when moving. All this improves the feeling of moving the player and by moving the player over a tile on the grid, the player changes the color of the tile with its respective color. The Dots also have the ability to change the tile of the grid with their respective color and can bring a fun game of cat and mouse as the player tries to color the grid that the Dot changes. A lot of the game feel portion comes from the player interacting with the Dots and the grid. The tile changing color is done in PlaneCollision.cs and the Hearts changing color to blue whenever the shield is turned on is in UI.cs. The camera of the game is kept as Position Lock Lerp to further enhance the game feel of the camera slowly trailing behind the player. If you click Main Camera you would be able to change the LerpDuration and see that the Player is the target. This camera script was taken from Homework 2 of this class. 
