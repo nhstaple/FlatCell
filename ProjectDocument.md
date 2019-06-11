@@ -90,6 +90,8 @@ Boost – Joystick Button 3; correlates to Triangle on Playstation Controller an
 
 I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev). I was responsible for the [Interfaces](https://github.com/nhstaple/FlatCell/wiki/Interfaces), [Spawner](https://github.com/nhstaple/FlatCell/wiki/Spawner), AI, shooting, programmatic asset generation, ... Here is a brief overview of what I handled as Game Logician. For more information about the technical details see the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev).
 
+I was also the _git master_ for this assignment.
+
 ### Asset Generation
 #### [Projectiles](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Weapons%20%26%20Projectiles/ProjectileObject.cs#L55)
 #### [Dots](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/DotObject.cs#L28)
@@ -159,15 +161,19 @@ The playtesters typically praised some of the simple visuals and basic movement 
 
 
 ## [Narrative Design](https://github.com/nhstaple/FlatCell/wiki/Narrative) - Nick S.
+Imagine if life evolved with geometry/color instead of biology. This is presented in the game the following ways:
 
-#### The Terrain
+### The Terrain
 The terrain is mutable and reacts to the the actions of the world's inhabitants. This reflects how one can influence the real world through their actions.
 
-#### AI
+### AI
 The AI are independent (at the moment purely random with no intelligence) and increase their stats the more kills that they acquire. This mimics evolution which allows the AI to improve as the game simulation runs.
 
-#### Player Color
+### Player Color
 The player's color starts off as nil. Only the AI have color and the player changes their color by killing enemy AI, which drop a portion of their stats for the player to pickup and evolve.
+
+### Evolution *Not Implmented*
+The player and enemy AI can morph from `dot` -> `line` -> `triangle` -> `square` ... all the way to a `sphere`. Do to the scope, and a bug in Unity's collider scaling, we reduced the scope to just implement the `dot` stage of evolution.
 
 ## Press Kit and Trailer
 
