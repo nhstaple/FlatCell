@@ -61,14 +61,14 @@ public class UI : MonoBehaviour
             }
             ogColor = Color.white;
         }   
-        this.RandomizeThrottle();
+        //this.RandomizeThrottle();
     }
 
 
-    private void RandomizeThrottle()
-    {
-       Throttle = Random.Range(0.0f, 1.0f);
-    }
+    //private void RandomizeThrottle()
+    //{
+    //   Throttle = Random.Range(0.0f, 5.0f);
+    //}
     // Update is called once per frame
     void Update()
     {
@@ -81,13 +81,11 @@ public class UI : MonoBehaviour
         {
             myscore = controller.GetScore();
         }
-        if (TimetoWatch >= Throttle)
-        {
-            //player = GameObject.FindWithTag("Player");
-            //PlayerController controller = player.GetComponent<PlayerController>();
-            health = controller.GetHealth();
-            maxhealth = controller.GetMaxHealth();
-        }
+        //if (TimetoWatch >= Throttle)
+        //{
+        health = controller.GetHealth();
+        maxhealth = controller.GetMaxHealth();
+        //}
 
         if (controller != null)
         {
