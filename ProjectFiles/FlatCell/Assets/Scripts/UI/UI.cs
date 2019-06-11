@@ -19,7 +19,7 @@ public class UI : MonoBehaviour
     public float shieldperc;
 
     private float TimetoWatch = 0.5f;
-    private float Throttle;// = Random.Range(0.0f,1.0f);
+    private float Throttle = 0.5f;// = Random.Range(0.0f,1.0f);
 
     GameObject player;
     public Text scoretext;
@@ -38,7 +38,7 @@ public class UI : MonoBehaviour
 
     //public PlayerController p;
     // Start is called before the first frame update
-    void Start()
+    void OnAwake()
     {
         if (player != null)
         {
@@ -61,14 +61,14 @@ public class UI : MonoBehaviour
             }
             ogColor = Color.white;
         }   
-        //this.RandomizeThrottle();
+        this.RandomizeThrottle();
     }
 
 
-    //private void RandomizeThrottle()
-    //{
-    //   Throttle = Random.Range(0.0f, 5.0f);
-    //}
+    private void RandomizeThrottle()
+    {
+       Throttle = Random.Range(0.0f, 1.0f);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -81,11 +81,11 @@ public class UI : MonoBehaviour
         {
             myscore = controller.GetScore();
         }
-        //if (TimetoWatch >= Throttle)
-        //{
-        health = controller.GetHealth();
-        maxhealth = controller.GetMaxHealth();
-        //}
+        if (TimetoWatch >= Throttle)
+        {
+            health = controller.GetHealth();
+            maxhealth = controller.GetMaxHealth();
+        }
 
         if (controller != null)
         {
