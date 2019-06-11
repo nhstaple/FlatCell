@@ -26,31 +26,3 @@ The `canvas` is an infinite sheet which all `geo`s reside within. Or, FlatCell's
 
 [Link to press kit.](https://nhstaple.github.io/FlatCell/)
 
-# The Team
-Inlcude our bios so Brian can include them in the press kit and remove them.
-
-## Megan
-### Roles- Animation/Visuals, Audio
-
-
-## Brian
-### Roles - Movement/Physics, Press Kit and Trailer
-### Graduating
-
-
-### David
-#### Roles - UI, Game Feel
-
-
-## Kyle
-### Roles - Input, Gameplay Testing
-### Graduating
-* Major: Computer Science
-
-## Nick
-### Roles- Game Logic, Narrative Design.
-### Expected Summer 2020
-
-* Major: Computer Science
-* Minor: Moosic 🐮
-* Favorite fact: [U.S.A. mapped onto the moon.](https://imgur.com/yl7v7Bd)
