@@ -230,9 +230,7 @@ namespace Geo.Command
 
         public void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.ToString().Contains("Projectile") && (
-                collision.gameObject.tag != "Player" && this.gameObject.tag != "Player"
-                ))
+            if (collision.gameObject.ToString().Contains("Projectile"))
             {
                 IProjectile bullet = collision.gameObject.GetComponent<DotProjectile>();
                 if(!shield.active && 
@@ -240,6 +238,10 @@ namespace Geo.Command
                    bullet.GetOwner() != null &&
                    bullet.GetOwner().GetOwner() != null)
                 {
+                    if(bullet.ToString().Contains("Player") && this.gameObject.tag == "Player")
+                    {
+                        return;
+                    }
                     lastHitBy = bullet.GetOwner().GetOwner().GetGameObject();
                     float armorBuff = armor;
                     if (armorBuff > .5f)

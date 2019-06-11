@@ -44,6 +44,7 @@ namespace Obscura
         //GameObject locations are finalized.
         void LateUpdate()
         {
+   
             if (Target == null)
             {
                 Target = GameObject.FindWithTag("Player");
@@ -65,7 +66,7 @@ namespace Obscura
             }
 
             var adjust = Vector2.Lerp(new Vector2(cameraPosition.x, cameraPosition.z), new Vector2(previousLoc.x, previousLoc.z), timeCounter/ LerpDuration);
-            cameraPosition = new Vector3(adjust.x, cameraPosition.y, adjust.y);
+            cameraPosition = new Vector3(adjust.x, 150, adjust.y);
 
             this.ManagedCamera.transform.position = cameraPosition;
 

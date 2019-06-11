@@ -56,11 +56,13 @@ public class DotSpawner : MonoBehaviour, ISpawner
     {
         Alive = new List<GameObject>();
         transform.position = SpawnLocation;
+        /*
         if (Player != null)
         {
             var boop = GameObject.Instantiate(Player, transform);
             boop.tag = "Player";
         }
+        */
     }
 
     void Update()

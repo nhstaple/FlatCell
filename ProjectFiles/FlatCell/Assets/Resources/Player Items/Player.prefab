@@ -53,7 +53,7 @@ MonoBehaviour:
   MaxHealth: 3
   FireRate: 0.25
   Damage: 1
-  health: 0
+  health: 3
   armor: 0
   color: {r: 1, g: 1, b: 1, a: 0}
   shield: {fileID: 252064358201996518, guid: 54d4ab565e1334397b1f4e3b0aff3e7d, type: 3}
@@ -90,12 +90,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   YesHeart: {fileID: 21300000, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
   NoHeart: {fileID: 21300002, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
-  health: 0
-  maxhealth: 0
+  health: 3
+  maxhealth: 3
   myscore: 0
   scoretext: {fileID: 0}

@@ -6,9 +6,9 @@ using UnityEngine.UI;
 using Spawner.Command;
 using Geo.Command;
 
-public class UI : MonoBehaviour //, IGeo
+public class UI : MonoBehaviour 
 {
-    public Image[] Numhearts;
+    [SerializeField] public Image[] Numhearts;
     public Sprite YesHeart;
     public Sprite NoHeart;
 
@@ -20,8 +20,6 @@ public class UI : MonoBehaviour //, IGeo
     private float Throttle;
 
     GameObject player;
-    GameObject Doty;
-
     public Text scoretext;
 
     void GetPlayer()
@@ -31,11 +29,10 @@ public class UI : MonoBehaviour //, IGeo
 
     //public PlayerController p;
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         //        score = GetComponent<Text>();
-        player = GameObject.FindWithTag("Player");
-        if(player != null)
+        if (player != null)
         {
             IGeo controller = player.GetComponent<PlayerController>();
             if (controller != null)
@@ -47,13 +44,13 @@ public class UI : MonoBehaviour //, IGeo
             {
                 health = maxhealth = 1;
             }
-        }
-        this.RandomizeThrottle();
+        }   
+        //this.RandomizeThrottle();
     }
-    private void RandomizeThrottle()
-    {
-        Throttle = Random.Range(0.4f, 0.5f);
-    }
+    //private void RandomizeThrottle()
+    //{
+    //   Throttle = Random.Range(0.4f, 0.5f);
+   //}
     // Update is called once per frame
     void Update()
     {
@@ -66,19 +63,19 @@ public class UI : MonoBehaviour //, IGeo
         {
             myscore = controller.GetScore();
         }
-        if (TimetoWatch >= Throttle)
-        {
+        //if (TimetoWatch >= Throttle)
+        //{
             //player = GameObject.FindWithTag("Player");
             //PlayerController controller = player.GetComponent<PlayerController>();
-            health = controller.GetHealth();
-            maxhealth = controller.GetMaxHealth();
+        health = controller.GetHealth();
+        maxhealth = controller.GetMaxHealth();
             //myscore = controller.killHistory["Dot"];
             //if (scoretext != null)
             //{
             //    scoretext.text = "Score: " + myscore.ToString();
             //}
             //Debug.Log(myscore);
-        }
+        //}
 
         if (scoretext != null)
         {
@@ -91,8 +88,9 @@ public class UI : MonoBehaviour //, IGeo
         }
         for (int i = 0; i < Numhearts.Length; i++)
         {
-            if (Numhearts[i] != null)
-            {
+            Debug.Log(health);
+            //if (Numhearts[i] != null)
+            //{
                 if (i < health)
                 {
                     Numhearts[i].sprite = YesHeart;
@@ -104,17 +102,17 @@ public class UI : MonoBehaviour //, IGeo
 
                 if (i < maxhealth)
                 {
-                     Numhearts[i].enabled = true;
+                    Numhearts[i].enabled = true;
                 }
                 else
                 {
                     Numhearts[i].enabled = false;
                 }
-            } 
-            else
-            {
+            //} 
+            //else
+            //{
                 // Debug.Log("UI Error!");
-            }
+            //}
         }
     }
 }
