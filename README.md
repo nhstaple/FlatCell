@@ -5,7 +5,7 @@
 ##### Dr. Joshua A. McCoy
 ##### Arunpreet Sandhu
 ### ECS 189L Game Programming
-### Due 6/11/19, 8am
+### Due 6/11/19, 12pm
 
 # About
 ## FlatCell
