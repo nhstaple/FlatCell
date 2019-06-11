@@ -9,8 +9,7 @@ Taking inspiration from [_Planiverse_](https://en.wikipedia.org/wiki/The_Planive
 The canvas is an infinite sheet which all geos reside within. Or, FlatCell's gameworld.
 
 # Video
-**TODO Brian**
-
+[Trailer](https://drive.google.com/file/d/1uV2ZAV5FoKvD1dfD0247UjOSvw1lvcT3/view?usp=sharing)
 # Screenshots
 
 ![Start](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/Start.png)
