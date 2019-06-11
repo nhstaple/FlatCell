@@ -160,7 +160,7 @@ The player's color starts off as nil. Only the AI have color and the player chan
 **Include links to your presskit materials and trailer.**
 
 **Describe how you showcased your work. How did you choose what to show in the trailer? Why did you choose your screenshots?*
-Trailer: https://drive.google.com/file/d/1ZeWCKp4-XdzLmZKqq_mUUkho9-X4_tfr/view?usp=sharing
+[Trailer (https://drive.google.com/file/d/1ZeWCKp4-XdzLmZKqq_mUUkho9-X4_tfr/view?usp=sharing)]
 
 The trailer for the game ended up being a 2 minute video of gameplay. We ran out of time due to finalizing and fixing bugs for the game so there wasn't enough time to edit the video from the final build.
 The Press Kit is spread across a couple pages in the github and unfortunately we ran out of time to consolidate it together.
