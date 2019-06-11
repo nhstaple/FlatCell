@@ -2,14 +2,11 @@
 
 ## Summary ##
 
-**A paragraph-length pitch for your game.**
+Imagine if life evolved from geometry instead of cells. This is the premace beind the idea of Flat Cell. Pieces of geometry evolve from their most basic components (`dots`) to the most complex (`spheres`). The scope of this project was reduced to deliver a playable prototype with just the first stage of evolution- `dot`.
 
 ## Gameplay explanation ##
 
-**In this section, explain how the game should be played. Treat this like a manual within a game. It is encouraged to explain the button mappings and the most optimal gameplay strategy.**
-
-
-
+The current devlopment state of the game is alpha. The player can move, shoot, use their shields, boost, interact with the environment and AI. The goal of the game is to destroy AI, pickup their stats, level up, and evolve. Due to time contraints the game demo is over after the player reaches 20 kills.
 
 # Main Roles #
 
