@@ -159,8 +159,9 @@ The player's color starts off as nil. Only the AI have color and the player chan
 
 **Include links to your presskit materials and trailer.**
 
-**Describe how you showcased your work. How did you choose what to show in the trailer? Why did you choose your screenshots?**
- 
+**Describe how you showcased your work. How did you choose what to show in the trailer? Why did you choose your screenshots?*
+*
+Trailer: https://drive.google.com/file/d/1ZeWCKp4-XdzLmZKqq_mUUkho9-X4_tfr/view?usp=sharing
 
 
 ## Game Feel
