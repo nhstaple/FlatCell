@@ -6,6 +6,9 @@ Download [this link](https://github.com/nhstaple/FlatCell/archive/master.zip), e
 ### Development version
 ##### requires Unity 2019.1.4f1
 These instructions will get you the most recent version of `dev`.
+
+#### [Download this link](https://github.com/nhstaple/FlatCell/archive/dev.zip)
+
 #### Command line
 ```
 git clone https://github.com/nhstaple/FlatCell
