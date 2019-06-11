@@ -94,11 +94,29 @@ Boost – Joystick Button 3; correlates to Triangle on Playstation Controller an
 
 ## Audio
 
-**List your assets including their sources, and licenses.**
+####List of assets:
 
-**Describe the implementation of your audio system.**
+•	Background Music: “Neon Cars” | MelodyLoops.com | free licensed preview | https://www.melodyloops.com/my-music/longoloops/neon-cars/
 
-**Document the sound style.** 
+•	Hit Sound: “Impact_004” | Freesound.org | Creative Commons licensed sound| https://freesound.org/people/AlienXXX/sounds/196215/
+
+•	Death Sound: “Game Over Arcade” | Freesound.org | Creative Commons licensed sound| https://freesound.org/people/myfox14/sounds/382310/
+
+•	Shoot Sound: “SFX Laser Shoot 02” | Freesound.org | Creative Commons licensed sound| https://freesound.org/people/bolkmar/sounds/421704/
+
+•	Start Menu Music: “8-Bit March” | twinmusicom.org | Creative Commons licensed sound| http://www.twinmusicom.org/
+
+####Implementation:
+
+•	The background music is attached to the script that makes the colorful grid, makePlaneGrid.cs, and with play on awake.
+
+•	The start menu music is attached to the title screen and is played on awake.
+
+•	The shoot, hit, and death sounds are all attached to the player, so you do not hear extraneous NPC sounds. They have a higher priority and volume than the background music so that they can be distinctly heard. 
+
+####Sound style:
+•	The sounds are inspired by and aim to bring you back to the stand-up retro arcade games. The “Death Sound” is similar to the sound played when the player dies in Galaga. The “Hit Sound” and “Shoot Sound” are akin to those you would hear in shooting type arcade games. In addition, the background music is entitled “Neon Cars” which ties together the retro feel to our colorful geometry game. 
+
 
 ## Gameplay Testing
 #### Link for Raw Comments: https://docs.google.com/document/d/1rYI942jcIvSDMTHJXfsBOHByzJLrH4nIpnVnDgs6cdE/edit?usp=sharing
