@@ -50,25 +50,39 @@ The NPC's movement is generated randomly and would be developed further in later
 
 
 The default input configuration is as follows:
+
 Fire1 (Shooting) – Left Mouse Click
+
 Fire2 (Shield) – Right Mouse Click
+
 Movement – W for up, A for left, S for down, and D for right
+
 Boost – Space Bar
+
 Pause Menu – Escape Key
 
 
 The second input configuration is as follows:
+
 Fire1 (Shooting) – Left CTRL
+
 Fire2 (Shield) – Right CTRL
+
 Movement – up arrow for up, left arrow for left, down arrow for down, and right arrow for right
+
 Boost – Space Bar
+
 Pause Menu – Escape Key
 
 
 We have also managed to get inputs mapped accordingly for Playstation 4 and Xbox One controllers when they are connected with a cable.
+
 Movement – left joystick of Xbox or Playstation controller
+
 Shooting – Joystick Button 4; correlates to L1 on Playstation Controller and LB (left bumper) on Xbox controller
+
 Shield – Joystick Button 5; correlates to R1 on Playstation Controller and RB (right bumper) on Xbox controller
+
 Boost – Joystick Button 3; correlates to Triangle on Playstation Controller and Y button on Xbox controller
 
 
