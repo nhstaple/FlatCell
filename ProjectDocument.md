@@ -27,7 +27,7 @@ In the User Interface there exists a canvas that contains all the hearts, shield
 
 ## Movement/Physics
 ##### Nick 
-Initial projectile, pickup, and geometry collision.
+Initial projectile, pickup, and geometry collision. I just set things up so they could be debugged and playtested.
 
 ##### Brian
 The environment is set to have the rotation and transforms frozen. The boundary has a collider attached that detects objects and keepsthem from leaving. 
@@ -44,11 +44,9 @@ The NPC's movement is generated randomly and would be developed further in later
 * Obtained heart through Unity asset store.
 
 ##### Nick S.
-* Programmatically made player, projectiles, and AI assets available through Unity in-engine tools.
+* Programmatically made player, projectiles, and AI assets available through Unity in-engine tools. See **Game Logic** section for more information.
 
 ## Input
-
-
 #### The default input configuration is as follows:
 
 Fire1 (Shooting) – Left Mouse Click
@@ -60,7 +58,6 @@ Movement – W for up, A for left, S for down, and D for right
 Boost – Space Bar
 
 Pause Menu – Escape Key
-
 
 #### The second input configuration is as follows:
 
@@ -97,14 +94,14 @@ I was also the _git master_ for this assignment.
 #### [Dots](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/DotObject.cs#L28)
 I made the use of interfaces that call `GameObject Spawn(Vector3 Loc)` to programmatically generate assets through `new GameObject()`.
 
-### Inheritance
+### [Inheritance](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Geos/GeoObject.cs#L163)
 All `geo`s derive from a base `GeoObject` class. This class implmenets the `IGeo` interfaces, which means all `geo` objects can be added to `GameObjects` and references via a `IGeo` interfaces via its methods.
 
-### Factories
+### [Factories](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Spawner/DotSpawner.cs#L68)
 The `ISpawner` interfaces acts as a factory for spawning AI. We have one spawner that a `DotSpawner.cs` is attached to. The ideas was to have n spawners attached to it to handle the different types of `geo`s, ie `dot`, `line`, `triangle`, etc.
 
-### AI Stats and Evolution
-Each `geo` has a pointer referencing what hit it last. When that AI dies, the pointer is called and the killer's `killHistory<string, int>` hash table is updated. When the kills are updated that's when the AI's stats are mutated to become stronger.
+### [AI Stats and Evolution](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Controllers/SimpleDotBehaviour.cs#L84)
+Each `geo` has a pointer referencing what hit it last. When that AI dies, the pointer is called and the killer's `killHistory<string, int>` hash table is updated. Each from the AI's score is checked and their stats are updated accordingly.
 
 # Sub-Roles
 
