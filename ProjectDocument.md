@@ -25,9 +25,11 @@ You should replay any **bold text** with your own relevant information. Liberall
 
 In the User Interface there exists a canvas that contains all the hearts, shield bar, and score that keeps track of the player kills. The hearts in this case keep track of whether the user gets hit by a projectile by the enemies called dots. The player’s projectiles cannot affect the player’s health and therefore the health will not get affected by getting hit by your own projectiles. The shield bar is on the canvas named WorldOverlay and it keeps track of the Fill Percent and is updated on UI.cs where in void Update () the display shows the FillPercent. This is then attached to the Shield Image and therefore we can see the blue bar decreasing when using the shield and increasing if not used. This was implemented by Kyle Catapuscan and helped by me. The last part Score just keeps track of Myscore and increments when player kills an enemy Dot. There is a title screen and pause screen that you can change back and forth and once score = 20 then you win the game. It’s a straight forward UI with visual representation of the player. I also implemented a throttle when updating health similar to that of the Pikmini Spawner in Homework 3.
 
-## Movement/Physics -Brian
+## Movement/Physics
+##### Nick 
+Initial projectile, pickup, and geometry collision.
 
-**Describe the basics of movement and physics in your game. Is it the standard physics model? What did you change or modify? Did you make your own movement scripts that do not use the phyics system?**
+##### Brian
 The environment is set to have the rotation and transforms frozen. The boundary has a collider attached that detects objects and keepsthem from leaving. 
 The floor is set to trigger with a box that detects the player passing over it in order to change colors. 
 The Player, NPC's and projectiles all have colliders with no gravity, and the transform axis out from the screen is frozen.
@@ -38,10 +40,11 @@ The player and NPCs are given a vector of movement and we call MoveTowards on th
 The NPC's movement is generated randomly and would be developed further in later iterations of the game.
 
 ## Animation and Visuals
+##### David
+* Obtained heart through Unity asset store.
 
-**List your assets including their sources, and licenses.**
-
-**Describe how your work intersects with game feel, graphic design, and world-building. Include your visual style guide if one exists.**
+##### Nick S.
+* Programmatically made player, projectiles, and AI assets available through Unity in-engine tools.
 
 ## Input
 
@@ -83,9 +86,12 @@ Shooting – Joystick Button 5; correlates to R1 on Playstation Controller and R
 Boost – Joystick Button 3; correlates to Triangle on Playstation Controller and Y button on Xbox controller
 
 
-## Game Logic
+## Game Logic - Nick S.
 
-I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev). I was responsible for the [Interfaces](https://github.com/nhstaple/FlatCell/wiki/Interfaces), [Spawner](https://github.com/nhstaple/FlatCell/wiki/Spawner), and AI.
+I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev). I was responsible for the [Interfaces](https://github.com/nhstaple/FlatCell/wiki/Interfaces), [Spawner](https://github.com/nhstaple/FlatCell/wiki/Spawner), AI, shooting, programmatic asset generation, ...
+
+##### Asset Generation
+I made the use of interfaces that call `GameObject Spawn(Vector3 Loc)` to programmatically generate assets through `new GameObject()`.
 
 ##### Inheritance
 All `geo`s derive from a base `GeoObject` class.
@@ -147,7 +153,7 @@ The playtesters typically praised some of the simple visuals and basic movement 
 #### Some of these suggestions have been taken into consideration now. Particularly, we have adjusted player projectiles to not kill the player themselves and added a pointer to indicate the direction the player and NPCs are firing. Additionally, we adjusted the NPCs to spawn and fire more frequently in the game. However, some have not been fully added in due to time constraints.
 
 
-## [Narrative Design](https://github.com/nhstaple/FlatCell/wiki/Narrative)
+## [Narrative Design](https://github.com/nhstaple/FlatCell/wiki/Narrative) - Nick S.
 
 #### The Terrain
 The terrain is mutable and reacts to the the actions of the world's inhabitants. This reflects how one can influence the real world through their actions.
