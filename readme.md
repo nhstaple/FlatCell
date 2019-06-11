@@ -11,7 +11,7 @@ The canvas is an infinite sheet which all geos reside within. Or, FlatCell's gam
 # Video
 [Trailer](https://drive.google.com/file/d/1uV2ZAV5FoKvD1dfD0247UjOSvw1lvcT3/view?usp=sharing)
 
-[Link to video of the code demo'd on Firday](https://youtu.be/XjD1UQBSkIQ)
+[Link to video of the code demo'd on Friday](https://youtu.be/XjD1UQBSkIQ)
 
 [Link to in progress video.](https://youtu.be/5QK2IFQcyWg)
 
