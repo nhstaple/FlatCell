@@ -1151,8 +1151,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawLogic: 0
-  Target: {fileID: 0}
-  LerpDuration: 0.25
+  Target: {fileID: 1380216529}
+  LerpDuration: 1.5
 --- !u!1 &1054210534
 GameObject:
   m_ObjectHideFlags: 0
