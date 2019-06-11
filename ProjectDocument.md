@@ -10,16 +10,12 @@ The current devlopment state of the game is alpha. The player can move, shoot, u
 
 # Main Roles #
 
-Your goal is to relate the work of your role and sub-role in terms of the content of the course. Please look at the role sections below for specific instructions for each role.
-
 Below is a template for you to highlight items of your work. These provide the evidence needed for your work to be evaluated. Try to have at least 4 such descriptions. They will be assessed on the quality of the underlying system and how they are linked to course content. 
 
 *Short Description* - Long description of your work item that includes how it is relevant to topics discussed in class. [link to evidence in your repository](https://github.com/dr-jam/ECS189L/edit/project-description/ProjectDocumentTemplate.md)
 
 Here is an example:  
 *Procedural Terrain* - The background of the game consists of procedurally-generated terrain that is produced with Perlin noise. This terrain can be modified by the by the game at run-time via a call to its script methods. The intent is to allow the player to modify the terrain. This system is based off the component design pattern and the procedural content generation portions of the course. [The PCG terrain generation script](https://github.com/dr-jam/CameraControlExercise/blob/513b927e87fc686fe627bf7d4ff6ff841cf34e9f/Obscura/Assets/Scripts/TerrainGenerator.cs#L6).
-
-You should replay any **bold text** with your own relevant information. Liberally use the template when necessary and appropriate.
 
 ## User Interface
 
@@ -50,6 +46,7 @@ The NPC's movement is generated randomly and would be developed further in later
 * Added lerping and change of color to the shields.
 
 ## Input
+#### Kyle
 #### The default input configuration is as follows:
 
 Fire1 (Shooting) – Left Mouse Click
@@ -86,7 +83,8 @@ Shooting – Joystick Button 5; correlates to R1 on Playstation Controller and R
 Boost – Joystick Button 3; correlates to Triangle on Playstation Controller and Y button on Xbox controller
 
 
-## Game Logic - Nick S.
+## Game Logic
+#### Nick S.
 
 I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev). I was responsible for the [Interfaces](https://github.com/nhstaple/FlatCell/wiki/Interfaces), [Spawner](https://github.com/nhstaple/FlatCell/wiki/Spawner), AI, shooting, programmatic asset generation, ... Here is a brief overview of what I handled as Game Logician. For more information about the technical details see the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev).
 
@@ -109,7 +107,7 @@ Each `geo` has a pointer referencing what hit it last. When that AI dies, the po
 # Sub-Roles
 
 ## Audio
-
+#### Megan
 #### List of assets:
 
 •	Background Music: “Neon Cars” | MelodyLoops.com | free licensed preview | https://www.melodyloops.com/my-music/longoloops/neon-cars/
@@ -160,7 +158,8 @@ The playtesters typically praised some of the simple visuals and basic movement 
 #### Some of these suggestions have been taken into consideration now. Particularly, we have adjusted player projectiles to not kill the player themselves and added a pointer to indicate the direction the player and NPCs are firing. Additionally, we adjusted the NPCs to spawn and fire more frequently in the game. However, some have not been fully added in due to time constraints.
 
 
-## [Narrative Design](https://github.com/nhstaple/FlatCell/wiki/Narrative) - Nick S.
+## [Narrative Design](https://github.com/nhstaple/FlatCell/wiki/Narrative)
+#### Nick S.
 Imagine if life evolved with geometry/color instead of biology. This is presented in the game the following ways:
 
 ### The Terrain
@@ -173,7 +172,7 @@ The AI are independent (at the moment purely random with no intelligence) and in
 The player's color starts off as nil. Only the AI have color and the player changes their color by killing enemy AI, which drop a portion of their stats for the player to pickup and evolve.
 
 ### Evolution *Not Implmented*
-The player and enemy AI can morph from `dot` -> `line` -> `triangle` -> `square` ... all the way to a `sphere`. Do to the scope, and a bug in Unity's collider scaling, we reduced the scope to just implement the `dot` stage of evolution.
+The player and enemy AI can morph from `dot` -> `line` -> `triangle` -> `square` ... all the way to a `sphere`. Do to the scope, and a bug in Unity's collider scaling, we reduced the scope to just implement the `dot` stage of evolution. However I did [implement Speed and Damage levelling up.](https://github.com/nhstaple/FlatCell/blob/c7c58a1c8f4b5e3cf7b76719fe2783dc9fc3c64b/ProjectFiles/FlatCell/Assets/Scripts/Controllers/SimpleDotBehaviour.cs#L140)
 
 ## Press Kit and Trailer
 
