@@ -45,7 +45,7 @@ Inlcude our bios so Brian can include them in the press kit and remove them.
 ## Kyle
 ### Roles - Input, Gameplay Testing
 ### Graduating
-
+* Major: Computer Science
 
 ## Nick
 ### Roles- Game Logic, Narrative Design.
