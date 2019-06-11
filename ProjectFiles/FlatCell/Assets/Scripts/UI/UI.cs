@@ -27,10 +27,13 @@ public class UI : MonoBehaviour
         player = GameObject.FindWithTag("Player");
     }
 
+    Color ogColor;
+
     //public PlayerController p;
     // Start is called before the first frame update
     void Start()
     {
+        ogColor = Numhearts[0].color;
         //        score = GetComponent<Text>();
         if (player != null)
         {
@@ -54,7 +57,7 @@ public class UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(player == null)
+        if (player == null)
         {
             GetPlayer();
         }
@@ -89,30 +92,32 @@ public class UI : MonoBehaviour
         for (int i = 0; i < Numhearts.Length; i++)
         {
             Debug.Log(health);
-            //if (Numhearts[i] != null)
-            //{
-                if (i < health)
-                {
-                    Numhearts[i].sprite = YesHeart;
-                }
-                else
-                {
-                    Numhearts[i].sprite = NoHeart;
-                }
 
-                if (i < maxhealth)
-                {
-                    Numhearts[i].enabled = true;
-                }
-                else
-                {
-                    Numhearts[i].enabled = false;
-                }
-            //} 
-            //else
-            //{
-                // Debug.Log("UI Error!");
-            //}
+            if(player.GetComponent<PlayerController>().GetShield().active)
+            {
+                Numhearts[i].color = Color.blue;
+            }
+            else
+            {
+                Numhearts[i].color = ogColor;
+            }
+            if (i < health)
+            {
+                Numhearts[i].sprite = YesHeart;
+            }
+            else
+            {
+                Numhearts[i].sprite = NoHeart;
+            }
+
+            if (i < maxhealth)
+            {
+                Numhearts[i].enabled = true;
+            }
+            else
+            {
+                Numhearts[i].enabled = false;
+            }
         }
     }
 }
