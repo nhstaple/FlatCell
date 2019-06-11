@@ -21,7 +21,7 @@ namespace Geo.Command
         [SerializeField] Vector3 SpawnLocation = new Vector3(0, 25, 0);
 
         /** Script variables **/
-        [SerializeField] public bool EnableBoost = false;
+        [SerializeField] public bool EnableBoost = true;
         private float modifiedSpeed;
         // Added to track the 3 moves we can use
         private int weaponSelect;
@@ -29,6 +29,10 @@ namespace Geo.Command
         /** Evolution variables **/
         private float initSpawnOffset;
         private bool GrowFlag = false;
+
+        private float boostEnergy = 0f;
+        private float boostMax = 0.5f;
+        private bool boostReady = true;
 
         new private void Start()
         {
@@ -84,10 +88,17 @@ namespace Geo.Command
 
             modifiedSpeed = Speed;
 
-            if (Input.GetButton("Jump") && EnableBoost)
+            if(boostEnergy < 0)
+            {
+                boostEnergy = 0;
+                boostReady = false;
+            }
+
+            if (Input.GetButton("Jump") && boostReady)
             {
                 modifiedSpeed *= BoostFactor;
                 trail.widthMultiplier = BoostFactor;
+                boostEnergy -= Time.deltaTime;
             }
             else if (Input.GetButton("Fire2") && !shield.IsCharging())
             {
@@ -108,6 +119,19 @@ namespace Geo.Command
                 if (trail.widthMultiplier >= 1.0f)
                 {
                     trail.widthMultiplier -= Time.deltaTime * trailDecay;
+                }
+            }
+
+            if (!boostReady)
+            {
+                if (boostEnergy >= boostMax * 4)
+                {
+                    boostEnergy = boostMax;
+                    boostReady = true;
+                }
+                else
+                {
+                    boostEnergy += Time.deltaTime;
                 }
             }
 

@@ -27,9 +27,9 @@ public class UI : MonoBehaviour
     IGeo p;
     Shield shieldCopy;
     public float fillPercent;
-
+    float minHeartShieldPercent = 0.33f;
     public Image ShieldBar;
-
+    Color ogColor;
     void GetPlayer()
     {
         player = GameObject.FindWithTag("Player");
@@ -59,6 +59,7 @@ public class UI : MonoBehaviour
             {
                 health = maxhealth = 1;
             }
+            ogColor = Color.white;
         }   
         //this.RandomizeThrottle();
     }
@@ -116,7 +117,16 @@ public class UI : MonoBehaviour
             //Debug.Log(health);
             //if (Numhearts[i] != null)
             //{
-                if (i < health)
+            if (player.GetComponent<PlayerController>().GetShield().active)
+            {
+
+                Numhearts[i].color = Color.Lerp(Color.white, Color.blue, player.GetComponent<PlayerController>().GetShield().GetPercent() + minHeartShieldPercent);
+            }
+            else
+            {
+                Numhearts[i].color = Color.white;
+            }
+            if (i < health)
                 {
                     Numhearts[i].sprite = YesHeart;
                 }

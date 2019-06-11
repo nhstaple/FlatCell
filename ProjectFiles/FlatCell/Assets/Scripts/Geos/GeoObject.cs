@@ -210,8 +210,9 @@ namespace Geo.Command
         private float geoColorLerpCounter = 0f;
         protected float refreshCounter = 0;
         private Color newShieldColor;
+        Color initColor;
 
-    /** Script variables **/
+        /** Script variables **/
         [SerializeField] public TrailRenderer trail;
         protected Vector3 lastMovement;
         protected Vector3 movementDirection;
@@ -300,6 +301,7 @@ namespace Geo.Command
             if (color == Color.clear)
             {
                 color = ComputeRandomColor();
+                initColor = color;
             }
 
             rend = gameObject.GetComponent<MeshRenderer>();
@@ -335,6 +337,7 @@ namespace Geo.Command
                 pickup.init(this, "Pickup");
             }
             refreshCounter = colorRefreshPoll;
+            initColor = color;
         }
 
         public void FixedUpdate()
@@ -372,9 +375,31 @@ namespace Geo.Command
                     geoColorLerpCounter = 0f;
                     float time = 1f;
                     // Lerp the material
-                    StartCoroutine(anim.lerpColor(time, rend.material, this.color, locked));
+                    // StartCoroutine(anim.lerpColor(time, rend.material, this.color, locked));
+                    if (this.gameObject.tag == "Player")
+                    {
+                        anim.lerpColorWithoutThread(time, rend.material, this.color, ref locked);
+                    }
+                    else
+                    {
+                        anim.lerpColorWithoutThread(time, rend.material, this.initColor, ref locked);
+                    }
+
+                    this.color.a = 255;
+                    refreshCounter = 0;
+                    trail.startColor = Color.white;
+                    trail.endColor = this.color;
+                    Gradient gradient = new Gradient();
+                    gradient.SetKeys(
+                        new GradientColorKey[] { new GradientColorKey(trail.startColor, 1f), new GradientColorKey(trail.endColor, 0.25f) },
+                        new GradientAlphaKey[] { new GradientAlphaKey(0.9f, 1f), new GradientAlphaKey(0.8f, 1f) }
+                    );
+                    trail.colorGradient = gradient;
+
                     // Set the callback
+                    /*
                     StartCoroutine(anim.WaitForSecondsThenExecute(() => {
+
                         this.color.a = 255;
                         refreshCounter = 0;
                         trail.startColor = Color.white;
@@ -385,7 +410,9 @@ namespace Geo.Command
                             new GradientAlphaKey[] { new GradientAlphaKey(0.9f, 1f), new GradientAlphaKey(0.8f, 1f) }
                         );
                         trail.colorGradient = gradient;
+                                              
                     }, time*1.1f));
+                    */
                 }
             }
         }
@@ -573,9 +600,18 @@ namespace Geo.Command
                     shieldLerpCounter += Time.deltaTime;
                     locked = true;
                     // Geo color.
-                    rend.material.color = Color.Lerp(this.color,
-                                                     Color.grey,
-                                                     geoColorLerpCounter / geoColorLerpTime);
+                    if (this.gameObject.tag == "Player")
+                    {
+                        rend.material.color = Color.Lerp(this.color,
+                                 Color.grey,
+                                 geoColorLerpCounter / geoColorLerpTime);
+                    }
+                    else
+                    {
+                        rend.material.color = Color.Lerp(this.color * 0.25f + Color.grey * 0.25f,
+                                 Color.grey,
+                                 geoColorLerpCounter / geoColorLerpTime);
+                    }
                     locked = false;
                 }
 
