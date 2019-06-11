@@ -8,6 +8,8 @@
 ### University of California, Davis
 ### Due 6/11/19, 12pm
 
+#### [Source code](https://github.com/nhstaple/FlatCell/releases/tag/v1.0.0)
+
 # About
 ## FlatCell
 This is a final group project for [ECS 189L Game Programming](https://github.com/dr-jam/ECS189L/) taught by Dr. Joshua A. McCoy and
