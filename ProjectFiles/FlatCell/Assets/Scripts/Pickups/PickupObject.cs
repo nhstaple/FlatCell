@@ -68,7 +68,7 @@ public class PickupObject : MonoBehaviour, IPickup
         armor = Random.Range(LowRange, HighRange)/4;
         damage = 1 * Random.Range(LowRange, HighRange);
         speed = owner.GetSpeed() * Random.Range(LowRange, HighRange);
-        color = owner.GetColor() * Random.Range(0.01f, 0.10f);
+        color = owner.GetColor() * Random.Range(0.50f, 1f);
     }
     // Start is called before the first frame update
     void Start()
