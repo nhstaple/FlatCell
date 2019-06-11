@@ -11,6 +11,11 @@ a world that's influenced by the player's actions. We've taken the view that the
 the only one to have direct influence over the `canvas`.
 
 The `canvas` is an infinite sheet which all `geo`s reside within. Or, FlatCell's gameworld.
+[Title](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/Title.png)
+[Start](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/Start.png)
+[Start](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/action.png)
+[Start](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/shield.png)
+
 # The Team
 
 ## Megan
