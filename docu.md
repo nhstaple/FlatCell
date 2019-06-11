@@ -94,7 +94,7 @@ Boost – Joystick Button 3; correlates to Triangle on Playstation Controller an
 
 ## Audio
 
-####List of assets:
+#### List of assets:
 
 •	Background Music: “Neon Cars” | MelodyLoops.com | free licensed preview | https://www.melodyloops.com/my-music/longoloops/neon-cars/
 
@@ -106,7 +106,7 @@ Boost – Joystick Button 3; correlates to Triangle on Playstation Controller an
 
 •	Start Menu Music: “8-Bit March” | twinmusicom.org | Creative Commons licensed sound| http://www.twinmusicom.org/
 
-####Implementation:
+#### Implementation:
 
 •	The background music is attached to the script that makes the colorful grid, makePlaneGrid.cs, and with play on awake.
 
@@ -114,7 +114,7 @@ Boost – Joystick Button 3; correlates to Triangle on Playstation Controller an
 
 •	The shoot, hit, and death sounds are all attached to the player, so you do not hear extraneous NPC sounds. They have a higher priority and volume than the background music so that they can be distinctly heard. 
 
-####Sound style:
+#### Sound style:
 •	The sounds are inspired by and aim to bring you back to the stand-up retro arcade games. The “Death Sound” is similar to the sound played when the player dies in Galaga. The “Hit Sound” and “Shoot Sound” are akin to those you would hear in shooting type arcade games. In addition, the background music is entitled “Neon Cars” which ties together the retro feel to our colorful geometry game. 
 
 
