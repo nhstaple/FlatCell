@@ -88,7 +88,7 @@ Boost – Joystick Button 3; correlates to Triangle on Playstation Controller an
 
 ## Game Logic
 
-**Document what game states and game data you managed and what design patterns you used to complete your task.**
+I've documentated quite a lot in the [Dev Wiki](https://github.com/nhstaple/FlatCell/wiki/Dev). I was responsible for the [Interfaces](https://github.com/nhstaple/FlatCell/wiki/Interfaces), [Spawner](https://github.com/nhstaple/FlatCell/wiki/Spawner), and AI.
 
 # Sub-Roles
 
@@ -144,9 +144,16 @@ The playtesters typically praised some of the simple visuals and basic movement 
 #### Some of these suggestions have been taken into consideration now. Particularly, we have adjusted player projectiles to not kill the player themselves and added a pointer to indicate the direction the player and NPCs are firing. Additionally, we adjusted the NPCs to spawn and fire more frequently in the game. However, some have not been fully added in due to time constraints.
 
 
-## Narrative Design
+## [Narrative Design](https://github.com/nhstaple/FlatCell/wiki/Narrative)
 
-**Document how the narrative is present in the game via assets, gameplay systems, and gameplay.** 
+#### The Terrain
+The terrain is mutable and reacts to the the actions of the world's inhabitants. This reflects how one can influence the real world through their actions.
+
+#### AI
+The AI are independent (at the moment purely random with no intelligence) and increase their stats the more kills that they acquire. This mimics evolution which allows the AI to improve as the game simulation runs.
+
+#### Player Color
+The player's color starts off as nil. Only the AI have color and the player changes their color by killing enemy AI, which drop a portion of their stats for the player to pickup and evolve.
 
 ## Press Kit and Trailer
 
