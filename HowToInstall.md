@@ -1,5 +1,8 @@
 # Install Instructions
 
+### Playable version
+Download [this link](https://github.com/nhstaple/FlatCell/archive/master.zip), extract it, and select your operating system in "`/Deliverables`".
+
 ### Development version
 ##### requires Unity 2019.1.4f1
 These instructions will get you the most recent version of `dev`.
