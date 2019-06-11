@@ -25,6 +25,8 @@ the only one to have direct influence over the `canvas`.
 
 The `canvas` is an infinite sheet which all `geo`s reside within. Or, FlatCell's gameworld.
 
+[Link to `ProjectDocument.md`](https://github.com/nhstaple/FlatCell/blob/master/ProjectDocument.md)
+
 [Link to press kit.](https://nhstaple.github.io/FlatCell/)
 
 [Link to static source code.](https://github.com/nhstaple/FlatCell/releases/tag/v1.0.0)
