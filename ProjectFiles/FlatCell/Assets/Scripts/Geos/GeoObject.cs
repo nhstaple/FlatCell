@@ -96,6 +96,8 @@ using Pickup.Command;
 
 namespace Geo.Command
 {
+    // source
+    // https://stackoverflow.com/questions/42819071/debug-drawline-not-showing-in-the-gameview
     // Used to draw debug line.
     public struct LineDrawer
     {
@@ -252,7 +254,7 @@ namespace Geo.Command
                     Hurt(bullet.GetDamage() * (1 - armorBuff));
                 }
                 Destroy(collision.gameObject, .1f);
-                // deathSource.PlayOneShot(deathSource.clip, 0.4f);
+               
             }
             else if (collision.gameObject.tag == "Boundary")
             {
@@ -448,6 +450,11 @@ namespace Geo.Command
                 this.Speed -= this.Speed * statPenalty * 0.50f;
                 this.color -= this.color * statPenalty * 0.25f;
             }
+            if(deathSource != null && deathSource.enabled)
+            {
+                deathSource.PlayOneShot(deathSource.clip, 0.4f);
+            }
+
             forwardLine.Destroy();
         }
 

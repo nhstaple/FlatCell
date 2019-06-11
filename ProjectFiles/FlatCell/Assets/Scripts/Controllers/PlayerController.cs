@@ -30,7 +30,7 @@ namespace Geo.Command
         private float initSpawnOffset;
         private bool GrowFlag = false;
 
-        private float boostEnergy = 0f;
+        private float boostEnergy = 0.5f;
         private float boostMax = 0.5f;
         private bool boostReady = true;
 

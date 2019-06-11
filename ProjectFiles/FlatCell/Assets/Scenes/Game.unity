@@ -362,7 +362,7 @@ MonoBehaviour:
   SpawnLocation: {x: 0, y: 25, z: 0}
   InitScale: {x: 25, y: 25, z: 25}
   EnableTrail: 1
-  DrawDebugLine: 1
+  DrawDebugLine: 0
   Speed: 75
   MaxHealth: 3
   FireRate: 0.05
@@ -667,8 +667,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537e08cac4cd85c4882f703cf3565894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planeSize: 3
-  gridSize: 33
+  planeSize: 2
+  gridSize: 50
   gridPlane: {fileID: 8659519363311212023, guid: 89454cd2d29dbae4798739b0e632a006,
     type: 3}
   boundary: {fileID: 4073489969973322299, guid: 0f763dfd9b8513e4a8ee04b4c3403e12,
@@ -1816,6 +1816,16 @@ PrefabInstance:
       propertyPath: Numhearts.Array.data[5]
       value: 
       objectReference: {fileID: 1397006700}
+    - target: {fileID: 4463196817797996647, guid: 47d588308289b4dec8b4208a5b087f0d,
+        type: 3}
+      propertyPath: DrawDebugLine
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4463196817797996647, guid: 47d588308289b4dec8b4208a5b087f0d,
+        type: 3}
+      propertyPath: ProjectileSpawnOffset
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4463196817797996642, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
