@@ -27,7 +27,7 @@ The `canvas` is an infinite sheet which all `geo`s reside within. Or, FlatCell's
 
 ### [Source code](https://github.com/nhstaple/FlatCell/releases/tag/v1.0.0)
 ### [Press kit](https://nhstaple.github.io/FlatCell/)
-### [`ProjectDocument.md`](https://github.com/nhstaple/FlatCell/blob/master/ProjectDocument.md)
+### [ProjectDocument.md](https://github.com/nhstaple/FlatCell/blob/master/ProjectDocument.md)
 
 #### Link to version of source code demo'd on [Friday, June 7th. (v0.1.0)](https://github.com/nhstaple/FlatCell/releases/tag/v0.1.0)
 
