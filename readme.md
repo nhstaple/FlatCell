@@ -51,7 +51,7 @@ Requires [**Unity v2019.1.4f**.](https://unity3d.com/get-unity/download/archive)
 #### Graduating
 * Major: Computer Science
 
-## Nick
+## [Nick](https://github.com/nhstaple)
 #### Roles- Game Logic, Narrative Design.
 #### Expected Summer 2020
 * Major: Computer Science
