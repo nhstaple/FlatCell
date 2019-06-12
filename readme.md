@@ -1,4 +1,4 @@
-# Flat Cell Press Kit
+# FlatCell Press Kit
 ![Title](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/Title.png)
 
 # About FlatCell
@@ -11,11 +11,11 @@ The canvas is an infinite sheet which all geos reside within. Or, **_FlatCell_**
 # [The **Wiki!**](https://github.com/nhstaple/FlatCell/wiki)
 Both dev and game wikis.
 
-## Download the game!!
-### [Public Version](https://github.com/nhstaple/FlatCell/archive/master.zip)
+# Download the game!!
+## [Public Version](https://github.com/nhstaple/FlatCell/archive/master.zip)
 Requires **Windows** or **macOS**. [**Install** instructions.](https://github.com/nhstaple/FlatCell/blob/master/HowToInstall.md)
 
-### [Development Version](https://github.com/nhstaple/FlatCell/archive/v1.0.0.zip)
+## [Development Version](https://github.com/nhstaple/FlatCell/archive/v1.0.0.zip)
 Requires [**Unity v2019.1.4f**.](https://unity3d.com/get-unity/download/archive)
 
 # Video
@@ -28,39 +28,32 @@ Requires [**Unity v2019.1.4f**.](https://unity3d.com/get-unity/download/archive)
 [Link to final video.](https://youtu.be/GolomK45J8E)
 
 # Screenshots
-
 ![Start](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/Start.png)
 ![action](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/action.png)
 ![shield](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/shield.png)
 
 # The Team
-
 ## Megan
 #### Roles- Animation/Visuals, Audio
-
 * Major: Computer Science
 
 ## Brian
 #### Roles - Movement/Physics, Press Kit and Trailer
 #### Graduating
-
 * Major: Computer Science
 
 ### David
 ##### Roles - UI, Game Feel
-
 * Major: Computer Science
 
 ## Kyle
 #### Roles - Input, Gameplay Testing
 #### Graduating
-
 * Major: Computer Science
 
 ## Nick
 #### Roles- Game Logic, Narrative Design.
 #### Expected Summer 2020
-
 * Major: Computer Science
 * Minor: Moosic 🐮
 * Favorite fact: [U.S.A. mapped onto the moon.](https://imgur.com/yl7v7Bd)
