@@ -1,5 +1,5 @@
 # ECS 189L Group Project - FlatCell 
-### [ECS 189L](https://github.com/dr-jam/ECS189L/) Game Programming, Spring 2019
+### ECS 189LGame Programming, Spring 2019
 ### University of California, Davis
 ### Instructors 
 ##### Dr. Joshua A. McCoy
