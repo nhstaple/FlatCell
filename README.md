@@ -8,8 +8,6 @@
 ##### Megan Brown, Brian Coe, David Lee, Kyle Catapusan, Nick Stapleton
 ### Due 6/11/19, 12pm
 
-### [Source code](https://github.com/nhstaple/FlatCell/releases/tag/v1.0.0)
-
 # About
 ## FlatCell
 This is a final group project for [ECS 189L](https://github.com/dr-jam/ECS189L/) Game Programming taught by Dr. Joshua A. McCoy and
@@ -26,6 +24,8 @@ a world that's influenced by the player's actions. We've taken the view that the
 the only one to have direct influence over the `canvas`.
 
 The `canvas` is an infinite sheet which all `geo`s reside within. Or, FlatCell's gameworld.
+
+### [Source code](https://github.com/nhstaple/FlatCell/releases/tag/v1.0.0)
 
 [Link to `ProjectDocument.md`](https://github.com/nhstaple/FlatCell/blob/master/ProjectDocument.md)
 
