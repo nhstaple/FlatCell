@@ -1,5 +1,5 @@
 # ECS 189L Group Project - FlatCell 
-### ECS 189L Game Programming, Spring 2019
+### [ECS 189L](https://github.com/dr-jam/ECS189L/) Game Programming, Spring 2019
 ### University of California, Davis
 ### Instructors 
 ##### Dr. Joshua A. McCoy
@@ -12,7 +12,7 @@
 
 # About
 ## FlatCell
-This is a final group project for [ECS 189L Game Programming](https://github.com/dr-jam/ECS189L/) taught by Dr. Joshua A. McCoy and
+This is a final group project for [ECS 189L](https://github.com/dr-jam/ECS189L/) Game Programming taught by Dr. Joshua A. McCoy and
 assisted by Arunpreet Sandhu during the Spring 2019 Quarter at University of California, Davis. The project's scope was "Game Jam" 
 in size but thought was put into allowing the system to be expanded upon in the future through reusuable `interfaces` and
 object `inheritance`. 
