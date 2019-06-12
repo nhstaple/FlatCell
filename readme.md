@@ -8,6 +8,13 @@ Taking inspiration from [**_Planiverse_**](https://en.wikipedia.org/wiki/The_Pla
 
 The canvas is an infinite sheet which all geos reside within. Or, **_FlatCell_**'s game world.
 
+## Download the game!!
+### [Public Version](https://github.com/nhstaple/FlatCell/archive/master.zip)
+Requires **Windows** or **macOS**. [**Install** instructions.](https://github.com/nhstaple/FlatCell/blob/master/HowToInstall.md)
+
+### [Development Version](https://github.com/nhstaple/FlatCell/archive/v1.0.0.zip)
+Requires Unity version 2019.1.4f.
+
 # Video
 [Trailer](https://drive.google.com/file/d/1uV2ZAV5FoKvD1dfD0247UjOSvw1lvcT3/view?usp=sharing)
 
