@@ -46,7 +46,7 @@ Requires [**Unity v2019.1.4f**.](https://unity3d.com/get-unity/download/archive)
 #### Roles - UI, Game Feel
 * Major: Computer Science
 
-## Kyle
+## [Kyle](https://github.com/kc1996)
 #### Roles - Input, Gameplay Testing
 #### Graduating
 * Major: Computer Science
