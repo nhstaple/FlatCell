@@ -42,8 +42,8 @@ Requires [**Unity v2019.1.4f**.](https://unity3d.com/get-unity/download/archive)
 #### Graduating
 * Major: Computer Science
 
-### David
-##### Roles - UI, Game Feel
+## David
+#### Roles - UI, Game Feel
 * Major: Computer Science
 
 ## Kyle
