@@ -1,11 +1,11 @@
 # ECS 189L Group Project - FlatCell 
 ### ECS 189L Game Programming, Spring 2019
 ### University of California, Davis
-### Group members 
-##### Megan Brown, Brian Coe, David Lee, Kyle Catapusan, Nick Stapleton
 ### Instructors 
 ##### Dr. Joshua A. McCoy
 ##### Arunpreet Sandhu
+### Group members 
+##### Megan Brown, Brian Coe, David Lee, Kyle Catapusan, Nick Stapleton
 ### Due 6/11/19, 12pm
 
 #### [Source code](https://github.com/nhstaple/FlatCell/releases/tag/v1.0.0)
