@@ -11,14 +11,7 @@ The canvas is an infinite sheet which all geos reside within. Or, **_FlatCell_**
 # Video
 [Trailer](https://drive.google.com/file/d/1uV2ZAV5FoKvD1dfD0247UjOSvw1lvcT3/view?usp=sharing)
 
-<video>
-  <source src="https://youtu.be/XjD1UQBSkIQ">
-  Friday Build.
-  <source src="https://youtu.be/5QK2IFQcyWg">
-  Weekend in-progress build.
-  <source src="https://youtu.be/GolomK45J8E">
-  Final Build.
-</vide>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/XjD1UQBSkIQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 [Link to video of the code demo'd on Friday](https://youtu.be/XjD1UQBSkIQ)
 
