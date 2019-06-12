@@ -2,16 +2,14 @@
 ![Title](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/Title.png)
 # About
 ## FlatCell
-This game was inspired by the likes of **[_Spore_]**(https://en.wikipedia.org/wiki/Spore_(2008_video_game)) and **[_Flatland_]**(https://en.wikipedia.org/wiki/Flatland). How would the world look if the fundamental building blocks of life were geometry? How would life evolve from the most primative single-cell organism, into complex multi-cell orgnism? How would a 1D dot evolve into a 3D sphere?
+This game was inspired by the likes of [**_Spore_**](https://en.wikipedia.org/wiki/Spore_(2008_video_game)) and [**_Flatland_**](https://en.wikipedia.org/wiki/Flatland). How would the world look if the fundamental building blocks of life were geometry? How would life evolve from the most primative single-cell organism, into complex multi-cell orgnism? How would a 1D dot evolve into a 3D sphere?
 
-Taking inspiration from **[_Planiverse_]**(https://en.wikipedia.org/wiki/The_Planiverse), a derivative of **_Flatland_**, we've constructed a simple simulation of geometric evolution in a world that's influenced by the player's actions. We've taken the view that the player is a visiter to this 2D world thus they're the only one to have direct influence over the canvas.
+Taking inspiration from [**_Planiverse_**](https://en.wikipedia.org/wiki/The_Planiverse), a derivative of **_Flatland_**, we've constructed a simple simulation of geometric evolution in a world that's influenced by the player's actions. We've taken the view that the player is a visiter to this 2D world thus they're the only one to have direct influence over the canvas.
 
 The canvas is an infinite sheet which all geos reside within. Or, **_FlatCell_**'s game world.
 
 # Video
 [Trailer](https://drive.google.com/file/d/1uV2ZAV5FoKvD1dfD0247UjOSvw1lvcT3/view?usp=sharing)
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/XjD1UQBSkIQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 [Link to video of the code demo'd on Friday](https://youtu.be/XjD1UQBSkIQ)
 
