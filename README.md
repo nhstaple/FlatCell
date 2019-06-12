@@ -4,7 +4,7 @@
 ### Instructors 
 ##### Dr. Joshua A. McCoy
 ##### Arunpreet Sandhu
-### ECS 189L Game Programming
+### ECS 189L Game Programming, Spring 2019
 ### University of California, Davis
 ### Due 6/11/19, 12pm
 
