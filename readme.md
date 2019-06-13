@@ -8,9 +8,6 @@ Taking inspiration from [**_Planiverse_**](https://en.wikipedia.org/wiki/The_Pla
 
 The canvas is an infinite sheet which all geos reside within. Or, **_FlatCell_**'s game world.
 
-# [The **Wiki!**](https://github.com/nhstaple/FlatCell/wiki)
-Both dev and game wikis.
-
 # Download the game!
 ## **Public Version**
 Requires [**Windows**](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.Win.zip) or [**macOS**](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.macOS.app.zip).
@@ -33,6 +30,9 @@ Requires [**Unity v2019.1.4f**.](https://unity3d.com/get-unity/download/archive)
 ![Start](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/Start.png)
 ![action](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/action.png)
 ![shield](https://raw.githubusercontent.com/nhstaple/FlatCell/gh-pages/shield.png)
+
+# [The **Wiki!**](https://github.com/nhstaple/FlatCell/wiki)
+Both dev and game wikis.
 
 # The Team
 ## Megan
