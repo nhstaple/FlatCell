@@ -30,13 +30,13 @@ The `canvas` is an infinite sheet which all `geo`s reside within. Or, FlatCell's
 ## [Trailer](https://drive.google.com/file/d/1uV2ZAV5FoKvD1dfD0247UjOSvw1lvcT3/view?usp=sharing)
 
 # Downloads
-## Final Version
-### [Source code (v1.0.0)](https://github.com/nhstaple/FlatCell/releases/tag/v1.0.0)
+## Final Version (v1.0.0)
+### [Source code](https://github.com/nhstaple/FlatCell/releases/tag/v1.0.0)
 ### [Windows](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.Win.zip)
 ### [macOS](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.macOS.app.zip)
-## Friday Showcase Version
+## Friday Showcase Version (v0.1.0)
 ### Link to video of the code demo'd on [Friday](https://youtu.be/XjD1UQBSkIQ)
-### [Source code (v0.1.0)](https://github.com/nhstaple/FlatCell/releases/tag/v0.1.0)
+### [Source code](https://github.com/nhstaple/FlatCell/releases/tag/v0.1.0)
 ### [Windows](https://github.com/nhstaple/FlatCell/releases/download/v0.0.7/FlatCell.Win.v0.0.7.zip)
 ### [macOS](https://github.com/nhstaple/FlatCell/releases/download/v0.0.7/FlatCell.macOS.v0.0.7.app.zip)
 
