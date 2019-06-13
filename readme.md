@@ -11,7 +11,7 @@ The canvas is an infinite sheet which all geos reside within. Or, **_FlatCell_**
 # [The **Wiki!**](https://github.com/nhstaple/FlatCell/wiki)
 Both dev and game wikis.
 
-# Download the game!!
+# Download the game!
 ## **Public Version**
 Requires [**Windows**](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.Win.zip) or [**macOS**](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.macOS.app.zip).
 
