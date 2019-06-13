@@ -57,5 +57,4 @@ Both dev and game wikis.
 #### Roles- Game Logic, Narrative Design.
 #### Expected Summer 2020
 * Major: Computer Science
-* Minor: Moosic 🐮
-* Favorite fact: [U.S.A. mapped onto the moon.](https://imgur.com/yl7v7Bd)
+* Minor: Music
