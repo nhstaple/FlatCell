@@ -25,14 +25,15 @@ the only one to have direct influence over the `canvas`.
 
 The `canvas` is an infinite sheet which all `geo`s reside within. Or, FlatCell's gameworld.
 
+## [ProjectDocument.md](https://github.com/nhstaple/FlatCell/blob/master/ProjectDocument.md)
+## [Press kit](https://nhstaple.github.io/FlatCell/)
+## [Trailer](https://drive.google.com/file/d/1uV2ZAV5FoKvD1dfD0247UjOSvw1lvcT3/view?usp=sharing)
+
 # Downloads
 ## [Source code](https://github.com/nhstaple/FlatCell/releases/tag/v1.0.0)
 ## [Windows](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.Win.zip)
 ## [macOS](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.macOS.app.zip)
 
-# [Press kit](https://nhstaple.github.io/FlatCell/)
-# [Trailer](https://drive.google.com/file/d/1uV2ZAV5FoKvD1dfD0247UjOSvw1lvcT3/view?usp=sharing)
-# [ProjectDocument.md](https://github.com/nhstaple/FlatCell/blob/master/ProjectDocument.md)
 # [Wiki](https://github.com/nhstaple/FlatCell/wiki)
 # [Trello board](https://github.com/nhstaple/FlatCell/projects/1)
 ## Link to version of source code demo'd on [Friday, June 7th. (v0.1.0)](https://github.com/nhstaple/FlatCell/releases/tag/v0.1.0)
