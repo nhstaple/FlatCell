@@ -13,7 +13,8 @@ Both dev and game wikis.
 
 # Download the game!!
 ## [Public Version](https://github.com/nhstaple/FlatCell/archive/master.zip)
-Requires **Windows** or **macOS**. [**Install** instructions.](https://github.com/nhstaple/FlatCell/blob/master/HowToInstall.md)
+Requires [**Windows**](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.Win.zip) or [**macOS**](https://github.com/nhstaple/FlatCell/releases/download/v1.0.0/FlatCell.macOS.app.zip).
+[**Install** instructions.](https://github.com/nhstaple/FlatCell/blob/master/HowToInstall.md)
 
 ## [Development Version](https://github.com/nhstaple/FlatCell/archive/v1.0.0.zip)
 Requires [**Unity v2019.1.4f**.](https://unity3d.com/get-unity/download/archive)
