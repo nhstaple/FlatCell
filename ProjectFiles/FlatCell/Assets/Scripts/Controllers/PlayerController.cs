@@ -134,31 +134,53 @@ namespace Geo.Command
                 modifiedSpeed *= BoostFactor;
                 trail.widthMultiplier = BoostFactor;
                 boostEnergy -= Time.deltaTime;
-                movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-                movementDirection *= BoostFactor;
-                geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
+                BoostedMove();
             }
-            else if (Input.GetButton("Fire2") && !geo.GetShield().IsCharging())
+            else if(!Input.GetButton("Jump"))
             {
-                // Shields on.
-                geo.FlameOn();
-            }
-            else if (Input.GetButton("Fire1") && !geo.GetShield().active)
-            {
-                // Fire me matey!
-                geo.Shoot();
+                // Check for shields.
+                if (Input.GetButton("Fire2") && !geo.GetShield().IsCharging())
+                {
+                    geo.FlameOn();
+                }
+                // Check for guns.
+                else if (Input.GetButton("Fire1") && !geo.GetShield().active)
+                {
+                    // Fire me matey!
+                    geo.Shoot();
+                }
+                // Default case- no input.
+                else
+                {
+                    // Shields off.
+                    geo.FlameOff();
+                    if (trail.widthMultiplier >= 1.0f)
+                    {
+                        trail.widthMultiplier -= Time.deltaTime * trailDecay * 0.5f;
+                    }
+                }
+                Move();
             }
             else
             {
-                // Shields off.
-                geo.FlameOff();
-                if (trail.widthMultiplier >= 1.0f)
-                {
-                    trail.widthMultiplier -= Time.deltaTime * trailDecay * 0.5f;
-                }
-                movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-                geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
+                Move();
             }
+        }
+
+        // Grab input information and move the character.
+        private void Move()
+        {
+            // Move if there's input.
+            movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+            geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
+        }
+
+        // Grab the movement information and apply the boosted information,
+        private void BoostedMove()
+        {
+            movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+            movementDirection *= BoostFactor;
+            geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
         }
 
         void SwitchWeapon()

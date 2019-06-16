@@ -2,8 +2,6 @@
 // Nick S.
 // Game Logic - AI
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Weapon.Command;
 

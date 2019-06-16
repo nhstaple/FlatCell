@@ -31,13 +31,18 @@ using Geo.Command;
 */
 namespace DotBehaviour.Command
 {
+    enum EDOT_BEHAVIOUR
+    {
+        Simple = 0,
+        Shield,
+        Shooter
+    }
+
     class SimpleDotBehaviour : MonoBehaviour, IDotBehaviour
     {
-
-        protected IGeo owner;
-
         [SerializeField] protected float DotProjectilePush = 100;
         [SerializeField] protected float DirectionChangeTimer = 0.5f;
+        [SerializeField] protected float moveMax = 0.5f;
         [SerializeField] protected int maxKills = 10;
         [SerializeField] protected int killWeight = 5;
 
@@ -47,9 +52,34 @@ namespace DotBehaviour.Command
         protected Vector3 movementDirection;
         protected float initSpeed;
         protected float initDamage;
-        protected float moveMax = 1f;
+
+        protected IGeo owner;
 
         public string type;
+        public EDOT_BEHAVIOUR e_type;
+
+        bool ResetToSpawn = false;
+        protected bool PlayerVisionLocked = false;
+        const float ResetVisionTimer = 1f;
+        float visionCounter = 0.0f;
+
+        public void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.tag == "Boundary")
+            {
+                ResetToSpawn = true;
+                Debug.Log("Hit the wall!");
+                movementDirection.x *= -1;
+                movementDirection.y *= -1;
+                Vector3 pos = -1 * transform.position;
+                pos.y = 0;
+                pos.Normalize();
+
+                Rigidbody body = GetComponent<Rigidbody>();
+                body.AddForce(25f * pos, ForceMode.Impulse);
+                owner.MoveTo(new Vector3(0, 25, 0), movementDirection, owner.GetSpeed());
+            }
+        }
 
         public void Start()
         {
@@ -62,6 +92,7 @@ namespace DotBehaviour.Command
             Rigidbody b = GetComponent<Rigidbody>();
             b.AddForce(movementDirection * Random.Range(0.25f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
             type = "Simple Dot";
+            e_type = EDOT_BEHAVIOUR.Simple;
         }
 
         new public string GetType()
@@ -79,59 +110,88 @@ namespace DotBehaviour.Command
             }
         }
 
+        public void OnTriggerEnter(Collider other)
+        {
+            if (other.tag == "Spawner")
+            {
+                ResetToSpawn = false;
+            }
+        }
+
         public void Update()
         {
+            visionCounter += Time.deltaTime;
+            if (visionCounter >= ResetVisionTimer)
+            {
+                visionCounter = 0f;
+                PlayerVisionLocked = false;
+            }
+
             CheckScore();
-            Move();
+            if(!ResetToSpawn)
+            {
+                Move();
+            }
         }
 
         public void Move()
         {
+            // Increment the timer and check if it's exceed our poll rate.
             timer += Time.deltaTime;
             if (timer >= DirectionChangeTimer)
             {
+                // Reset the timer.
                 timer = 0.0f;
-                movementDirection =  new Vector3(Random.Range(-moveMax * Random.Range(-1f, 1f),
+
+                // If the dot flipped axis.
+                var flipped = false;
+
+                // Add input to the movement vector. This is adding input to a virtual stick.
+                movementDirection += new Vector3(Random.Range(-moveMax * Random.Range(-1f, 1f),
                                                                moveMax * Random.Range(-1f, 1f)),
                                                  0.0f,
                                                  Random.Range(-moveMax * Random.Range(-1f, 1f),
                                                                moveMax * Random.Range(-1f, 1f)));
-
-                if(movementDirection.x > 1)         { movementDirection.x = 1; }
-                else if (movementDirection.x < -1 ) { movementDirection.x = -1; }
-                if (movementDirection.z > 1)        { movementDirection.z = 1; }
-                else if (movementDirection.z < -1)  { movementDirection.z = -1; }
-
-
-                if(Random.Range(0, 100f) <= 1)
+                var res = Random.Range(0, 100f);
+                // 10% to flip vertical dir
+                if (res <= 10)
                 {
                     movementDirection.x *= -1;
+                    flipped = true;
                 }
-                if (Random.Range(0, 100f) <= 1)
+
+                // 10% to flip horizontal dir
+                res = Random.Range(0, 100f);
+                if (!flipped && res <= 10) { movementDirection.z *= -1; }
+
+                // 1% to flip both directions.
+                if (!flipped && res <= 1)
                 {
+                    movementDirection.x *= -1;
                     movementDirection.z *= -1;
                 }
 
-                // Roatate the object.
-                Vector3 newDir = Vector3.RotateTowards(transform.forward, movementDirection, 360 * Mathf.Deg2Rad, 0.0f);
-                transform.rotation = Quaternion.LookRotation(newDir);
+                // Check horizontal overflow.
+                if (movementDirection.x >= 1)   { movementDirection.x =  1; }
+                else if (movementDirection.x <= -1 ) { movementDirection.x = -1; }
+                // Check vertical overflow.
+                if (movementDirection.z >= 1)   { movementDirection.z =  1; }
+                else if (movementDirection.z <= -1)  { movementDirection.z = -1; }
 
-                // Move the object.
-                Vector3 loc = owner.GetGameObject().transform.position;
-                float speed = Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed());
-                float step = speed * Time.deltaTime;
-                // owner.MoveTo(loc + speed * movementDirection, movementDirection, step);
-                owner.MoveTo(loc, movementDirection, speed);
-                // Rigidbody b = GetComponent<Rigidbody>();
-                // b.AddForce(movementDirection * Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
             }
+            // Move the object.
+            Vector3 loc = transform.position;
+            float speed = owner.GetSpeed();
+            owner.MoveTo(loc, movementDirection, speed, PlayerVisionLocked);
         }
 
+        // TODO- implement in child classes.
         public void Shields()
         {
             return;
         }
 
+        // TODO- implement in child classes.
         public void Fire()
         {
             return;

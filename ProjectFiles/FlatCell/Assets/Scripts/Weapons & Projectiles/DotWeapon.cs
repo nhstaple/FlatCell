@@ -28,8 +28,9 @@ namespace Weapon.Command
             cast.Init(this, Damage, Piercing, ProjectileLifetime);
         }
 
-        void Start()
+        new void Start()
         {
+            base.Start();
             this.Projectile = gameObject.AddComponent<DotProjectile>();
             DotProjectile cast = (DotProjectile)this.Projectile;
             cast.Init(this, Damage, Piercing, ProjectileLifetime);
@@ -51,19 +52,15 @@ namespace Weapon.Command
                 bullet_rigidbody.mass = 0.1f;
                 if (Owner.ToString().Contains("Player"))
                 {
-                    Debug.Log("Value: " + Owner.GetMovementMagnitude());
                     float modified = 1;
                     if (Random.Range(1, 100) < PlayerChargeChance)
                     {
                         modified = Random.Range(ChargeMinMod, ChargeMaxMod);
                     }
-                    // bullet_rigidbody.AddRelativeForce(lastMove * (push*modified + Owner.GetCurrentSpeed()), ForceMode.Impulse);
-                    Debug.Log("value: " + Owner.GetMovementMagnitude());
                     bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
                 }
                 else
                 {
-                    // bullet_rigidbody.AddRelativeForce(lastMove * (push + Owner.GetCurrentSpeed()), ForceMode.Impulse);
                     bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
                 }
             }

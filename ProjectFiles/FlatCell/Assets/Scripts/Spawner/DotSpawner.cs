@@ -135,11 +135,11 @@ public class DotSpawner : MonoBehaviour, ISpawner
 
     public void Kill(GameObject dead, GameObject killer = null)
     {
-        /** Update the killer's score **/
+        // Update the killer's score if the thing that died was a Dot or the player.
         IGeo geo;
         if (killer != null && (
-            dead.ToString().Contains("Dot") ||
-            dead.ToString().Contains("Player")))
+            dead.ToString().Contains("Dot") || dead.ToString().Contains("Player")
+            ))
         {
             if (killer.gameObject.ToString().Contains("Simple Dot"))
             {
@@ -171,7 +171,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             return;
         }
 
-        /** Kill the dead object **/
+        // Kill the dead object in the game.
         Alive.Remove(dead);
         IAI[] res = dead.GetComponents<IAI>();
         if(res.Length > 0)
@@ -179,16 +179,20 @@ public class DotSpawner : MonoBehaviour, ISpawner
             IAI ai = res[0];
             ai.Kill();
         }
-        if(killer != null)
-        {
-            Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
-        }
+
         // Spawn the stat drop.
         IPickup pickup = dead.GetComponent<PickupObject>();
         if(pickup != null)
         {
             pickup.Spawn(dead.transform.position + dead.transform.forward*10);
         }
+
         Destroy(dead);
+        // Log debug information.
+        if (killer != null)
+        {
+            Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
+        }
+        //
     }
 }

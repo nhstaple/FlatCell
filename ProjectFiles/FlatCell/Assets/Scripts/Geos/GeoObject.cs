@@ -9,7 +9,7 @@ using Weapon.Command;
 using Projectile.Command;
 using Pickup.Command;
 using Utils.Debug;
-using Util.ASDR;
+using Util.ADSR;
 
 /*
  * Geo Object
@@ -103,13 +103,16 @@ namespace Geo.Command
         [SerializeField] private float DeathPenaltyLower = 0.5f;
         [SerializeField] private float DeathPenaltyUpper = 0.75f;
         [SerializeField] protected bool DrawDebugLine = false;
+        // The speed the geo currently is.
         [SerializeField] protected float Speed = 10;
-        [SerializeField] protected float MaxSpeed = 100;
-        [SerializeField] protected float BoostFactor;
-        [SerializeField] protected float MaxHealth = 3;
+        [SerializeField] const float MaxSpeed = 100;
+        const float BaseSpeed = 1f;
+        // Use this to tweak the max speed.
+        [SerializeField] float SpeedMultiplier = 4f;
         [SerializeField] protected float FireRate = 0.25f;
         [SerializeField] protected float Damage = 1;
         [SerializeField] protected float health = 0;
+        [SerializeField] protected float MaxHealth = 3;
         [SerializeField] protected float armor = 0.0f;
         [SerializeField] protected Color color = Color.clear;
         [SerializeField] protected Shield shield;
@@ -127,8 +130,8 @@ namespace Geo.Command
         public Dictionary<string, int> killHistory;
         [SerializeField] protected float FireChance = 35;
         [SerializeField] protected float ShieldChance = 35;
-        float asdrCounter = 0;
-        ASDR asdr;
+        float adsrCounter = 0;
+        ADSR adsr;
 
     // Cosemetics
         // The force applied to the projectile. 
@@ -143,10 +146,10 @@ namespace Geo.Command
         LineDrawer movementLineX;
         LineDrawer movementLineZ;
         LineDrawer velocityLine;
-        Vector3 prevASDR;
+        Vector3 prevADSR;
         //
 
-    // Animation manager.
+        // Animation manager.
         Animation anim = new Animation();
         private bool locked = false;
         [SerializeField] protected float colorRefreshPoll = 0.5f;
@@ -195,7 +198,7 @@ namespace Geo.Command
         private void addComponents()
         {
             // Movement
-            asdr = new ASDR();
+            adsr = new ADSR();
 
             // Debug lines.
             Lines = new List<LineDrawer>();
@@ -209,8 +212,14 @@ namespace Geo.Command
             Lines.Add(movementLineZ);
 
             // Add components to game object.
-            gameObject.AddComponent<MeshFilter>();
-            gameObject.AddComponent<MeshRenderer>();
+            if(!GetComponent<MeshFilter>())
+            {
+                gameObject.AddComponent<MeshFilter>();
+            }
+            if (!GetComponent<MeshRenderer>())
+            {
+                gameObject.AddComponent<MeshRenderer>();
+            }
 
             // Trail
             if (!trail)
@@ -243,7 +252,7 @@ namespace Geo.Command
             currentSpeed = 0;
             health = MaxHealth;
             transform.forward = new Vector3(1, 0, 0);
-            prevASDR = Vector3.zero;
+            prevADSR = Vector3.zero;
 
             // Kill tracking
             lastHitBy = this.gameObject;
@@ -378,22 +387,9 @@ namespace Geo.Command
                 Destroy(collision.gameObject, .1f);
 
             }
-            else if (collision.gameObject.tag == "Boundary")
-            {
-                Debug.Log("Hit the wall!");
-                movementDirection.x *= -1;
-                movementDirection.y *= -1;
-                Vector3 pos = -1 * transform.position;
-                pos.y = 0;
-                pos.Normalize();
-
-                Rigidbody body = GetComponent<Rigidbody>();
-                body.AddForce(25f * pos, ForceMode.Impulse);
-                // MoveTo(pos, movementDirection, Speed*Time.deltaTime);
-            }
             else
             {
-                Debug.Log("Hit a: " + collision.gameObject.tag);
+                
             }
             return;
         }
@@ -435,9 +431,9 @@ namespace Geo.Command
             if (DrawDebugLine || flag)
             {
                 Vector3 pos = gameObject.transform.position;
-                pos.y = 75;
+                pos.y = 45;
                 Vector3 forv = transform.forward * length;
-                forv.y = 75;
+
                 Vector3 x = new Vector3(movementDirection.x, 0, 0);
                 Vector3 z = new Vector3(0, 0, movementDirection.z);
                 if(x.x >= 1) { x.x = 1; }
@@ -448,7 +444,7 @@ namespace Geo.Command
                 forwardLine.DrawLineInGameView(pos, pos + forv, forc);
                 movementLineX.DrawLineInGameView(pos, pos + x * x.magnitude * length, movc);
                 movementLineZ.DrawLineInGameView(pos, pos + z * z.magnitude * length, movc);
-                velocityLine.DrawLineInGameView(pos + -1f * prevASDR * length, pos, velc);
+                velocityLine.DrawLineInGameView(pos + -1f * prevADSR * length, pos, velc);
             }
         }
 
@@ -461,17 +457,16 @@ namespace Geo.Command
                 deathSource.PlayOneShot(deathSource.clip, 0.4f);
             }
 
-            if(this.gameObject.tag != "Player")
+            if (this.gameObject.tag != "Player")
             {
                 foreach (LineDrawer line in Lines)
                 {
                     line.Destroy();
                 }
+                // Turn the pickup script on.
+                PickupObject cast = (PickupObject)pickup;
+                cast.enabled = true;
             }
-
-            // Turn the pickup script on.
-            PickupObject cast = (PickupObject)pickup;
-            cast.enabled = true;
         }
 
         // Respawns the geo. Only to be used on player for now.
@@ -519,17 +514,17 @@ namespace Geo.Command
         }
 
         // Moves to the location.
-        public void MoveTo(Vector3 Position, Vector3 MovementVector, float Speed)
+        public void MoveTo(Vector3 Position, Vector3 MovementVector, float Speed, bool ForwardLock = false)
         {
             // Set the previous movement vector.
             movementDirection = MovementVector;
             if(MovementVector.magnitude > 0)
             {
-                asdrCounter += Time.deltaTime;
+                adsrCounter += Time.deltaTime;
             }
             else
             {
-                asdrCounter = 0;
+                adsrCounter = 0;
             }
 
             // Compute the location to move to.
@@ -537,9 +532,12 @@ namespace Geo.Command
 
             // Move our position a step closer to the target.
             // transform.Translate(MovementVector, Space.World);
-            prevASDR = asdr.ComputeAttack(MovementVector, asdrCounter);
-            transform.Translate(prevASDR * (1 + Speed / MaxSpeed), Space.World);
-            transform.LookAt(Location, new Vector3(0, 1, 0));
+            prevADSR = adsr.ComputeAttack(MovementVector, adsrCounter);
+            transform.Translate(prevADSR * (BaseSpeed + SpeedMultiplier * (Speed / MaxSpeed)), Space.World);
+            if(!ForwardLock)
+            {
+                transform.LookAt(Location, new Vector3(0, 1, 0));
+            }
         }
 
         // Turn the shields on. Sets a flag and toggles emmision field on mat

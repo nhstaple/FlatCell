@@ -78,8 +78,6 @@ public class Animation
 
 }
 
-
-
 public class planeCollision : MonoBehaviour
 {
     GameObject player;
@@ -96,9 +94,10 @@ public class planeCollision : MonoBehaviour
         animTime = UnityEngine.Random.Range(1f, 2f);
     }
 
-
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
+        Physics.IgnoreCollision(this.gameObject.GetComponent<Collider>(), other.collider);
+
         // if(other.gameObject.ToString().Contains("Player") && !other.gameObject.ToString().Contains("Projectile"))
         if (!other.gameObject.ToString().Contains("Projectile"))
         {
