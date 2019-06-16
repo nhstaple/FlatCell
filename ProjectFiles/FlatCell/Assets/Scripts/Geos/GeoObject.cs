@@ -143,6 +143,7 @@ namespace Geo.Command
         LineDrawer movementLineX;
         LineDrawer movementLineZ;
         LineDrawer velocityLine;
+        Vector3 prevASDR;
         //
 
     // Animation manager.
@@ -242,6 +243,7 @@ namespace Geo.Command
             currentSpeed = 0;
             health = MaxHealth;
             transform.forward = new Vector3(1, 0, 0);
+            prevASDR = Vector3.zero;
 
             // Kill tracking
             lastHitBy = this.gameObject;
@@ -442,7 +444,7 @@ namespace Geo.Command
                 forwardLine.DrawLineInGameView(pos, pos + forv, forc);
                 movementLineX.DrawLineInGameView(pos, pos + x * x.magnitude * length, movc);
                 movementLineZ.DrawLineInGameView(pos, pos + z * z.magnitude * length, movc);
-                // velocityLine.DrawLineInGameView(pos + -1f * currentSpeed * forv * length, pos, velc);
+                velocityLine.DrawLineInGameView(pos + -1f * prevASDR * length, pos, velc);
             }
         }
 
@@ -531,9 +533,8 @@ namespace Geo.Command
 
             // Move our position a step closer to the target.
             // transform.Translate(MovementVector, Space.World);
-            Vector3 res = asdr.ComputeAttack(MovementVector, asdrCounter);
-            Debug.Log(res);
-            transform.Translate(res, Space.World);
+            prevASDR = asdr.ComputeAttack(MovementVector, asdrCounter);
+            transform.Translate(prevASDR, Space.World);
             transform.LookAt(Location, new Vector3(0, 1, 0));
         }
 
