@@ -4,6 +4,7 @@
 
 using UnityEngine;
 using Geo.Command;
+using Utils.Vectors;
 
 /*
  * DotBehaviour - The implemntation of the IDotBehaviour interface.
@@ -77,7 +78,7 @@ namespace DotBehaviour.Command
 
                 Rigidbody body = GetComponent<Rigidbody>();
                 body.AddForce(25f * pos, ForceMode.Impulse);
-                owner.MoveTo(new Vector3(0, 25, 0), movementDirection, owner.GetSpeed());
+                owner.MoveTo(Locations.SpawnLocation, movementDirection, owner.GetSpeed());
             }
         }
 
@@ -177,6 +178,7 @@ namespace DotBehaviour.Command
 
             }
 
+            // If the geo is in a 255 radious circle around the spawn.
             if(this.gameObject.transform.position.magnitude < 255)
             {
                 ResetToSpawn = false;
@@ -184,17 +186,17 @@ namespace DotBehaviour.Command
 
             if(ResetToSpawn)
             {
-                Vector3 loc = transform.position;
+                Vector3 pos = transform.position;
                 float speed = owner.GetSpeed();
-                owner.MoveTo(loc, 4 * (new Vector3(0, 25, 0) - loc).normalized, speed);
+                owner.MoveTo(pos, 4 * (Locations.SpawnLocation - pos).normalized, speed);
             }
 
             else
             {
                 // Move the object.
-                Vector3 loc = transform.position;
+                Vector3 pos = transform.position;
                 float speed = owner.GetSpeed();
-                owner.MoveTo(loc, movementDirection, speed, PlayerVisionLocked);
+                owner.MoveTo(pos, movementDirection, speed, PlayerVisionLocked);
             }
         }
 

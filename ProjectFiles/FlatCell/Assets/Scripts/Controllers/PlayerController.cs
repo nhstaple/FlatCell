@@ -2,10 +2,9 @@
 // Nick S.
 // Game Logic
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Geo.Command;
+using Utils.Vectors;    // For Locations
 
 /*
  * Player Controller
@@ -18,7 +17,7 @@ namespace Geo.Command
 {
     class PlayerController : MonoBehaviour // DotObject
     {
-        [SerializeField] Vector3 SpawnLocation = new Vector3(0, 25, 0);
+        [SerializeField] Vector3 SpawnLocation = Locations.SpawnLocation;
         [SerializeField] float InitSpeed = 25f;
         [SerializeField] float InitMaxHP = 3f;
         [SerializeField] float FireRate = 0.25f;
@@ -36,12 +35,14 @@ namespace Geo.Command
         /** Evolution variables **/
         private float initSpawnOffset;
         private bool GrowFlag = false;
-
+        [SerializeField] protected Boost boost;
+        /*
         private float boostEnergy = 0.5f;
         private float boostMax = 0.5f;
         private bool boostReady = true;
+        */
         private bool initColorSet = false;
-
+    
         // The current geo type,
         public IGeo geo;
         // The trail.
@@ -74,6 +75,11 @@ namespace Geo.Command
             {
                 trail = this.gameObject.GetComponent<TrailRenderer>();
             }
+            if(boost == null)
+            {
+                GameObject boop = (GameObject) Instantiate(Resources.Load("Player Items/Boost"));
+                boost = boop.GetComponent<Boost>();
+            }
         }
 
         private void initValues()
@@ -98,26 +104,7 @@ namespace Geo.Command
             gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             modifiedSpeed = geo.GetSpeed();
 
-            if(boostEnergy < 0)
-            {
-                boostEnergy = 0;
-                boostReady = false;
-            }
-
             handleInput();
-
-            if (!boostReady)
-            {
-                if (boostEnergy >= boostMax * 4)
-                {
-                    boostEnergy = boostMax;
-                    boostReady = true;
-                }
-                else
-                {
-                    boostEnergy += Time.deltaTime;
-                }
-            }
         }
 
         void handleInput()
@@ -129,15 +116,17 @@ namespace Geo.Command
                 SwitchWeapon();
             }
 
-            if (Input.GetButton("Jump") && boostReady)
+            if (Input.GetButton("Jump") && !boost.charging)
             {
                 modifiedSpeed *= BoostFactor;
                 trail.widthMultiplier = BoostFactor;
-                boostEnergy -= Time.deltaTime;
+                boost.TurnOn();
                 BoostedMove();
             }
             else if(!Input.GetButton("Jump"))
             {
+                boost.TurnOff();
+
                 // Check for shields.
                 if (Input.GetButton("Fire2") && !geo.GetShield().IsCharging())
                 {

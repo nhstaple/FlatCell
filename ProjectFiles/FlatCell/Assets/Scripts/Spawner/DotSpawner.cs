@@ -26,173 +26,177 @@ using AI.Command;
    void Kill(GameObject dead, GameObject killer = null)
 */
 
-public class DotSpawner : MonoBehaviour, ISpawner
+namespace Spawner.Command
 {
-    [SerializeField] public GameObject Player;
-    /** Spawner Stats **/
-    [SerializeField] public int NumDots = 15;
-    [SerializeField] public int ArchetypeCount = 3;
-    [SerializeField] public float SpawnOffset = 400f;
-    [SerializeField] public Vector3 SpawnLocation = new Vector3(0, 25, 0);
-    [SerializeField] public Vector3 InitScale = new Vector3(25, 25, 25);
-    [SerializeField] public bool EnableTrail = true;
-    [SerializeField] public bool DrawDebugLine = true;
-    
-    /** Dot AI Stats **/
-    [SerializeField] public float Speed = 50;
-    [SerializeField] public float MaxHealth = 3;
-    [SerializeField] public float FireRate = 0.05f;
-    [SerializeField] public float FireChance = 25;
-    [SerializeField] public float ShieldChance = 25;
-    [SerializeField] public float Damage = 1;
 
-    // Container of alive objects.
-    private List<GameObject> Alive;
-
-    // Global counter to keep track of unique dots.
-    private int counter = -1;
-
-    public void Start()
+    public class DotSpawner : MonoBehaviour, ISpawner
     {
-        Alive = new List<GameObject>();
-        transform.position = SpawnLocation;
-        /*
-        if (Player != null)
+        [SerializeField] public GameObject Player;
+        /** Spawner Stats **/
+        [SerializeField] public int NumDots = 15;
+        [SerializeField] public int ArchetypeCount = 3;
+        [SerializeField] public float SpawnOffset = 400f;
+        [SerializeField] public Vector3 SpawnLocation = new Vector3(0, 25, 0);
+        [SerializeField] public Vector3 InitScale = new Vector3(25, 25, 25);
+        [SerializeField] public bool EnableTrail = true;
+        [SerializeField] public bool DrawDebugLine = true;
+
+        /** Dot AI Stats **/
+        [SerializeField] public float Speed = 50;
+        [SerializeField] public float MaxHealth = 3;
+        [SerializeField] public float FireRate = 0.05f;
+        [SerializeField] public float FireChance = 25;
+        [SerializeField] public float ShieldChance = 25;
+        [SerializeField] public float Damage = 1;
+
+        // Container of alive objects.
+        private List<GameObject> Alive;
+
+        // Global counter to keep track of unique dots.
+        private int counter = -1;
+
+        public void Start()
         {
-            var boop = GameObject.Instantiate(Player, transform);
-            boop.tag = "Player";
-        }
-        */
-    }
-
-    void Update()
-    {
-        Lottery(1000f);
-
-        if(Alive.Count < NumDots)
-        {
-            Spawn();
-        }
-    }
-
-    // .1% to kill a random dot
-    public void Lottery(float cap)
-    {
-        if (UnityEngine.Random.Range(0, cap) <= 1 && Alive.Count > 0)
-        {
-            int index = UnityEngine.Random.Range(0, Alive.Count - 1);
-            Kill(Alive[index]);
-        }
-    }
-
-    public void Spawn()
-    {
-        counter++;
-        Vector3 Location = SpawnLocation;
-        Location.x = UnityEngine.Random.Range(-SpawnOffset, SpawnOffset);
-        Location.z = UnityEngine.Random.Range(-SpawnOffset, SpawnOffset);
-
-        // Add a random Ai controller to the List
-        int res = UnityEngine.Random.Range(1, 100);
-        if (res < 33)
-        {
-            Debug.Log("Spawned simple dot ai");
-            GameObject Dot = new GameObject("Geo Simple Dot" + counter);
-            Dot.transform.position = Location;
-            Dot.transform.localScale = InitScale;
-
-            IAI ai = Dot.AddComponent<DotController>();
-            ai.Init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
-            Alive.Add(Dot);
-        }
-        else if(res < 66)
-        {
-            Debug.Log("Spawned shooter dot ai");
-            GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
-            Dot.transform.position = Location;
-            Dot.transform.localScale = InitScale;
-
-            IAI ai = Dot.AddComponent<DotController>();
-            ShooterDotBehaviour b = Dot.AddComponent<ShooterDotBehaviour>();
-            b.Init(ai);
-            ai.Init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
-            Alive.Add(Dot);
-        }
-        else
-        {
-            Debug.Log("Spawned shield dot ai");
-            GameObject Dot = new GameObject("Geo Shield Dot" + counter);
-            Dot.transform.position = Location;
-            Dot.transform.localScale = InitScale;
-
-            IAI ai = Dot.AddComponent<DotController>();
-            ShieldDotBehaviour b = Dot.AddComponent<ShieldDotBehaviour>();
-            b.Init(ai);
-            ai.Init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
-            Alive.Add(Dot);
-        }
-    }
-
-    public void Kill(GameObject dead, GameObject killer = null)
-    {
-        // Update the killer's score if the thing that died was a Dot or the player.
-        IGeo geo;
-        if (killer != null && (
-            dead.ToString().Contains("Dot") || dead.ToString().Contains("Player")
-            ))
-        {
-            if (killer.gameObject.ToString().Contains("Simple Dot"))
+            Alive = new List<GameObject>();
+            transform.position = SpawnLocation;
+            /*
+            if (Player != null)
             {
-                geo = killer.gameObject.GetComponent<DotController>();
-                geo.AddKill("Dot");
+                var boop = GameObject.Instantiate(Player, transform);
+                boop.tag = "Player";
             }
-            else if (killer.gameObject.ToString().Contains("Shield Dot"))
+            */
+        }
+
+        void Update()
+        {
+            Lottery(1000f);
+
+            if (Alive.Count < NumDots)
             {
-                geo = killer.gameObject.GetComponent<DotController>();
-                geo.AddKill("Dot");
-            }
-            else if (killer.gameObject.ToString().Contains("Shooter Dot"))
-            {
-                geo = killer.gameObject.GetComponent<DotController>();
-                geo.AddKill("Dot");
-            }
-            else if (killer.gameObject.ToString().Contains("Player"))
-            {
-                PlayerController p = killer.gameObject.GetComponent<PlayerController>();
-                p.geo.AddKill("Dot");
+                Spawn();
             }
         }
 
-        if (dead.ToString().Contains("Player"))
+        // .1% to kill a random dot
+        public void Lottery(float cap)
         {
-            PlayerController p = dead.gameObject.GetComponent<PlayerController>();
-            p.geo.Respawn();
-            Debug.Log("You died! Fool- score: " + p.geo.GetScore());
-            return;
+            if (UnityEngine.Random.Range(0, cap) <= 1 && Alive.Count > 0)
+            {
+                int index = UnityEngine.Random.Range(0, Alive.Count - 1);
+                Kill(Alive[index]);
+            }
         }
 
-        // Kill the dead object in the game.
-        Alive.Remove(dead);
-        IAI[] res = dead.GetComponents<IAI>();
-        if(res.Length > 0)
+        public void Spawn()
         {
-            IAI ai = res[0];
-            ai.Kill();
+            counter++;
+            Vector3 Location = SpawnLocation;
+            Location.x = UnityEngine.Random.Range(-SpawnOffset, SpawnOffset);
+            Location.z = UnityEngine.Random.Range(-SpawnOffset, SpawnOffset);
+
+            // Add a random Ai controller to the List
+            int res = UnityEngine.Random.Range(1, 100);
+            if (res < 33)
+            {
+                Debug.Log("Spawned simple dot ai");
+                GameObject Dot = new GameObject("Geo Simple Dot" + counter);
+                Dot.transform.position = Location;
+                Dot.transform.localScale = InitScale;
+
+                IAI ai = Dot.AddComponent<DotController>();
+                ai.Init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
+                Alive.Add(Dot);
+            }
+            else if (res < 66)
+            {
+                Debug.Log("Spawned shooter dot ai");
+                GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
+                Dot.transform.position = Location;
+                Dot.transform.localScale = InitScale;
+
+                IAI ai = Dot.AddComponent<DotController>();
+                ShooterDotBehaviour b = Dot.AddComponent<ShooterDotBehaviour>();
+                b.Init(ai);
+                ai.Init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
+                Alive.Add(Dot);
+            }
+            else
+            {
+                Debug.Log("Spawned shield dot ai");
+                GameObject Dot = new GameObject("Geo Shield Dot" + counter);
+                Dot.transform.position = Location;
+                Dot.transform.localScale = InitScale;
+
+                IAI ai = Dot.AddComponent<DotController>();
+                ShieldDotBehaviour b = Dot.AddComponent<ShieldDotBehaviour>();
+                b.Init(ai);
+                ai.Init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
+                Alive.Add(Dot);
+            }
         }
 
-        // Spawn the stat drop.
-        IPickup pickup = dead.GetComponent<PickupObject>();
-        if(pickup != null)
+        public void Kill(GameObject dead, GameObject killer = null)
         {
-            pickup.Spawn(dead.transform.position + dead.transform.forward*10);
-        }
+            // Update the killer's score if the thing that died was a Dot or the player.
+            IGeo geo;
+            if (killer != null && (
+                dead.ToString().Contains("Dot") || dead.ToString().Contains("Player")
+                ))
+            {
+                if (killer.gameObject.ToString().Contains("Simple Dot"))
+                {
+                    geo = killer.gameObject.GetComponent<DotController>();
+                    geo.AddKill("Dot");
+                }
+                else if (killer.gameObject.ToString().Contains("Shield Dot"))
+                {
+                    geo = killer.gameObject.GetComponent<DotController>();
+                    geo.AddKill("Dot");
+                }
+                else if (killer.gameObject.ToString().Contains("Shooter Dot"))
+                {
+                    geo = killer.gameObject.GetComponent<DotController>();
+                    geo.AddKill("Dot");
+                }
+                else if (killer.gameObject.ToString().Contains("Player"))
+                {
+                    PlayerController p = killer.gameObject.GetComponent<PlayerController>();
+                    p.geo.AddKill("Dot");
+                }
+            }
 
-        Destroy(dead);
-        // Log debug information.
-        if (killer != null)
-        {
-            Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
+            if (dead.ToString().Contains("Player"))
+            {
+                PlayerController p = dead.gameObject.GetComponent<PlayerController>();
+                p.geo.Respawn();
+                Debug.Log("You died! Fool- score: " + p.geo.GetScore());
+                return;
+            }
+
+            // Kill the dead object in the game.
+            Alive.Remove(dead);
+            IAI[] res = dead.GetComponents<IAI>();
+            if (res.Length > 0)
+            {
+                IAI ai = res[0];
+                ai.Kill();
+            }
+
+            // Spawn the stat drop.
+            IPickup pickup = dead.GetComponent<PickupObject>();
+            if (pickup != null)
+            {
+                pickup.Spawn(dead.transform.position + dead.transform.forward * 10);
+            }
+
+            Destroy(dead);
+            // Log debug information.
+            if (killer != null)
+            {
+                Debug.Log(killer.gameObject.ToString() + " killed " + dead.ToString());
+            }
+            //
         }
-        //
     }
 }

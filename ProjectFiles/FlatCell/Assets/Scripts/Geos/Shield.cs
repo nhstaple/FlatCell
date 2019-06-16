@@ -39,22 +39,22 @@ namespace Geo.Command
     public class Shield : MonoBehaviour // ScriptableObject
     {
         // The shield's energy in seconds.
-        [SerializeField] protected float energy = 0;
+        [SerializeField] public float energy { get; protected set; } = 2;
 
         // Indicates if the shield is charging.
-        [SerializeField] public bool charging { get; private set; } = false;
+        [SerializeField] public bool charging { get; protected set; } = false;
 
         // Indicates if the shields are on.
-        [SerializeField] public bool active { get; private set; } = false;
+        [SerializeField] public bool active { get; protected set; } = false;
 
         // The max value of the energy in seconds.
-        [SerializeField] protected float MaxEnergy = 2;
+        [SerializeField] public float MaxEnergy { get; protected set; } = 2;
 
         // The gameobject that this script is attached to.
         protected GameObject Owner;
 
         // The geo object that this shield logically belongs to.
-        IGeo owner;
+        protected IGeo owner;
 
         // The owner's mesh renderer.
         MeshRenderer rend;
@@ -63,7 +63,7 @@ namespace Geo.Command
         TrailRenderer trail;
 
         // The color of the shield.
-        Color shieldColor;
+        protected Color shieldColor;
 
         // The color the shield should lerp to.
         Color newShieldColor;
@@ -72,10 +72,10 @@ namespace Geo.Command
         float shieldLerpCounter = 0;
 
         // The time required before changing shields colors.
-        [SerializeField] float InitShieldLerpTime = 0.5f;
+        [SerializeField] private float InitShieldLerpTime = 0.5f;
         float shieldLerpTime = 0f;
 
-        void grabComponents()
+        protected void grabComponents()
         {
             Owner = gameObject;
             IGeo[] boop = Owner.GetComponents<IGeo>();
@@ -118,26 +118,56 @@ namespace Geo.Command
             {
                 Charge(Time.deltaTime);
             }
-            // The shield is not active and not charging.
-            else
+            else if (!active && !charging)
             {
-
+                Charge(Time.deltaTime);
             }
         }
 
-        public void SetMaxEnergy(float f)
+        
+        public void TurnOn()
         {
-            energy = MaxEnergy = f;
+            active = true;
+            turnOnShieldEffect();
         }
 
-        public float GetMaxEnergy()
+        public void TurnOff()
         {
-            return MaxEnergy;
+            active = false;
+            turnOffShieldEffect();
+            newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+            shieldLerpCounter = 0;
         }
 
-        public float GetPercent()
+        public bool CheckEnergy()
         {
-            return energy / MaxEnergy;
+            if (energy < MaxEnergy)
+            {
+                energy = MaxEnergy;
+                charging = true;
+                return false;
+            }
+            return true;
+        }
+
+        public void ForceRecharge()
+        {
+            energy = MaxEnergy;
+            charging = false;
+        }
+
+        public bool IsCharging()
+        {
+            if (energy <= 0)
+            {
+                charging = true;
+                energy = 0;
+                return charging;
+            }
+            else
+            {
+                return charging;
+            }
         }
 
         // Drains energy from the shield.
@@ -165,34 +195,17 @@ namespace Geo.Command
             }
         }
 
-        public bool IsCharging()
+    // Private
+        private void turnOnShieldEffect()
         {
-            if(energy <= 0)
-            {
-                charging = true;
-                energy = 0;
-                return charging;
-            }
-            else
-            {
-                return charging;
-            }
-        }
-
-        public void TurnOn()
-        {
-            active = true;
             rend.material.EnableKeyword("_EMISSION");
             trail.enabled = false;
         }
 
-        public void TurnOff()
+        private void turnOffShieldEffect()
         {
-            active = false;
             rend.material.DisableKeyword("_EMISSION");
             trail.enabled = true;
-            newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-            shieldLerpCounter = 0;
         }
 
         private void changeColor()
@@ -216,7 +229,22 @@ namespace Geo.Command
                 }
             }
         }
+    
+    // Get and Set
+        public float GetMaxEnergy()
+        {
+            return MaxEnergy;
+        }
 
+        public float GetPercent()
+        {
+            return energy / MaxEnergy;
+        }
+
+        public void SetMaxEnergy(float f)
+        {
+            energy = MaxEnergy = f;
+        }
 
     }
 }
