@@ -176,12 +176,19 @@ namespace DotBehaviour.Command
                 else if (movementDirection.z <= -1)  { movementDirection.z = -1; }
 
             }
+
+            if(this.gameObject.transform.position.magnitude < 255)
+            {
+                ResetToSpawn = false;
+            }
+
             if(ResetToSpawn)
             {
                 Vector3 loc = transform.position;
                 float speed = owner.GetSpeed();
-                owner.MoveTo(loc, 3 * (new Vector3(0, 25, 0) - loc).normalized, speed);
+                owner.MoveTo(loc, 4 * (new Vector3(0, 25, 0) - loc).normalized, speed);
             }
+
             else
             {
                 // Move the object.

@@ -157,7 +157,7 @@ MonoBehaviour:
   InitScale: {x: 25, y: 25, z: 25}
   EnableTrail: 1
   DrawDebugLine: 0
-  Speed: 75
+  Speed: 10
   MaxHealth: 3
   FireRate: 0.05
   FireChance: 15
