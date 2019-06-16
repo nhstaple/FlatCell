@@ -58,9 +58,9 @@ namespace DotBehaviour.Command
         public string type;
         public EDOT_BEHAVIOUR e_type;
 
-        bool ResetToSpawn = false;
+        public bool ResetToSpawn = false;
         protected bool PlayerVisionLocked = false;
-        const float ResetVisionTimer = 1f;
+        const float ResetVisionTimer = 3f;
         float visionCounter = 0.0f;
 
         public void OnCollisionEnter(Collision collision)
@@ -128,10 +128,7 @@ namespace DotBehaviour.Command
             }
 
             CheckScore();
-            if(!ResetToSpawn)
-            {
-                Move();
-            }
+            Move();
         }
 
         public void Move()
@@ -179,10 +176,19 @@ namespace DotBehaviour.Command
                 else if (movementDirection.z <= -1)  { movementDirection.z = -1; }
 
             }
-            // Move the object.
-            Vector3 loc = transform.position;
-            float speed = owner.GetSpeed();
-            owner.MoveTo(loc, movementDirection, speed, PlayerVisionLocked);
+            if(ResetToSpawn)
+            {
+                Vector3 loc = transform.position;
+                float speed = owner.GetSpeed();
+                owner.MoveTo(loc, 3 * (new Vector3(0, 25, 0) - loc).normalized, speed);
+            }
+            else
+            {
+                // Move the object.
+                Vector3 loc = transform.position;
+                float speed = owner.GetSpeed();
+                owner.MoveTo(loc, movementDirection, speed, PlayerVisionLocked);
+            }
         }
 
         // TODO- implement in child classes.
