@@ -40,8 +40,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 98575277926834426}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2242a1f8ae04fd4f8323ce1a5058e28, type: 3}
+  m_Script: {fileID: 11500000, guid: 287cd6a69a5b444ab976f3d5960f2c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   InitShieldLerpTime: 0.5
+  e: 0
+  max: 0
+  BoostEnergy: 0.5
+  MaxBoostEnergy: 0.5
   RechargeTime: 2
