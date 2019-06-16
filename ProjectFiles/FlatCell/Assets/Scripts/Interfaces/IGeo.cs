@@ -20,17 +20,18 @@ namespace Geo.Command
 {
     public interface IGeo
     {
-/** Player **/
-        void MoveTo(Vector3 Location, Vector3 Forward, float Step);
+        /** Player **/
+        void MoveTo(Vector3 Position, Vector3 MovementVector, float Speed);
         void Respawn();
         void Kill();
         void AddColor(Color c);
         float GetMovementMagnitude();
+        Vector3 GetMovementDirection();
 
 /** AI **/
-    // Constructors
+        // Constructors
         // Initializes the Component when you add it to game object. ie, initializing an AI
-        void init(float Speed,          // The speed at which the AI moves.
+        void Init(float Speed,          // The speed at which the AI moves.
                   float MaxHP,          // The MaxHP of the AI.
                   float FireRate,       // The time to wait between firing bullets in seconds.
                   float FireChance,     // 0-100 how likely the AI is to fire their gun.
@@ -77,13 +78,12 @@ namespace Geo.Command
         void Hurt(float d);
         void Heal(float d);
         void ModifyArmor(float a);
-        // void IncreaseArmor(float a);
-        // void DecreaseArmor(float a);
 
 /** Stats  **/
     // Get
         float GetHealth();
         float GetMaxHealth();
+        float GetHealthPercent();
         float GetArmor();
         float GetDamage();
         float GetSpeed();
@@ -92,5 +92,7 @@ namespace Geo.Command
     // Set
         void SetDamage(float d);
         void SetSpeed(float s);
+        void SetColor(Color c);
+        void DrawDebug(bool flag = false);
     }
 }

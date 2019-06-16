@@ -20,19 +20,19 @@ namespace Weapon.Command
         const float ChargeMinMod = 0f;
         const float ChargeMaxMod = 1f;
 
-        public new void init(IGeo GeoOwner, AudioClip Sound, float Damage, float Pierce = 0, float Rate = 0.25f, float lifeTime = 2.5f)
+        public new void Init(IGeo GeoOwner, AudioClip Sound, float Damage, float Pierce = 0, float Rate = 0.25f, float lifeTime = 2.5f)
         {
-            base.init(GeoOwner, Sound, Damage, Pierce, Rate, lifeTime);
+            base.Init(GeoOwner, Sound, Damage, Pierce, Rate, lifeTime);
             this.Projectile = gameObject.AddComponent<DotProjectile>();
-            DotProjectile boopCast = (DotProjectile) this.Projectile;
-            boopCast.init(this, Damage, Piercing, ProjectileLifetime);
+            DotProjectile cast = (DotProjectile) this.Projectile;
+            cast.Init(this, Damage, Piercing, ProjectileLifetime);
         }
 
         void Start()
         {
             this.Projectile = gameObject.AddComponent<DotProjectile>();
-            DotProjectile boopCoast = (DotProjectile)this.Projectile;
-            boopCoast.init(this, Damage, Piercing, ProjectileLifetime);
+            DotProjectile cast = (DotProjectile)this.Projectile;
+            cast.Init(this, Damage, Piercing, ProjectileLifetime);
         }
 
         new public void Fire(Vector3 movementDir, Vector3 pos, float push, float SpawnOffset)
@@ -58,12 +58,13 @@ namespace Weapon.Command
                         modified = Random.Range(ChargeMinMod, ChargeMaxMod);
                     }
                     // bullet_rigidbody.AddRelativeForce(lastMove * (push*modified + Owner.GetCurrentSpeed()), ForceMode.Impulse);
-                    bullet_rigidbody.AddRelativeForce(lastMove * (push * 0.125f * (1 + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
+                    Debug.Log("value: " + Owner.GetMovementMagnitude());
+                    bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
                 }
                 else
                 {
                     // bullet_rigidbody.AddRelativeForce(lastMove * (push + Owner.GetCurrentSpeed()), ForceMode.Impulse);
-                    bullet_rigidbody.AddRelativeForce(lastMove * (push * 0.125f * (1 + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
+                    bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
                 }
             }
         }

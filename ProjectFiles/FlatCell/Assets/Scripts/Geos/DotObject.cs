@@ -35,7 +35,7 @@ namespace Geo.Command
                 // Add the weapon.
                 ActiveGun = Instantiate(Resources.Load("Player Items/Dot Gun")) as GameObject;
                 DotWeapon dotGun = ActiveGun.GetComponents<IWeapon>()[0] as DotWeapon;
-                dotGun.init(this, Resources.Load<AudioClip>(Dot_Shoot_Soundfile), DotDamage, DotPiercing, FireRate);
+                dotGun.Init(this, Resources.Load<AudioClip>(Dot_Shoot_Soundfile), DotDamage, DotPiercing, FireRate);
                 weapon.Add(dotGun);
             }
 

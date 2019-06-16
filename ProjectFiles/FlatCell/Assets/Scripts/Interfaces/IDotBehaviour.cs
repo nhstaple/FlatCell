@@ -20,7 +20,7 @@ namespace DotBehaviour.Command
     public interface IAIBehaviour
     {
         // Sets the parent.
-        void init(IGeo geo);
+        void Init(IGeo geo);
 
         // Updates the parent's stats according to it's kill record.
         void CheckScore();

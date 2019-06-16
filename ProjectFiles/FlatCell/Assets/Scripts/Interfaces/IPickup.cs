@@ -22,7 +22,7 @@ namespace Pickup.Command
     {
         // initializes the pickup after attaching it to a game object.
         // this sets the values of the pickup to be used when the player "eats it"
-        void init(IGeo geo, string t);
+        void Init(IGeo geo, string t);
 
         // programtically creates the pickup drop at the location
         GameObject Spawn(Vector3 Location);

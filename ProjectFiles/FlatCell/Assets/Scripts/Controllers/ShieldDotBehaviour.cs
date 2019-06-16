@@ -51,7 +51,7 @@ namespace DotBehaviour.Command
                 // Randomly set the peroid.
                 if (Random.Range(0, 100) <= owner.GetShieldChance())
                 {
-                    period = Random.Range(0, shield.MaxEnergy);
+                    period = Random.Range(0, shield.GetMaxEnergy());
                 }
 
                 // Turn the shields on.

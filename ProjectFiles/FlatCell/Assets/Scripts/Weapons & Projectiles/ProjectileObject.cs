@@ -29,7 +29,7 @@ namespace Projectile.Command
         // Pointer to a renderer
         protected Renderer rend;
 
-        public void init(IWeapon owner, float Damage, float Piercing, float ProjectileLifetime)
+        public void Init(IWeapon owner, float Damage, float Piercing, float ProjectileLifetime)
         {
             this.Owner = owner;
             this.Damage = Damage;

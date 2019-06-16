@@ -2,13 +2,14 @@
 // Nick S.
 // Game Logic - AI
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 using Weapon.Command;
 using Projectile.Command;
 using Pickup.Command;
+using Utils.Debug;
+using Util.ASDR;
 
 /*
  * Geo Object
@@ -96,73 +97,9 @@ using Pickup.Command;
 
 namespace Geo.Command
 {
-    // source
-    // https://stackoverflow.com/questions/42819071/debug-drawline-not-showing-in-the-gameview
-    // Used to draw debug line.
-    public struct LineDrawer
-    {
-        private LineRenderer lineRenderer;
-        private float lineSize;
-
-        public LineDrawer(float lineSize = 0.2f)
-        {
-            GameObject lineObj = new GameObject("LineObj");
-            lineRenderer = lineObj.AddComponent<LineRenderer>();
-            //Particles/Additive
-            lineRenderer.material = new Material(Shader.Find("Hidden/Internal-Colored"));
-
-            this.lineSize = lineSize;
-        }
-
-        private void init(float lineSize = 0.2f)
-        {
-            if (lineRenderer == null)
-            {
-                GameObject lineObj = new GameObject("LineObj");
-                lineRenderer = lineObj.AddComponent<LineRenderer>();
-                //Particles/Additive
-                lineRenderer.material = new Material(Shader.Find("Hidden/Internal-Colored"));
-
-                this.lineSize = lineSize;
-            }
-        }
-
-        //Draws lines through the provided vertices
-        public void DrawLineInGameView(Vector3 start, Vector3 end, Color color)
-        {
-            if (lineRenderer == null)
-            {
-                init(0.2f);
-            }
-            //Set color
-            lineRenderer.startColor = color;
-            lineRenderer.endColor = color;
-
-            //Set width
-            lineRenderer.startWidth = lineSize;
-            lineRenderer.endWidth = lineSize;
-
-            //Set line count which is 2
-            lineRenderer.positionCount = 2;
-
-            //Set the postion of both two lines
-            lineRenderer.SetPosition(0, start);
-            lineRenderer.SetPosition(1, end);
-        }
-
-        public void Destroy()
-        {
-            if (lineRenderer != null)
-            {
-                UnityEngine.Object.Destroy(lineRenderer.gameObject);
-            }
-        }
-    }
-
-
     public class GeoObject : MonoBehaviour, IGeo
     {
-    /** Geo Stats **/
+    // Geo Stats
         [SerializeField] private float DeathPenaltyLower = 0.5f;
         [SerializeField] private float DeathPenaltyUpper = 0.75f;
         [SerializeField] protected bool DrawDebugLine = false;
@@ -182,39 +119,42 @@ namespace Geo.Command
         [SerializeField] protected GameObject ActiveGun;
         [SerializeField] public IPickup pickup;
 
-    /** Dot stats **/
+    // Dot stats
         [SerializeField] protected float DotDamage = 1;
         [SerializeField] protected float DotPiercing = 0;
 
-    /** AI vars **/
+    // AI vars
         public Dictionary<string, int> killHistory;
         [SerializeField] protected float FireChance = 35;
         [SerializeField] protected float ShieldChance = 35;
+        float asdrCounter = 0;
+        ASDR asdr;
 
-    /** Cosemetics **/
+    // Cosemetics
         // The force applied to the projectile. 
         [SerializeField] public float ProjectileSpawnOffset = 20f;
-        [SerializeField] protected float Push = 100.0f;
-        [SerializeField] protected float trailDecay = 5f;
+        [SerializeField] protected float Push = 10.0f;
+        [SerializeField] protected float trailDecay = 2.5f;
+        [SerializeField] protected float trailWidth = 5f;
         [SerializeField] protected bool EnableTrail;
         // Used for debugging.
+        List<LineDrawer> Lines;
         LineDrawer forwardLine;
-        LineDrawer movementLine;
+        LineDrawer movementLineX;
+        LineDrawer movementLineZ;
         LineDrawer velocityLine;
         //
-        // Animation manager.
+
+    // Animation manager.
         Animation anim = new Animation();
         private bool locked = false;
         [SerializeField] protected float colorRefreshPoll = 0.5f;
-        [SerializeField] protected float shieldLerpTime = 1f;
-        private float shieldLerpCounter = 0;
         [SerializeField] protected float geoColorLerpTime = 1f;
         private float geoColorLerpCounter = 0f;
         protected float refreshCounter = 0;
-        private Color newShieldColor;
         Color initColor;
 
-        /** Script variables **/
+    // Script variables
         [SerializeField] public TrailRenderer trail;
         protected Vector3 lastMovement;
         protected Vector3 movementDirection;
@@ -224,24 +164,204 @@ namespace Geo.Command
 
         protected Renderer rend;
 
-    /** Audio **/
+    // Audio
         const string Geo_Death_Sound = "Audio/Death Sound";
         protected AudioClip deathSound;
         protected float volLowRange = 0.5F;
         protected float volHighRange = 1.0F;
         protected AudioSource deathSource;
 
+    // Initializers.
+        // Start is called before the first frame update
+        public void Start()
+        {
+            addComponents();
+            initValues();
+        }
+
+        public void Init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
+        {
+            Start();
+            this.color = computeRandomColor();
+            this.Speed = Speed;
+            this.MaxHealth = MaxHP;
+            this.FireRate = FireRate;
+            this.FireChance = FireChance;
+            this.ShieldChance = ShieldChance;
+            this.EnableTrail = ShowTrail;
+        }
+
+        private void addComponents()
+        {
+            // Movement
+            asdr = new ASDR();
+
+            // Debug lines.
+            Lines = new List<LineDrawer>();
+            forwardLine = new LineDrawer(0.5f);
+            velocityLine = new LineDrawer(1f);
+            movementLineX = new LineDrawer(0.75f);
+            movementLineZ = new LineDrawer(0.75f);
+            Lines.Add(forwardLine);
+            Lines.Add(velocityLine);
+            Lines.Add(movementLineX);
+            Lines.Add(movementLineZ);
+
+            // Add components to game object.
+            gameObject.AddComponent<MeshFilter>();
+            gameObject.AddComponent<MeshRenderer>();
+
+            // Trail
+            if (!trail)
+            {
+                addTrail();
+                trail.enabled = EnableTrail;
+            }
+            // Shield
+            if (!shield)
+            {
+                shield = gameObject.AddComponent<Shield>();
+                shield.SetMaxEnergy(InitMaxShieldEnergy);
+            }
+
+            // Weapon
+            weapon = new List<IWeapon>();
+            if (InitWeapon != null)
+            {
+                ActiveGun = Instantiate(InitWeapon);
+                IWeapon ptr = ActiveGun.GetComponents<IWeapon>()[0];
+                ptr.SetOwner(this);
+                weapon.Add(ptr);
+            }
+        }
+
+        // Sets the initial values for the geo.
+        private void initValues()
+        {
+            // Set the stats
+            currentSpeed = 0;
+            health = MaxHealth;
+            transform.forward = new Vector3(1, 0, 0);
+
+            // Kill tracking
+            lastHitBy = this.gameObject;
+            killHistory = new Dictionary<string, int>();
+            killHistory.Add("Dot", 0);
+
+            // Material
+            if (color == Color.clear)
+            {
+                color = computeRandomColor();
+                initColor = color;
+            }
+            rend = gameObject.GetComponent<MeshRenderer>();
+            rend.material = Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
+            rend.material.color = this.color;
+            rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+
+            // Sound.
+            deathSource = gameObject.AddComponent<AudioSource>();
+            deathSource.enabled = true;
+            deathSource.clip = Resources.Load<AudioClip>(Geo_Death_Sound);
+
+            // Cosmetics
+            refreshCounter = colorRefreshPoll;
+            initColor = color;
+
+            // The pickup
+            if (pickup == null)
+            {
+                pickup = gameObject.AddComponent<PickupObject>();
+                pickup.Init(this, "Pickup");
+                PickupObject cast = (PickupObject)pickup;
+                cast.enabled = false;
+            }
+        }
+
+        // Adds a trail renderer.
+        private void addTrail()
+        {
+            trail = gameObject.AddComponent<TrailRenderer>();
+            trail.material = new Material(Resources.Load("TrailShader", typeof(Shader)) as Shader);
+            trail.enabled = true;
+            trail.time = trailDecay;
+            trail.startWidth = trail.startWidth * trailWidth;
+            trail.endWidth = 0;
+            ResetTrail();
+        }
+
+        // Computes a random color for the geo.
+        private Color computeRandomColor()
+        {
+            Color color;
+            var res = UnityEngine.Random.Range(1, 100);
+            if (1 <= res && res <= 33)
+            {
+                color = Color.red;
+            }
+            else if (res > 33 && res < 66)
+            {
+                color = Color.blue;
+            }
+            else
+            {
+                color = Color.green;
+            }
+            return color;
+        }
+
+        // Main Logic
+        public void FixedUpdate()
+        {
+            // Update the speed if the position has changed.
+            if (transform.hasChanged)
+            {
+                currentSpeed = (transform.position - prevPos).magnitude / Time.deltaTime;
+                prevPos = this.transform.position;
+            }
+            else
+            {
+                currentSpeed = 0;
+            }
+        }
+
+        // Update is called once per frame
+        public void Update()
+        {
+            DrawDebug();
+            refreshCounter += Time.deltaTime;
+            checkStats();
+            if (refreshCounter >= colorRefreshPoll && !shield.active)
+            {
+                refreshCounter = 0;
+                geoColorLerpCounter = 0f;
+                float time = 1f;
+                // Lerp the material
+                if (this.gameObject.tag == "Player")
+                {
+                    anim.lerpColorWithoutThread(time, rend.material, this.color, ref locked);
+                }
+                else
+                {
+                    anim.lerpColorWithoutThread(time, rend.material, this.initColor, ref locked);
+                }
+                this.color.a = 255;
+                ResetTrail();
+            }
+        }
+
+        // Collision logic.
         public void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.ToString().Contains("Projectile"))
             {
                 IProjectile bullet = collision.gameObject.GetComponent<DotProjectile>();
-                if(!shield.active && 
+                if (!shield.active &&
                    bullet != null &&
                    bullet.GetOwner() != null &&
                    bullet.GetOwner().GetOwner() != null)
                 {
-                    if(bullet.ToString().Contains("Player") && this.gameObject.tag == "Player")
+                    if (bullet.ToString().Contains("Player") && this.gameObject.tag == "Player")
                     {
                         return;
                     }
@@ -254,7 +374,7 @@ namespace Geo.Command
                     Hurt(bullet.GetDamage() * (1 - armorBuff));
                 }
                 Destroy(collision.gameObject, .1f);
-               
+
             }
             else if (collision.gameObject.tag == "Boundary")
             {
@@ -276,263 +396,104 @@ namespace Geo.Command
             return;
         }
 
-
-        // Start is called before the first frame update
-        public void Start()
+        // Checks the max stats.
+        private void checkStats()
         {
-            weapon = new List<IWeapon>();
-
-            if (InitWeapon != null)
-            {
-                ActiveGun = Instantiate(InitWeapon);
-                IWeapon ptr = ActiveGun.GetComponents<IWeapon>()[0];
-                ptr.SetOwner(this);
-                weapon.Add(ptr);
-            }
-            forwardLine = new LineDrawer(1f);
-            // Add components to game object.
-            gameObject.AddComponent<MeshFilter>();
-            gameObject.AddComponent<MeshRenderer>();
-
-            // Init values. 
-            currentSpeed = 0;
-            health = MaxHealth;
-            transform.forward = new Vector3(1, 0, 0);
-
-            // Set material
-            if (color == Color.clear)
-            {
-                color = ComputeRandomColor();
-                initColor = color;
-            }
-
-            rend = gameObject.GetComponent<MeshRenderer>();
-            rend.material = Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
-            rend.material.color = this.color;
-            rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            if (!trail)
-            {
-                AddTrail();
-                trail.enabled = EnableTrail;
-            }
-            if (!shield)
-            {
-                shield = gameObject.AddComponent<Shield>();
-                shield.SetMaxEnergy(InitMaxShieldEnergy);
-            }
-            lastHitBy = this.gameObject;
-            killHistory = new Dictionary<string, int>();
-            killHistory.Add("Dot", 0);
-            deathSource = gameObject.AddComponent<AudioSource>();
-            deathSource.enabled = true;
-            deathSource.clip = Resources.Load<AudioClip>(Geo_Death_Sound);
-            if (rend.material.color == null)
-            {
-                rend.material.color = Color.white;
-            }
-            color.a = 255;
-            newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-
-            if (pickup == null)
-            {
-                pickup = gameObject.AddComponent<PickupObject>();
-                pickup.init(this, "Pickup");
-            }
-            refreshCounter = colorRefreshPoll;
-            initColor = color;
-        }
-
-        public void FixedUpdate()
-        {
-            currentSpeed = (transform.position - prevPos).magnitude / Time.deltaTime;
-            prevPos = this.transform.position;
-        }
-
-        // Update is called once per frame
-        public void Update()
-        {
-            if (DrawDebugLine)
-            {
-                Vector3 pos = gameObject.transform.position;
-                pos.y = 25;
-                Vector3 forw = transform.forward * 25;
-                forw.y = 0;
-                forwardLine.DrawLineInGameView(pos + transform.forward, pos + forw, Color.yellow * 10);
-            }
-            refreshCounter += Time.deltaTime;
             if (health <= 0)
             {
                 GameObject spawner = GameObject.FindWithTag("Spawner");
                 spawner.GetComponent<DotSpawner>().Kill(this.gameObject, lastHitBy);
             }
-            if (refreshCounter >= colorRefreshPoll && !shield.active)
+            if (this.Speed >= MaxSpeed)
             {
-                refreshCounter = 0;
-                if(this.Speed >= MaxSpeed)
-                {
-                    Speed = MaxSpeed;
-                }
-                if (!locked)
-                {
-                    geoColorLerpCounter = 0f;
-                    float time = 1f;
-                    // Lerp the material
-                    // StartCoroutine(anim.lerpColor(time, rend.material, this.color, locked));
-                    if (this.gameObject.tag == "Player")
-                    {
-                        anim.lerpColorWithoutThread(time, rend.material, this.color, ref locked);
-                    }
-                    else
-                    {
-                        anim.lerpColorWithoutThread(time, rend.material, this.initColor, ref locked);
-                    }
-
-                    this.color.a = 255;
-                    refreshCounter = 0;
-                    trail.startColor = Color.white;
-                    trail.endColor = this.color;
-                    Gradient gradient = new Gradient();
-                    gradient.SetKeys(
-                        new GradientColorKey[] { new GradientColorKey(trail.startColor, 1f), new GradientColorKey(trail.endColor, 0.25f) },
-                        new GradientAlphaKey[] { new GradientAlphaKey(0.9f, 1f), new GradientAlphaKey(0.8f, 1f) }
-                    );
-                    trail.colorGradient = gradient;
-
-                    // Set the callback
-                    /*
-                    StartCoroutine(anim.WaitForSecondsThenExecute(() => {
-
-                        this.color.a = 255;
-                        refreshCounter = 0;
-                        trail.startColor = Color.white;
-                        trail.endColor = this.color;
-                        Gradient gradient = new Gradient();
-                        gradient.SetKeys(
-                            new GradientColorKey[] { new GradientColorKey(trail.startColor, 1f), new GradientColorKey(trail.endColor, 0.25f) },
-                            new GradientAlphaKey[] { new GradientAlphaKey(0.9f, 1f), new GradientAlphaKey(0.8f, 1f) }
-                        );
-                        trail.colorGradient = gradient;
-                                              
-                    }, time*1.1f));
-                    */
-                }
+                Speed = MaxSpeed;
             }
         }
 
-
-        public void init(float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail)
+        // Resets the trail's color.
+        public void ResetTrail()
         {
-            this.color = ComputeRandomColor();
-            this.Speed = Speed;
-            this.MaxHealth = MaxHP;
-            this.FireRate = FireRate;
-            this.FireChance = FireChance;
-            this.ShieldChance = ShieldChance;
-            this.EnableTrail = ShowTrail;
-            AddTrail();
-            trail.enabled = ShowTrail;
-            if (pickup == null)
-            {
-                pickup = gameObject.AddComponent<PickupObject>();
-                pickup.init(this, "Pickup");
-            }
-        }
-
-        public void Kill()
-        {
-            if (killHistory.ContainsKey("Dot"))
-            {
-                var score = killHistory["Dot"];
-                float lowerBound = DeathPenaltyLower;
-                float upperBound = DeathPenaltyUpper;
-                var statPenalty = Random.Range(lowerBound, upperBound);
-                this.armor -= this.armor * statPenalty;
-                this.Speed -= this.Speed * statPenalty * 0.50f;
-                this.color -= this.color * statPenalty * 0.25f;
-            }
-            if(deathSource != null && deathSource.enabled)
-            {
-                deathSource.PlayOneShot(deathSource.clip, 0.4f);
-            }
-
-            forwardLine.Destroy();
-        }
-
-        public void AddColor(Color c)
-        {
-            color = new Color(color.r + c.r, color.g + c.g, color.b + c.b, color.a);
-        }
-
-        private void AddTrail()
-        {
-            trail = gameObject.AddComponent<TrailRenderer>();
             trail.startColor = Color.white;
             trail.endColor = this.color;
             Gradient gradient = new Gradient();
             gradient.SetKeys(
-                new GradientColorKey[] { new GradientColorKey(trail.startColor, 0.75f), new GradientColorKey(trail.endColor, 1.0f) },
-                new GradientAlphaKey[] { new GradientAlphaKey(0.75f, 0.0f), new GradientAlphaKey(1, 1.0f) }
+                new GradientColorKey[] { new GradientColorKey(trail.startColor, 1f), new GradientColorKey(trail.endColor, 0.25f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(0.9f, 1f), new GradientAlphaKey(0.8f, 1f) }
             );
             trail.colorGradient = gradient;
-            trail.material = new Material(Resources.Load("TrailShader", typeof(Shader)) as Shader);
-            trail.enabled = true;
-            trail.time = 1.0f;
-            trail.startWidth = trail.startWidth * 10;
-            trail.endWidth = 0;
         }
 
-        public void ModifyArmor(float a)
+        // Draw's the debug line on the forward vector.
+        public void DrawDebug(bool flag = false)
         {
-            if (a < 0)
+            var length = 15f;
+            Color forc = Color.yellow * 10;
+            Color movc = Color.red * 10;
+            Color velc = Color.cyan * 10;
+            if (DrawDebugLine || flag)
             {
-                DecreaseArmor(a);
+                Vector3 pos = gameObject.transform.position;
+                pos.y = 75;
+                Vector3 forv = transform.forward * length;
+                forv.y = 75;
+                Vector3 x = new Vector3(movementDirection.x, 0, 0);
+                Vector3 z = new Vector3(0, 0, movementDirection.z);
+
+                forwardLine.DrawLineInGameView(pos, pos + forv, forc);
+                movementLineX.DrawLineInGameView(pos, pos + x * x.magnitude * length, movc);
+                movementLineZ.DrawLineInGameView(pos, pos + z * z.magnitude * length, movc);
+                // velocityLine.DrawLineInGameView(pos + -1f * currentSpeed * forv * length, pos, velc);
             }
-            else
+        }
+
+    // AI Interface
+        // Kills the geo.
+        public void Kill()
+        {
+            if (deathSource != null && deathSource.enabled)
             {
-                IncreaseArmor(a);
+                deathSource.PlayOneShot(deathSource.clip, 0.4f);
             }
-        }
 
-        private Color ComputeRandomColor()
-        {
-            Color color;
-            var res = Random.Range(1, 100);
-            if (1 <= res && res <= 33)
+            if(this.gameObject.tag != "Player")
             {
-                color = Color.red;
+                foreach (LineDrawer line in Lines)
+                {
+                    line.Destroy();
+                }
             }
-            else if (res > 33 && res < 66)
+
+            // Turn the pickup script on.
+            PickupObject cast = (PickupObject)pickup;
+            cast.enabled = true;
+        }
+
+        // Respawns the geo. Only to be used on player for now.
+        public void Respawn()
+        {
+            Kill();
+            PenalizeOnDeath();
+            // Rest the position.
+            transform.position = new Vector3(0, 25, 0);
+            // Reset the health.
+            health = MaxHealth;
+        }
+
+        // Applies a penalty to the geo on death.
+        void PenalizeOnDeath()
+        {
+            if (GetScore() > 0)
             {
-                color = Color.blue;
+                float lowerBound = DeathPenaltyLower;
+                float upperBound = DeathPenaltyUpper;
+                var statPenalty = UnityEngine.Random.Range(lowerBound, upperBound);
+                this.armor -= this.armor * statPenalty;
+                this.Speed -= this.Speed * statPenalty * 0.25f;
+                this.color -= this.color * statPenalty;
             }
-            else
-            {
-                color = Color.green;
-            }
-            return color;
         }
 
-        /** IGeo methods **/
-        public float GetCurrentSpeed()
-        {
-            return currentSpeed;
-        }
-
-        public Vector3 GetMovementDirection()
-        {
-            return movementDirection;
-        }
-
-        public float GetMovementMagnitude()
-        {
-            return movementDirection.magnitude;
-        }
-
-        public Color GetColor()
-        {
-            return color;
-        }
-
+        // Fires a projectile.
         public void Shoot()
         {
             Shoot(ProjectileSpawnOffset);
@@ -551,61 +512,46 @@ namespace Geo.Command
             }
         }
 
-        public void MoveTo(Vector3 Location, Vector3 Forward, float Step)
+        // Moves to the location.
+        public void MoveTo(Vector3 Position, Vector3 MovementVector, float Speed)
         {
-            // movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-            Vector3 newDir = Vector3.RotateTowards(transform.forward, Forward, 360 * Mathf.Deg2Rad, 0.0f);
-            // Move our position a step closer to the target.
-            transform.position = Vector3.MoveTowards(transform.position, Location, Step);
-            transform.rotation = Quaternion.LookRotation(newDir); ;
-        }
-
-        public Vector3 GetForward()
-        {
-            return transform.forward;
-        }
-
-       
-        public Shield GetShield()
-        {
-            return shield;
-        }
-
-        public GameObject GetGameObject()
-        {
-            if (this != null && gameObject != null)
+            // Set the previous movement vector.
+            movementDirection = MovementVector;
+            if(MovementVector.magnitude > 0)
             {
-                return gameObject;
+                asdrCounter += Time.deltaTime;
             }
-            return null;
+            else
+            {
+                asdrCounter = 0;
+            }
+
+            // Compute the location to move to.
+            Vector3 Location = Position + MovementVector * Speed * MovementVector.magnitude;
+
+            // Move our position a step closer to the target.
+            // transform.Translate(MovementVector, Space.World);
+            Vector3 res = asdr.ComputeAttack(MovementVector, asdrCounter);
+            Debug.Log(res);
+            transform.Translate(res, Space.World);
+            transform.LookAt(Location, new Vector3(0, 1, 0));
         }
 
         // Turn the shields on. Sets a flag and toggles emmision field on mat
-        // Called every frame.
         public void FlameOn()
         {
             if (!shield.active)
             {
                 shield.TurnOn();
-                rend.material.EnableKeyword("_EMISSION");
                 geoColorLerpCounter = 0f;
-                trail.enabled = false;
             }
 
             if (shield.active)
             {
-                Color oldColor = rend.material.GetColor("_EmissionColor");
-                // Shield color
-                Color c = Color.Lerp(oldColor,
-                                     newShieldColor,
-                                     shieldLerpCounter / shieldLerpTime);
-
                 // If the geo hasn't updated its color
                 if(rend.material.color != Color.gray && !locked)
                 {
                     geoColorLerpCounter += Time.deltaTime * 0.25f;
-                    shieldLerpCounter += Time.deltaTime;
-                    locked = true;
                     // Geo color.
                     if (this.gameObject.tag == "Player")
                     {
@@ -619,68 +565,20 @@ namespace Geo.Command
                                  Color.grey,
                                  geoColorLerpCounter / geoColorLerpTime);
                     }
-                    locked = false;
                 }
-
-                rend.material.SetColor("_EmissionColor", c);
-
-                if (shieldLerpCounter >= shieldLerpTime)
-                {
-                    shieldLerpCounter = 0;
-                    newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) * Random.Range(1f, 2f);
-                }
-
-                shield.Drain(Time.deltaTime);
             }
         }
 
         // Turn the shields off. Clears a flag and toggles emmision field on mat
-        // Called every frame.
         public void FlameOff()
         {
             if (shield.active)
             {
                 shield.TurnOff();
-                rend.material.DisableKeyword("_EMISSION");
-                trail.enabled = true;
-                shieldLerpCounter = 0;
-                newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-            }
-
-            shield.Charge(Time.deltaTime);
-        }
-
-        public bool SetMaxHealth(float h)
-        {
-            if (health == MaxHealth)
-            {
-                MaxHealth = h;
-                health = MaxHealth;
-                return true;
-            }
-            return false;
-        }
-
-        public float GetHealth()
-        {
-            return health;
-        }
-
-        public float GetMaxHealth()
-        {
-            return MaxHealth;
-        }
-
-        public void Hurt(float d)
-        {
-            health -= d;
-            if (health <= 0)
-            {
-                GameObject spawner = GameObject.FindWithTag("Spawner");
-                spawner.GetComponent<DotSpawner>().Kill(this.gameObject, lastHitBy);
             }
         }
 
+        // Adds health to the geo's hp.
         public void Heal(float h)
         {
             if (health == MaxHealth)
@@ -698,18 +596,18 @@ namespace Geo.Command
             }
         }
 
-        public float GetArmor()
+        // Removes health from the geo's hp.
+        public void Hurt(float d)
         {
-            return armor;
+            health -= d;
+            if (health <= 0)
+            {
+                GameObject spawner = GameObject.FindWithTag("Spawner");
+                spawner.GetComponent<DotSpawner>().Kill(this.gameObject, lastHitBy);
+            }
         }
 
-        public void Respawn()
-        {
-            Kill();
-            transform.position = new Vector3(0, 25, 0);
-            health = MaxHealth;
-        }
-
+        // Increments the value at key @name in killHistory<string, int>
         public void AddKill(string name)
         {
             if (killHistory.ContainsKey(name))
@@ -718,24 +616,38 @@ namespace Geo.Command
             }
         }
 
+    // Get
+        // Returns the current speed of the player. See GeoObject.FixedUpdate()
+        public float GetCurrentSpeed()
+        {
+            return currentSpeed;
+        }
+
+        // Returns the direction the last input information the Geo provided.
+        public Vector3 GetMovementDirection()
+        {
+            return movementDirection;
+        }
+
+        // Returnd the magnitude of the last movement vector.
+        public float GetMovementMagnitude()
+        {
+            return movementDirection.magnitude;
+        }
+
+        // Returns the color.
+        public Color GetColor()
+        {
+            return color;
+        }
+
+        // Returns the damage of the geo.
         public float GetDamage()
         {
             return Damage;
         }
 
-        public void IncreaseArmor(float a)
-        {
-            armor += a;
-        }
-        public void DecreaseArmor(float a)
-        {
-            armor -= a;
-            if (armor <= 0)
-            {
-                armor = 0;
-            }
-        }
-
+        // Returns the aggregated score of this.killHistor<string, int>
         public float GetScore()
         {
             float score = 0.0f;
@@ -749,11 +661,88 @@ namespace Geo.Command
             return score;
         }
 
+        // Returns the Speed.
         public float GetSpeed()
         {
             return Speed;
         }
 
+        // Returns the chance of the shield activating.
+        public float GetShieldChance()
+        {
+            return ShieldChance;
+        }
+
+        // Retuns the chance of the weapon firing.
+        public float GetFireChance()
+        {
+            return FireChance;
+        }
+
+        // Returns the active weapon.
+        public IWeapon GetWeapon()
+        {
+            if (weapon.Count > 0)
+            {
+                return weapon[0];
+            }
+            return null;
+        }
+
+        // Returns the current health.
+        public float GetHealth()
+        {
+            return health;
+        }
+
+        // Returns the max health.
+        public float GetMaxHealth()
+        {
+            return MaxHealth;
+        }
+
+        // Returns the percentage of the health.
+        public float GetHealthPercent()
+        {
+            return health / MaxHealth;
+        }
+
+        // Returns the armor.
+        public float GetArmor()
+        {
+            return armor;
+        }
+
+        // Returns the direction the object is facing, ie the euler vector.
+        public Vector3 GetForward()
+        {
+            return transform.forward;
+        }
+
+        // Returns a copy of the shield object.
+        public Shield GetShield()
+        {
+            return shield;
+        }
+
+        // Returns the game object.
+        public GameObject GetGameObject()
+        {
+            if (this != null && gameObject != null)
+            {
+                return gameObject;
+            }
+            return null;
+        }
+
+    // Set & Mutators
+        // Changes the color of the object.
+        public void AddColor(Color c)
+        {
+            color += c;
+        }
+
+        // Sets the damage. TODO- setup to perculate through to IProjectile
         public void SetDamage(float d)
         {
             Damage = d;
@@ -763,28 +752,56 @@ namespace Geo.Command
             }
         }
 
+        // Modifes the armor. Calls Increase/Decrease armor respectively.
+        public void ModifyArmor(float a)
+        {
+            if (a < 0)
+            {
+                decreaseArmor(a);
+            }
+            else
+            {
+                increaseArmor(a);
+            }
+        }
+
+        // Sets the movement speed of the geo
         public void SetSpeed(float s)
         {
             Speed = s;
         }
 
-        public float GetShieldChance()
+        // Sets the max health to the new value iff health >= MaxHealth
+        public bool SetMaxHealth(float h)
         {
-            return ShieldChance;
-        }
-
-        public float GetFireChance()
-        {
-            return FireChance;
-        }
-
-        public IWeapon GetWeapon()
-        {
-            if (weapon.Count > 0)
+            if (health >= MaxHealth)
             {
-                return weapon[0];
+                MaxHealth = h;
+                health = MaxHealth;
+                return true;
             }
-            return null;
+            return false;
+        }
+
+        // Increases the armor
+        private void increaseArmor(float a)
+        {
+            armor += a;
+        }
+
+        // Decreases the armor.
+        private void decreaseArmor(float a)
+        {
+            armor -= a;
+            if (armor <= 0)
+            {
+                armor = 0;
+            }
+        }
+
+        public void SetColor(Color c)
+        {
+            color = c;
         }
 
     }

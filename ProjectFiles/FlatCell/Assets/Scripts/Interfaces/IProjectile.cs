@@ -25,7 +25,7 @@ namespace Projectile.Command
     public interface IProjectile
     {
 
-        void init(IWeapon owner, float Damage, float Piercing, float ProjectileLifetime);
+        void Init(IWeapon owner, float Damage, float Piercing, float ProjectileLifetime);
 
         // Spawn the projectile at the location.
         GameObject Spawn(Vector3 Location);

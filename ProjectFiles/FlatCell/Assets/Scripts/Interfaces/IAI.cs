@@ -31,7 +31,7 @@ namespace AI.Command
 {
     public interface IAI : IGeo
     {
-        void init(
+        void Init(
           IDotBehaviour behaviour, // The dot's behaviour
           float Speed,             // The speed at which the AI moves.
           float MaxHP,             // The MaxHP of the AI.

@@ -21,7 +21,7 @@ namespace Weapon.Command
 {
     public interface IWeapon
     {
-        void init(IGeo GeoOwner, AudioClip Sound,
+        void Init(IGeo GeoOwner, AudioClip Sound,
                   float Damage = 1, float Pierce = 0, float Rate = 0.125f, float lifeTime = 2.5f);
 
         // Sets the damage and piercing

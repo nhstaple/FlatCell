@@ -356,13 +356,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 4463196817797996641, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
-  NumDots: 30
+  NumDots: 0
   ArchetypeCount: 3
   SpawnOffset: 500
   SpawnLocation: {x: 0, y: 25, z: 0}
   InitScale: {x: 25, y: 25, z: 25}
   EnableTrail: 1
-  DrawDebugLine: 0
+  DrawDebugLine: 1
   Speed: 75
   MaxHealth: 3
   FireRate: 0.05
@@ -1152,7 +1152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DrawLogic: 0
   Target: {fileID: 1380216529}
-  LerpDuration: 1.5
+  LerpDuration: 0.5
 --- !u!1 &1054210534
 GameObject:
   m_ObjectHideFlags: 0
@@ -1721,6 +1721,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: Numhearts.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Numhearts.Array.data[0]
+      value: 
+      objectReference: {fileID: 228683828}
+    - target: {fileID: 0}
+      propertyPath: Numhearts.Array.data[1]
+      value: 
+      objectReference: {fileID: 1164457409}
+    - target: {fileID: 0}
+      propertyPath: Numhearts.Array.data[2]
+      value: 
+      objectReference: {fileID: 1608250579}
+    - target: {fileID: 0}
+      propertyPath: Numhearts.Array.data[3]
+      value: 
+      objectReference: {fileID: 517711864}
+    - target: {fileID: 0}
+      propertyPath: Numhearts.Array.data[4]
+      value: 
+      objectReference: {fileID: 1436242633}
+    - target: {fileID: 0}
+      propertyPath: Numhearts.Array.data[5]
+      value: 
+      objectReference: {fileID: 1397006700}
     - target: {fileID: 4463196817797996641, guid: 47d588308289b4dec8b4208a5b087f0d,
         type: 3}
       propertyPath: m_Name
@@ -1781,53 +1809,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4463196817797996642, guid: 47d588308289b4dec8b4208a5b087f0d,
-        type: 3}
-      propertyPath: Numhearts.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4463196817797996642, guid: 47d588308289b4dec8b4208a5b087f0d,
-        type: 3}
-      propertyPath: Numhearts.Array.data[0]
-      value: 
-      objectReference: {fileID: 228683828}
-    - target: {fileID: 4463196817797996642, guid: 47d588308289b4dec8b4208a5b087f0d,
-        type: 3}
-      propertyPath: Numhearts.Array.data[1]
-      value: 
-      objectReference: {fileID: 1164457409}
-    - target: {fileID: 4463196817797996642, guid: 47d588308289b4dec8b4208a5b087f0d,
-        type: 3}
-      propertyPath: Numhearts.Array.data[2]
-      value: 
-      objectReference: {fileID: 1608250579}
-    - target: {fileID: 4463196817797996642, guid: 47d588308289b4dec8b4208a5b087f0d,
-        type: 3}
-      propertyPath: Numhearts.Array.data[3]
-      value: 
-      objectReference: {fileID: 517711864}
-    - target: {fileID: 4463196817797996642, guid: 47d588308289b4dec8b4208a5b087f0d,
-        type: 3}
-      propertyPath: Numhearts.Array.data[4]
-      value: 
-      objectReference: {fileID: 1436242633}
-    - target: {fileID: 4463196817797996642, guid: 47d588308289b4dec8b4208a5b087f0d,
-        type: 3}
-      propertyPath: Numhearts.Array.data[5]
-      value: 
-      objectReference: {fileID: 1397006700}
     - target: {fileID: 4463196817797996647, guid: 47d588308289b4dec8b4208a5b087f0d,
         type: 3}
       propertyPath: DrawDebugLine
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4463196817797996647, guid: 47d588308289b4dec8b4208a5b087f0d,
         type: 3}
       propertyPath: ProjectileSpawnOffset
       value: 20
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4463196817797996642, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
 --- !u!1 &1380216529 stripped
 GameObject:

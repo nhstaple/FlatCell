@@ -69,7 +69,7 @@ namespace DotBehaviour.Command
             return type;
         }
 
-        public void init(IGeo geo)
+        public void Init(IGeo geo)
         {
             owner = geo;
             if (owner != null)
@@ -120,8 +120,8 @@ namespace DotBehaviour.Command
                 Vector3 loc = owner.GetGameObject().transform.position;
                 float speed = Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed());
                 float step = speed * Time.deltaTime;
-                owner.MoveTo(loc + speed * movementDirection, movementDirection, step);
-
+                // owner.MoveTo(loc + speed * movementDirection, movementDirection, step);
+                owner.MoveTo(loc, movementDirection, speed);
                 // Rigidbody b = GetComponent<Rigidbody>();
                 // b.AddForce(movementDirection * Random.Range(0.5f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
             }
@@ -143,11 +143,11 @@ namespace DotBehaviour.Command
             {
                 initSpeed = owner.GetSpeed();
                 initDamage = owner.GetDamage();
-            }
-            if (owner.GetScore() <= maxKills)
-            {
-                owner.SetSpeed(initSpeed + owner.GetScore() * killWeight);
-                owner.SetDamage(initDamage + owner.GetScore() * 0.1f);
+                if(owner.GetScore() <= maxKills)
+                {
+                    owner.SetSpeed(initSpeed + owner.GetScore() * killWeight);
+                    owner.SetDamage(initDamage + owner.GetScore() * 0.1f);
+                }
             }
         }
     }

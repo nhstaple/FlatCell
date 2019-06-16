@@ -60,7 +60,7 @@ public class PickupObject : MonoBehaviour, IPickup
     private float colorRefresh = 0.25f;
     private float refreshCounter = 0f;
 
-    public void init(IGeo geo, string t)
+    public void Init(IGeo geo, string t)
     {
         type = t;
         owner = geo;
@@ -135,26 +135,26 @@ public class PickupObject : MonoBehaviour, IPickup
         if(res <= 10)
         {
             Debug.Log("Made a armor drop!");
-            p.init(owner, "Armor");
+            p.Init(owner, "Armor");
             rend.material.color = Color.yellow;
         }
         else if (res <= 25)
         {
             Debug.Log("Made a speed drop!");
-            p.init(owner, "Speed");
+            p.Init(owner, "Speed");
             rend.material.color = Color.cyan;
         }
         else if (res <= 50)
         {
             Debug.Log("Made a health drop!");
-            p.init(owner, "Health");
+            p.Init(owner, "Health");
             rend.material.color = Color.red;
         }
         else
         {
             Debug.Log("Made a color drop!");
             Debug.Log(this.color);
-            p.init(owner, "Color");
+            p.Init(owner, "Color");
             rend.material.color = Color.grey;
             rend.material.SetColor("_EmissionColor", this.color * ColorIntensity);
             rend.material.EnableKeyword("_EMISSION");
@@ -166,34 +166,42 @@ public class PickupObject : MonoBehaviour, IPickup
 
     public void OnCollisionEnter(Collision geo)
     {
-        if(geo.gameObject.ToString().Contains("Projectile"))
+        if(gameObject.GetComponent<PickupObject>().enabled)
         {
-            Debug.Log("passed through pickup!");
-            Physics.IgnoreCollision(geo.gameObject.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
-        }
-        else if(!gameObject.ToString().Contains("Geo") &&
-                 geo.gameObject.ToString().Contains("Player"))
-        {
-            IGeo p = geo.gameObject.GetComponent<PlayerController>();
-            if(p != null)
+            if (geo.gameObject.ToString().Contains("Projectile"))
             {
-                if(this.type == "Health")
+                Debug.Log("passed through pickup!");
+                Physics.IgnoreCollision(geo.gameObject.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
+            }
+            else if (!gameObject.ToString().Contains("Geo") &&
+                     geo.gameObject.ToString().Contains("Player"))
+            {
+                IGeo p;
+                IGeo[] geos = geo.gameObject.GetComponents<IGeo>();
+                if (geos.Length > 0)
                 {
-                    p.Heal(this.hp);
+                    p = geos[0];
+                    if (p != null)
+                    {
+                        if (this.type == "Health")
+                        {
+                            p.Heal(this.hp);
+                        }
+                        else if (this.type == "Armor")
+                        {
+                            p.ModifyArmor(this.armor);
+                        }
+                        else if (this.type == "Speed")
+                        {
+                            p.SetSpeed(p.GetSpeed() + this.speed);
+                        }
+                        else if (this.type == "Color")
+                        {
+                            p.AddColor(this.color);
+                        }
+                        Destroy(this.gameObject);
+                    }
                 }
-                else if (this.type == "Armor")
-                {
-                    p.ModifyArmor(this.armor);
-                }
-                else if (this.type == "Speed")
-                {
-                    p.SetSpeed(p.GetSpeed() + this.speed);
-                }
-                else if (this.type == "Color")
-                {
-                    p.AddColor(this.color);
-                }
-                Destroy(this.gameObject);
             }
         }
     }

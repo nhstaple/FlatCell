@@ -33,7 +33,7 @@ public class WeaponObject : MonoBehaviour, IWeapon
     protected AudioSource weaponSource;
     [SerializeField] protected float PlayerSoundPlayChance = 25;
 
-    public void init(IGeo GeoOwner, AudioClip Sound,
+    public void Init(IGeo GeoOwner, AudioClip Sound,
                      float Damage = 1, float Pierce = 0, float Rate = 0.125f, float lifeTime = 2.5f)
     {
         this.Owner = GeoOwner;
@@ -94,7 +94,7 @@ public class WeaponObject : MonoBehaviour, IWeapon
         }
         if (Owner == null)
         {
-            this.Owner = this.gameObject.GetComponent<PlayerController>();
+            this.Owner = this.gameObject.GetComponent<PlayerController>().geo;
         }
         if (Owner.ToString().Contains("Player"))
         {

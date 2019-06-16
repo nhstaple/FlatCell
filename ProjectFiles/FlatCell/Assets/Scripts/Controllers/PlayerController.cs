@@ -16,12 +16,19 @@ using Geo.Command;
 
 namespace Geo.Command
 {
-    class PlayerController : DotObject
+    class PlayerController : MonoBehaviour // DotObject
     {
         [SerializeField] Vector3 SpawnLocation = new Vector3(0, 25, 0);
+        [SerializeField] float InitSpeed = 75f;
+        [SerializeField] float InitMaxHP = 3f;
+        [SerializeField] float FireRate = 0.25f;
+        [SerializeField] float trailDecay = 0.25f;
+        [SerializeField] protected bool DrawDebugLine = true;
+
 
         /** Script variables **/
         [SerializeField] public bool EnableBoost = true;
+        [SerializeField] protected float BoostFactor = 2f;
         private float modifiedSpeed;
         // Added to track the 3 moves we can use
         private int weaponSelect;
@@ -33,16 +40,19 @@ namespace Geo.Command
         private float boostEnergy = 0.5f;
         private float boostMax = 0.5f;
         private bool boostReady = true;
+        private bool initColorSet = false;
 
-        new private void Start()
+        // The current geo type,
+        public IGeo geo;
+        // The trail.
+        TrailRenderer trail;
+        protected Vector3 movementDirection;
+
+        private void Start()
         {
-            // Call parent class's method.
-            base.Start();
-
-            prevPos = SpawnLocation;
-            weaponSelect = 1;
-            initSpawnOffset = ProjectileSpawnOffset;
-            this.color = Color.clear;
+            addComponents();
+            grabComponents();
+            initValues();
         }
 
         void Awake()
@@ -51,42 +61,42 @@ namespace Geo.Command
             transform.localScale = new Vector3(25, 25, 25);
         }
 
-        new void Update()
+        private void addComponents()
         {
-            base.Update();
+            geo = this.gameObject.AddComponent<DotObject>();
+            geo.Init(InitSpeed, InitMaxHP, FireRate, 0, 0, true);
+            geo.SetColor(Color.clear);
+        }
+
+        private void grabComponents()
+        {
+            if (trail == null)
+            {
+                trail = this.gameObject.GetComponent<TrailRenderer>();
+            }
+        }
+
+        private void initValues()
+        {
+            weaponSelect = 1;
+        }
+
+        void checkDebug()
+        {
+            if(DrawDebugLine)
+            {
+                geo.DrawDebug(DrawDebugLine);
+            }
+        }
+
+        void Update()
+        {
+            checkDebug();
+            grabComponents();
+            checkStats();
+
             gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            /*
-            if(transform.localScale.x <= 25 && GrowFlag)
-            {
-                transform.localScale += new Vector3(0.1f, 0.00f, 0.0f);
-                if(transform.localScale.x >= 25)
-                {
-                    GrowFlag = false;
-                }
-            }
-            else if(transform.localScale.x >= 5 && !GrowFlag)
-            {
-                transform.localScale -= new Vector3(0.1f, 0.00f, 0.0f);
-                if (transform.localScale.x <= 5)
-                {
-                    GrowFlag = true;
-                }
-            }
-
-            // Check for incremental evolution.
-            if (GetScore() >= 25)
-            {
-                transform.localScale = new Vector3(50, 1, 1);
-                SpawnOffset = initSpawnOffset + 15;
-            }
-            else
-            {
-                transform.localScale = new Vector3(25 + killHistory["Dot"], 25 - killHistory["Dot"], 25 - killHistory["Dot"]);
-                SpawnOffset = initSpawnOffset + (int)killHistory["Dot"];
-            }
-            */
-
-            modifiedSpeed = Speed;
+            modifiedSpeed = geo.GetSpeed();
 
             if(boostEnergy < 0)
             {
@@ -94,33 +104,7 @@ namespace Geo.Command
                 boostReady = false;
             }
 
-            if (Input.GetButton("Jump") && boostReady)
-            {
-                modifiedSpeed *= BoostFactor;
-                trail.widthMultiplier = BoostFactor;
-                boostEnergy -= Time.deltaTime;
-            }
-            else if (Input.GetButton("Fire2") && !shield.IsCharging())
-            {
-                Debug.Log("Flame On, Flame On!");
-                // Shields on.
-                FlameOn();
-            }
-            else if (Input.GetButton("Fire1") && !shield.active)
-            {
-                // Fire me matey!
-                Shoot(ProjectileSpawnOffset);
-            }
-            else
-            {
-                // Debug.Log("Oh man I need some water.");
-                // Shields off.
-                FlameOff();
-                if (trail.widthMultiplier >= 1.0f)
-                {
-                    trail.widthMultiplier -= Time.deltaTime * trailDecay;
-                }
-            }
+            handleInput();
 
             if (!boostReady)
             {
@@ -134,14 +118,45 @@ namespace Geo.Command
                     boostEnergy += Time.deltaTime;
                 }
             }
+        }
+
+        void handleInput()
+        {
 
             if (Input.GetButtonDown("SortWeapon"))
             {
                 Debug.Log("Switching Weapons");
                 SwitchWeapon();
             }
+
+            if (Input.GetButton("Jump") && boostReady)
+            {
+                modifiedSpeed *= BoostFactor;
+                trail.widthMultiplier = BoostFactor;
+                boostEnergy -= Time.deltaTime;
+            }
+            else if (Input.GetButton("Fire2") && !geo.GetShield().IsCharging())
+            {
+                // Shields on.
+                geo.FlameOn();
+            }
+            else if (Input.GetButton("Fire1") && !geo.GetShield().active)
+            {
+                // Fire me matey!
+                geo.Shoot();
+            }
+            else
+            {
+                // Shields off.
+                geo.FlameOff();
+                if (trail.widthMultiplier >= 1.0f)
+                {
+                    trail.widthMultiplier -= Time.deltaTime * trailDecay * 0.5f;
+                }
+            }
+
             movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-            MoveTo(transform.position + movementDirection * modifiedSpeed, movementDirection, modifiedSpeed * Time.deltaTime);
+            geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
         }
 
         void SwitchWeapon()
@@ -164,5 +179,24 @@ namespace Geo.Command
 
         }
 
+        private void checkStats()
+        {
+            if (!initColorSet)
+            {
+                geo.SetColor(Color.clear);
+                initColorSet = true;
+            }
+            trail.time = trailDecay;
+        }
+
+        public Vector3 GetMovementDirection()
+        {
+            return geo.GetMovementDirection();
+        }
+
+        public float GetCurrentSpeed()
+        {
+            return geo.GetCurrentSpeed();
+        }
     }
 }

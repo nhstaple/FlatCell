@@ -102,7 +102,7 @@ public class DotSpawner : MonoBehaviour, ISpawner
             Dot.transform.localScale = InitScale;
 
             IAI ai = Dot.AddComponent<DotController>();
-            ai.init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
+            ai.Init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
             Alive.Add(Dot);
         }
         else if(res < 66)
@@ -114,8 +114,8 @@ public class DotSpawner : MonoBehaviour, ISpawner
 
             IAI ai = Dot.AddComponent<DotController>();
             ShooterDotBehaviour b = Dot.AddComponent<ShooterDotBehaviour>();
-            b.init(ai);
-            ai.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
+            b.Init(ai);
+            ai.Init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
             Alive.Add(Dot);
         }
         else
@@ -127,8 +127,8 @@ public class DotSpawner : MonoBehaviour, ISpawner
 
             IAI ai = Dot.AddComponent<DotController>();
             ShieldDotBehaviour b = Dot.AddComponent<ShieldDotBehaviour>();
-            b.init(ai);
-            ai.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
+            b.Init(ai);
+            ai.Init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
             Alive.Add(Dot);
         }
     }
@@ -158,16 +158,16 @@ public class DotSpawner : MonoBehaviour, ISpawner
             }
             else if (killer.gameObject.ToString().Contains("Player"))
             {
-                geo = killer.gameObject.GetComponent<PlayerController>();
-                geo.AddKill("Dot");
+                PlayerController p = killer.gameObject.GetComponent<PlayerController>();
+                p.geo.AddKill("Dot");
             }
         }
 
         if (dead.ToString().Contains("Player"))
         {
-            IGeo p = dead.GetComponent<PlayerController>();
-            p.Respawn();
-            Debug.Log("You died! Fool- score: " + p.GetScore());
+            PlayerController p = dead.gameObject.GetComponent<PlayerController>();
+            p.geo.Respawn();
+            Debug.Log("You died! Fool- score: " + p.geo.GetScore());
             return;
         }
 

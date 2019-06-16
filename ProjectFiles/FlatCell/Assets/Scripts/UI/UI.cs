@@ -42,12 +42,12 @@ public class UI : MonoBehaviour
     {
         if (player != null)
         {
-            IGeo controller = player.GetComponent<PlayerController>();
+            PlayerController controller = player.GetComponent<PlayerController>();
             if (controller != null)
             {
-                health = controller.GetHealth();
-                maxhealth = controller.GetMaxHealth();
-                p = player.GetComponent<PlayerController>();
+                health = controller.geo.GetHealth();
+                maxhealth = controller.geo.GetMaxHealth();
+                p = controller.geo;
                 if (p != null)
                 {
                     shieldCopy = p.GetShield();
@@ -76,7 +76,7 @@ public class UI : MonoBehaviour
         {
             GetPlayer();
         }
-        IGeo controller = player.GetComponent<PlayerController>();
+        IGeo controller = player.GetComponent<PlayerController>().geo;
         if(controller != null)
         {
             myscore = controller.GetScore();
@@ -90,7 +90,6 @@ public class UI : MonoBehaviour
         if (controller != null)
         {
             fillPercent = controller.GetShield().GetPercent();
-            Debug.Log(fillPercent);
             if (ShieldBar != null)
             {
                 ShieldBar.fillAmount = fillPercent;
@@ -111,10 +110,10 @@ public class UI : MonoBehaviour
         }
         for (int i = 0; i < Numhearts.Length; i++)
         {
-            if (player.GetComponent<PlayerController>().GetShield().active)
+            if (player.GetComponent<PlayerController>().geo.GetShield().active)
             {
 
-                Numhearts[i].color = Color.Lerp(Color.white, Color.blue, player.GetComponent<PlayerController>().GetShield().GetPercent() + minHeartShieldPercent);
+                Numhearts[i].color = Color.Lerp(Color.white, Color.blue, player.GetComponent<PlayerController>().geo.GetShield().GetPercent() + minHeartShieldPercent);
             }
             else
             {

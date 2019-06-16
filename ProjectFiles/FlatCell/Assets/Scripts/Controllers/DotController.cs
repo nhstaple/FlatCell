@@ -60,37 +60,29 @@ public class DotController : DotObject, IAI
 
     protected IDotBehaviour behaviour;
 
-    public void SetBehaviour(IDotBehaviour b)
+    public void Init(IDotBehaviour behaviour, float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail = false, bool DrawDebugLine = false)
     {
-        if(b != null)
-        {
-            Debug.Log("Set a new behaviour: ");
-            behaviour = b;
-        }
-    }
-
-    public void init(IDotBehaviour behaviour, float Speed, float MaxHP, float FireRate, float FireChance, float ShieldChance, bool ShowTrail = false, bool DrawDebugLine = false)
-    {
-        if(behaviour != null)
+        base.Init(Speed, MaxHP, FireRate, FireChance, ShieldChance, ShowTrail);
+        if (behaviour != null)
         {
             this.behaviour = behaviour;
         }
         this.DrawDebugLine = DrawDebugLine;
-        base.init(Speed, MaxHP, FireRate, FireChance, ShieldChance, ShowTrail);
     }
 
     new public void Start()
     {
         base.Start();
         player = GameObject.FindGameObjectWithTag("Player");
-
         shield.SetMaxEnergy(InitMaxShieldEnergy);
+
         initSpeed = Speed;
         initDamage = Damage;
+
         if(behaviour == null)
         {
             SimpleDotBehaviour simple = gameObject.AddComponent<SimpleDotBehaviour>();
-            simple.init(this);
+            simple.Init(this);
             behaviour = simple;
         }
     }
@@ -98,6 +90,15 @@ public class DotController : DotObject, IAI
     new public void Update()
     {
         base.Update();
+    }
+
+    public void SetBehaviour(IDotBehaviour b)
+    {
+        if (b != null)
+        {
+            Debug.Log("Set a new behaviour: ");
+            behaviour = b;
+        }
     }
 
     new public void OnCollisionEnter(Collision collision)
