@@ -19,7 +19,7 @@ namespace Geo.Command
     class PlayerController : MonoBehaviour // DotObject
     {
         [SerializeField] Vector3 SpawnLocation = new Vector3(0, 25, 0);
-        [SerializeField] float InitSpeed = 75f;
+        [SerializeField] float InitSpeed = 25f;
         [SerializeField] float InitMaxHP = 3f;
         [SerializeField] float FireRate = 0.25f;
         [SerializeField] float trailDecay = 0.25f;
@@ -134,6 +134,9 @@ namespace Geo.Command
                 modifiedSpeed *= BoostFactor;
                 trail.widthMultiplier = BoostFactor;
                 boostEnergy -= Time.deltaTime;
+                movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+                movementDirection *= BoostFactor;
+                geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
             }
             else if (Input.GetButton("Fire2") && !geo.GetShield().IsCharging())
             {
@@ -153,10 +156,9 @@ namespace Geo.Command
                 {
                     trail.widthMultiplier -= Time.deltaTime * trailDecay * 0.5f;
                 }
+                movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+                geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
             }
-
-            movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-            geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
         }
 
         void SwitchWeapon()

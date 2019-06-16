@@ -103,8 +103,8 @@ namespace Geo.Command
         [SerializeField] private float DeathPenaltyLower = 0.5f;
         [SerializeField] private float DeathPenaltyUpper = 0.75f;
         [SerializeField] protected bool DrawDebugLine = false;
-        [SerializeField] protected float Speed = 75;
-        [SerializeField] protected float MaxSpeed = 200;
+        [SerializeField] protected float Speed = 10;
+        [SerializeField] protected float MaxSpeed = 100;
         [SerializeField] protected float BoostFactor;
         [SerializeField] protected float MaxHealth = 3;
         [SerializeField] protected float FireRate = 0.25f;
@@ -415,7 +415,7 @@ namespace Geo.Command
         // Resets the trail's color.
         public void ResetTrail()
         {
-            trail.startColor = Color.white;
+            trail.startColor = 0.25f * this.color + 0.75f * Color.white;
             trail.endColor = this.color;
             Gradient gradient = new Gradient();
             gradient.SetKeys(
@@ -440,6 +440,10 @@ namespace Geo.Command
                 forv.y = 75;
                 Vector3 x = new Vector3(movementDirection.x, 0, 0);
                 Vector3 z = new Vector3(0, 0, movementDirection.z);
+                if(x.x >= 1) { x.x = 1; }
+                if(z.z >= 1) { z.z = 1; }
+                if(x.x <= -1) { x.x = -1; }
+                if(z.z <= -1) { z.z = -1; }
 
                 forwardLine.DrawLineInGameView(pos, pos + forv, forc);
                 movementLineX.DrawLineInGameView(pos, pos + x * x.magnitude * length, movc);
@@ -529,12 +533,12 @@ namespace Geo.Command
             }
 
             // Compute the location to move to.
-            Vector3 Location = Position + MovementVector * Speed * MovementVector.magnitude;
+            Vector3 Location = Position + MovementVector * Speed;
 
             // Move our position a step closer to the target.
             // transform.Translate(MovementVector, Space.World);
             prevASDR = asdr.ComputeAttack(MovementVector, asdrCounter);
-            transform.Translate(prevASDR, Space.World);
+            transform.Translate(prevASDR * (1 + Speed / MaxSpeed), Space.World);
             transform.LookAt(Location, new Vector3(0, 1, 0));
         }
 
