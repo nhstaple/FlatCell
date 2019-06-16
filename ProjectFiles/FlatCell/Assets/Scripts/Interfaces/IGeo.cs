@@ -87,6 +87,8 @@ namespace Geo.Command
         float GetArmor();
         float GetDamage();
         float GetSpeed();
+        float GetMaxSpeed();
+        float GetSpeedPercent();
         Color GetColor();
         Shield GetShield();
     // Set

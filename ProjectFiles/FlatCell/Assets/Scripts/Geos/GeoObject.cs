@@ -10,6 +10,7 @@ using Projectile.Command;
 using Pickup.Command;
 using Utils.Debug;
 using Utils.ADSR;
+using Utils.Anim;
 using Spawner.Command;
 
 /*
@@ -151,7 +152,7 @@ namespace Geo.Command
         //
 
         // Animation manager.
-        Animation anim = new Animation();
+        Anim anim = new Anim();
         private bool locked = false;
         [SerializeField] protected float colorRefreshPoll = 0.5f;
         [SerializeField] protected float geoColorLerpTime = 1f;
@@ -284,7 +285,7 @@ namespace Geo.Command
             if (pickup == null)
             {
                 pickup = gameObject.AddComponent<PickupObject>();
-                pickup.Init(this, "Pickup");
+                pickup.Init(this, EPickup_Type.Default);
                 PickupObject cast = (PickupObject)pickup;
                 cast.enabled = false;
             }
@@ -671,6 +672,16 @@ namespace Geo.Command
             return Speed;
         }
 
+        public float GetMaxSpeed()
+        {
+            return MaxSpeed;
+        }
+
+        public float GetSpeedPercent()
+        {
+            return Speed / MaxSpeed;
+        }
+
         // Returns the chance of the shield activating.
         public float GetShieldChance()
         {
@@ -772,7 +783,14 @@ namespace Geo.Command
         // Sets the movement speed of the geo
         public void SetSpeed(float s)
         {
-            Speed = s;
+            if(s <= MaxSpeed)
+            {
+                Speed = s;
+            }
+            else
+            {
+                Speed = MaxSpeed;
+            }
         }
 
         // Sets the max health to the new value iff health >= MaxHealth

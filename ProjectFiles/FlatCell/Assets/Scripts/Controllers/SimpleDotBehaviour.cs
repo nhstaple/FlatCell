@@ -32,7 +32,7 @@ using Utils.Vectors;
 */
 namespace DotBehaviour.Command
 {
-    enum EDOT_BEHAVIOUR
+    public enum EDot_Behaviour
     {
         Simple = 0,
         Shield,
@@ -56,13 +56,10 @@ namespace DotBehaviour.Command
 
         protected IGeo owner;
 
-        public string type;
-        public EDOT_BEHAVIOUR e_type;
+        public EDot_Behaviour type;
 
         public bool ResetToSpawn = false;
         protected bool PlayerVisionLocked = false;
-        const float ResetVisionTimer = 3f;
-        float visionCounter = 0.0f;
 
         public void OnCollisionEnter(Collision collision)
         {
@@ -88,15 +85,14 @@ namespace DotBehaviour.Command
             // transform.LookAt(movementDirection, new Vector3(0, 1, 0));
             Vector3 newDir = Vector3.RotateTowards(transform.forward, movementDirection, 360 * Mathf.Deg2Rad, 0.0f);
             transform.rotation = Quaternion.LookRotation(newDir);
-            Debug.Log("speed = " + owner.GetSpeed());
+            // Debug.Log("speed = " + owner.GetSpeed());
             Vector3 target = transform.position + movementDirection * 100 * owner.GetSpeed();
             Rigidbody b = GetComponent<Rigidbody>();
             b.AddForce(movementDirection * Random.Range(0.25f*owner.GetSpeed(), owner.GetSpeed()), ForceMode.VelocityChange);
-            type = "Simple Dot";
-            e_type = EDOT_BEHAVIOUR.Simple;
+            type = EDot_Behaviour.Simple;
         }
 
-        new public string GetType()
+        new public EDot_Behaviour GetType()
         {
             return type;
         }
@@ -121,13 +117,6 @@ namespace DotBehaviour.Command
 
         public void Update()
         {
-            visionCounter += Time.deltaTime;
-            if (visionCounter >= ResetVisionTimer)
-            {
-                visionCounter = 0f;
-                PlayerVisionLocked = false;
-            }
-
             CheckScore();
             Move();
         }
@@ -188,7 +177,7 @@ namespace DotBehaviour.Command
             {
                 Vector3 pos = transform.position;
                 float speed = owner.GetSpeed();
-                owner.MoveTo(pos, 4 * (Locations.SpawnLocation - pos).normalized, speed);
+                owner.MoveTo(pos, 2 * (Locations.SpawnLocation - pos).normalized, speed);
             }
 
             else
@@ -221,7 +210,6 @@ namespace DotBehaviour.Command
                 if(owner.GetScore() <= maxKills)
                 {
                     owner.SetSpeed(initSpeed + owner.GetScore() * killWeight);
-                    owner.SetDamage(initDamage + owner.GetScore() * 0.1f);
                 }
             }
         }

@@ -5,10 +5,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Geo.Command;
-using Spawner.Command;
 using DotBehaviour.Command;
 using Pickup.Command;
 using AI.Command;
+using Utils.Vectors;
 
 /*
  * Dot Spawner
@@ -28,16 +28,21 @@ using AI.Command;
 
 namespace Spawner.Command
 {
-
     public class DotSpawner : MonoBehaviour, ISpawner
     {
+
+        bool DEBUG_TEXT = false;
+
         [SerializeField] public GameObject Player;
         /** Spawner Stats **/
         [SerializeField] public int NumDots = 15;
         [SerializeField] public int ArchetypeCount = 3;
+        [SerializeField] public bool EnableSimple = true;
+        [SerializeField] public bool EnableShield = true;
+        [SerializeField] public bool EnableShooter = true;
         [SerializeField] public float SpawnOffset = 400f;
-        [SerializeField] public Vector3 SpawnLocation = new Vector3(0, 25, 0);
-        [SerializeField] public Vector3 InitScale = new Vector3(25, 25, 25);
+        [SerializeField] public Vector3 SpawnLocation = Locations.SpawnLocation;
+        [SerializeField] public Vector3 InitScale = Scales.InitDotScale;
         [SerializeField] public bool EnableTrail = true;
         [SerializeField] public bool DrawDebugLine = true;
 
@@ -97,23 +102,24 @@ namespace Spawner.Command
 
             // Add a random Ai controller to the List
             int res = UnityEngine.Random.Range(1, 100);
-            if (res < 33)
+            if (EnableSimple && res < 33)
             {
-                Debug.Log("Spawned simple dot ai");
+                if(DEBUG_TEXT) { Debug.Log("Spawned simple dot ai"); }
                 GameObject Dot = new GameObject("Geo Simple Dot" + counter);
                 Dot.transform.position = Location;
-                Dot.transform.localScale = InitScale;
+                Dot.transform.localScale = InitScale * Random.Range(0.5f, 1.25f);
 
                 IAI ai = Dot.AddComponent<DotController>();
                 ai.Init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
                 Alive.Add(Dot);
             }
-            else if (res < 66)
+            else if (EnableShooter && res < 66)
             {
-                Debug.Log("Spawned shooter dot ai");
+                if(DEBUG_TEXT) { Debug.Log("Spawned shooter dot ai"); }
                 GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
                 Dot.transform.position = Location;
-                Dot.transform.localScale = InitScale;
+                Dot.transform.localScale = InitScale * Random.Range(0.75f, 2f);
+                
 
                 IAI ai = Dot.AddComponent<DotController>();
                 ShooterDotBehaviour b = Dot.AddComponent<ShooterDotBehaviour>();
@@ -121,12 +127,12 @@ namespace Spawner.Command
                 ai.Init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
                 Alive.Add(Dot);
             }
-            else
+            else if (EnableShield)
             {
-                Debug.Log("Spawned shield dot ai");
+                if(DEBUG_TEXT) { Debug.Log("Spawned shield dot ai"); }
                 GameObject Dot = new GameObject("Geo Shield Dot" + counter);
                 Dot.transform.position = Location;
-                Dot.transform.localScale = InitScale;
+                Dot.transform.localScale = InitScale * Random.Range(0.5f, 1.25f);
 
                 IAI ai = Dot.AddComponent<DotController>();
                 ShieldDotBehaviour b = Dot.AddComponent<ShieldDotBehaviour>();

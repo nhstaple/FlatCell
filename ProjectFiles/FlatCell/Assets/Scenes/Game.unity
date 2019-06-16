@@ -358,6 +358,9 @@ MonoBehaviour:
   Player: {fileID: 4463196817797996641, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
   NumDots: 20
   ArchetypeCount: 3
+  EnableSimple: 1
+  EnableShield: 1
+  EnableShooter: 1
   SpawnOffset: 500
   SpawnLocation: {x: 0, y: 25, z: 0}
   InitScale: {x: 25, y: 25, z: 25}
@@ -667,8 +670,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537e08cac4cd85c4882f703cf3565894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planeSize: 2
-  gridSize: 50
+  planeSize: 4
+  gridSize: 25
   gridPlane: {fileID: 8659519363311212023, guid: 89454cd2d29dbae4798739b0e632a006,
     type: 3}
   boundary: {fileID: 4073489969973322299, guid: 0f763dfd9b8513e4a8ee04b4c3403e12,
@@ -1882,7 +1885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dc65245564919041b115471996eb71f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnLocation: {x: 0, y: 25, z: 0}
+  boost: {fileID: 0}
   InitSpeed: 25
   InitMaxHP: 3
   FireRate: 0.25
@@ -1913,11 +1916,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1380216529}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4.5, y: 1, z: 8}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 12, y: 0.01, z: 12}
+  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!1 &1397006699
 GameObject:
   m_ObjectHideFlags: 0

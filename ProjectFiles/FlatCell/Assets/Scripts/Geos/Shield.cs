@@ -113,12 +113,7 @@ namespace Geo.Command
                 Drain(Time.deltaTime);
                 changeColor();
             }
-            // If the shield is charging.
-            else if(charging)
-            {
-                Charge(Time.deltaTime);
-            }
-            else if (!active && !charging)
+            else
             {
                 Charge(Time.deltaTime);
             }

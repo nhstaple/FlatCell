@@ -38,10 +38,14 @@ namespace Geo.Command
             }
 
             // Add a sphere mesh and collider to the game object.
-            SphereCollider volume = gameObject.AddComponent<SphereCollider>();
-            volume.radius = 0.5f;
+            // SphereCollider volume = gameObject.AddComponent<SphereCollider>();
+            // volume.radius = 0.5f;
+            MeshCollider coll = gameObject.AddComponent<MeshCollider>();
+            coll.convex = true;
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            GetComponent<MeshFilter>().mesh = sphere.GetComponent<MeshFilter>().mesh;
+            var mesh = sphere.GetComponent<MeshFilter>().mesh;
+            GetComponent<MeshFilter>().mesh = mesh;
+            coll.sharedMesh = mesh;
             Destroy(sphere);
 
             // Set physics constraints

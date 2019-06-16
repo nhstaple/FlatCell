@@ -17,13 +17,12 @@ namespace Geo.Command
 {
     class PlayerController : MonoBehaviour // DotObject
     {
-        [SerializeField] Vector3 SpawnLocation = Locations.SpawnLocation;
+        [SerializeField] protected Boost boost;
         [SerializeField] float InitSpeed = 25f;
         [SerializeField] float InitMaxHP = 3f;
         [SerializeField] float FireRate = 0.25f;
         [SerializeField] float trailDecay = 0.25f;
         [SerializeField] protected bool DrawDebugLine = true;
-
 
         /** Script variables **/
         [SerializeField] public bool EnableBoost = true;
@@ -35,12 +34,6 @@ namespace Geo.Command
         /** Evolution variables **/
         private float initSpawnOffset;
         private bool GrowFlag = false;
-        [SerializeField] protected Boost boost;
-        /*
-        private float boostEnergy = 0.5f;
-        private float boostMax = 0.5f;
-        private bool boostReady = true;
-        */
         private bool initColorSet = false;
     
         // The current geo type,
@@ -48,6 +41,9 @@ namespace Geo.Command
         // The trail.
         TrailRenderer trail;
         protected Vector3 movementDirection;
+
+        float EvoThrottle = 0.5f;
+        float EvoCounter = 0f;
 
         private void Start()
         {
@@ -58,8 +54,8 @@ namespace Geo.Command
 
         void Awake()
         {
-            transform.position = new Vector3(0, 25, 0);
-            transform.localScale = new Vector3(25, 25, 25);
+            transform.position = Locations.SpawnLocation;
+            transform.localScale = Scales.InitDotScale;
         }
 
         private void addComponents()
@@ -105,6 +101,20 @@ namespace Geo.Command
             modifiedSpeed = geo.GetSpeed();
 
             handleInput();
+        }
+
+        public void OnCollisionEnter(Collision collision)
+        {
+            if(collision.gameObject.tag == "Boundary")
+            {
+                Debug.Log("Player hit the wall!");
+                Physics.IgnoreCollision(this.gameObject.GetComponent<BoxCollider>(), collision.gameObject.GetComponent<Collider>());
+            }
+            if(collision.gameObject.tag != "Terrain")
+            {
+                Physics.IgnoreCollision(this.gameObject.GetComponent<BoxCollider>(),
+                        collision.gameObject.GetComponent<Collider>());
+            }
         }
 
         void handleInput()
@@ -161,7 +171,10 @@ namespace Geo.Command
         {
             // Move if there's input.
             movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-            geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
+            if(movementDirection.magnitude != 0 )
+            {
+                geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
+            }
         }
 
         // Grab the movement information and apply the boosted information,
@@ -192,6 +205,21 @@ namespace Geo.Command
 
         }
 
+        void IncrementEvolve()
+        {
+            EvoCounter += Time.deltaTime;
+            if(EvoCounter >= EvoThrottle)
+            {
+                EvoCounter = 0f;
+                var score = geo.GetScore();
+                Vector3 newScale = Scales.InitDotScale;
+                newScale.x += score;
+                newScale.y -= score;
+                newScale.z -= score;
+                this.gameObject.transform.localScale = newScale;
+            }
+        }
+
         private void checkStats()
         {
             if (!initColorSet)
@@ -200,6 +228,7 @@ namespace Geo.Command
                 initColorSet = true;
             }
             trail.time = trailDecay;
+            IncrementEvolve();
         }
 
         public Vector3 GetMovementDirection()

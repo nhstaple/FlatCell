@@ -19,38 +19,49 @@ namespace DotBehaviour.Command
     {
         const float ResetVisionTimer = 3f;
         float visionCounter = 0.0f;
-        Collider target;
+        GameObject target;
         new void Start()
         {
             base.Start();
-            type = "Shooter Dot";
+            type = EDot_Behaviour.Shooter;
         }
 
         new public void Update()
         {
             base.Update();
-            if(PlayerVisionLocked && target != null)
+            if (target != null)
             {
+                Vector3 distance = target.transform.position - this.transform.position;
+                if(PlayerVisionLocked || distance.magnitude < 100f)
+                {
+                    transform.LookAt(target.transform);
+                    Fire();
+                }
+            }
+            else
+            {
+                Fire();
+            }
+        }
+
+        new public void OnCollisionEnter(Collision collision)
+        {
+            base.OnCollisionEnter(collision);
+            if (collision.gameObject.tag == "Player")
+            {
+                Debug.Log("Looking at the player!");
+                target = collision.gameObject;
+                PlayerVisionLocked = true;
                 transform.LookAt(target.transform);
             }
-            Fire();
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void OnCollisionExit(Collision collision)
         {
-            Debug.Log("Entered a trigger: " + other.ToString());
-            if(other.tag == "Player")
+            if (collision.gameObject.tag == "Player")
             {
-                target = other;
-                PlayerVisionLocked = true;
-                Debug.Log("Looking at the player!");
-                transform.LookAt(other.transform);
+                PlayerVisionLocked = false;
             }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            PlayerVisionLocked = false;
         }
 
         new public void Fire()

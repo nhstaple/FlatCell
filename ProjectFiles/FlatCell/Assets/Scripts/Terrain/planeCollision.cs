@@ -6,119 +6,69 @@
 
 using System.Collections;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Geo.Command;
+using Utils.Anim;
 
-public class Animation
+namespace Terrain
 {
-    // Indicates if the animator is currently busy with a thread.
-    bool busy;
 
-    public Animation()
+    public class planeCollision : MonoBehaviour
     {
-        busy = false;
-    }
+        GameObject player;
 
-    // Lerps material's color to value without threads.
-    // FrameMulti skips frames
-    // ie, frameMulti = 4 means color will be set 4 times less than normal lerp. This is to increase performance.
-    public void lerpColorWithoutThread(float lerpTime, Material mat, Color targetColor, ref bool locked, float frameMulti = 2f)
-    {
-        if(locked == false && !busy)
+        bool animLock = false;
+        float animTime = 2.5f;
+
+        [SerializeField] public Anim anim;
+        IEnumerator coroutine;
+
+        void Start()
         {
-            locked = true;
-            busy = true;
-            float t = 0.0f;
-            while (t <= lerpTime)
-            {
-                t += frameMulti * Time.deltaTime;
-                mat.color = Color.Lerp(mat.color,
-                                     targetColor,
-                                     t / lerpTime);
-            }
-            locked = false;
-            busy = false;
+            player = GameObject.FindWithTag("Player");
+            animTime = UnityEngine.Random.Range(1f, 2f);
+            anim = new Anim();
         }
-    }
 
-    // Runs a function after waitTime.
-    // Used for calls backs 
-    // source https://answers.unity.com/questions/516798/executing-an-action-after-a-coroutine-has-finished.html
-    public IEnumerator WaitForSecondsThenExecute(Action method, float waitTime)
-    {
-        // Debug.Log("execute delegate coroutine!");
-        yield return new WaitForSeconds(waitTime);
-        method();
-    }
-
-    // Changing the upper and lower bounds will increase the spread at which this coroutine yields.
-    // Ie, makes it look different.
-    public IEnumerator lerpColor(float lerpTime, Material mat, Color targetColor, bool locked = false, float frameMulti = 2f, float juiceLowerRange = 1f, float juiceUpperRange = 2f)
-    {
-        if(locked == false && !busy)
+        void resetLock()
         {
-            locked = true;
-            busy = true;
-            float t = 0.0f;
-            while (t <= lerpTime)
-            {
-                float tick = UnityEngine.Random.Range(juiceLowerRange, juiceUpperRange) * frameMulti * Time.deltaTime;
-                t += tick;
-                mat.color = Color.Lerp(mat.color,
-                                     targetColor,
-                                     t / lerpTime);
-
-                yield return new WaitForSeconds(tick);
-            }
-            locked = false;
-            busy = false;
+            animLock = false;
         }
-    }
 
-}
-
-public class planeCollision : MonoBehaviour
-{
-    GameObject player;
-
-    bool animLock = false;
-    float animTime = 2.5f;
-
-    [SerializeField] public Animation anim = new Animation();
-    IEnumerator coroutine;
-
-    void Start()
-    {
-        player = GameObject.FindWithTag("Player");
-        animTime = UnityEngine.Random.Range(1f, 2f);
-    }
-
-    void OnCollisionEnter(Collision other)
-    {
-        Physics.IgnoreCollision(this.gameObject.GetComponent<Collider>(), other.collider);
-
-        // if(other.gameObject.ToString().Contains("Player") && !other.gameObject.ToString().Contains("Projectile"))
-        if (!other.gameObject.ToString().Contains("Projectile"))
+        void OnTriggerEnter(Collider other)
         {
-            IGeo[] res = other.gameObject.GetComponents<IGeo>();
-            if (res.Length > 0)
+            if (other.gameObject.tag == "Projectile")
             {
-                IGeo geo = res[0];
-                if (geo != null)
+                Physics.IgnoreCollision(this.gameObject.GetComponent<Collider>(),
+                                        other.gameObject.GetComponent<Collider>());
+                return;
+            }
+            else if (other.gameObject.tag != "Projectile")
+            {
+                Physics.IgnoreCollision(this.gameObject.GetComponent<Collider>(),
+                                        other.gameObject.GetComponent<Collider>());
+
+                IGeo[] res = other.gameObject.GetComponents<IGeo>();
+                if (res.Length > 0)
                 {
-                    // a primitive synch lock
-                    if (animLock == false)
+                    IGeo geo = res[0];
+                    if (geo != null)
                     {
-                        coroutine = anim.lerpColor(UnityEngine.Random.Range(1f, 2f) * animTime, GetComponent<Renderer>().material, geo.GetColor(), animLock);
-                        StartCoroutine(coroutine);
-                        // float time = UnityEngine.Random.Range(1f, 2f) * animTime;
-                        // anim.lerpColorWithoutThread(time, GetComponent<Renderer>().material, geo.GetColor(), ref animLock);
+                        // a primitive synch lock
+                        if (animLock == false)
+                        {
+                            float time = UnityEngine.Random.Range(1f, 2f) * animTime;
+                            coroutine = anim.lerpColor(time, GetComponent<Renderer>().material, geo.GetColor(), animLock, 1f, 0.5f, 2f);
+                            StartCoroutine(coroutine);
+                            animLock = true;
+
+                            // Set the callback to reset the lock.
+                            StartCoroutine(anim.WaitForSecondsThenExecute(() => resetLock(), time));
+                        }
                     }
                 }
             }
-            // lerpColorToPlayer(GetComponent<Renderer>().material);
         }
-    }
 
+    }
 }

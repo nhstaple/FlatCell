@@ -22,7 +22,7 @@ namespace Pickup.Command
     {
         // initializes the pickup after attaching it to a game object.
         // this sets the values of the pickup to be used when the player "eats it"
-        void Init(IGeo geo, string t);
+        void Init(IGeo geo, EPickup_Type t);
 
         // programtically creates the pickup drop at the location
         GameObject Spawn(Vector3 Location);
@@ -34,9 +34,9 @@ namespace Pickup.Command
         void Destroy();
 
         // returns the type of pickup, ie HP, armor, etc
-        string GetType();
+        EPickup_Type GetType();
 
         // sets the type. will only affect successive calls to Spawn()
-        void SetType(string t);
+        void SetType(EPickup_Type t);
     }
 }

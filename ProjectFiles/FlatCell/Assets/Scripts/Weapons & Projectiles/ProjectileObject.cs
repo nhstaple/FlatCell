@@ -2,11 +2,10 @@
 // Nick S.
 // Game Logic - Combat
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Weapon.Command;
 using Geo.Command;
+using Utils.Vectors;
 
 /*
  * Dot Projectile 
@@ -74,7 +73,7 @@ namespace Projectile.Command
             proj.transform.position = Location;
 
             // Set the size/
-            proj.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+            proj.transform.localScale = Scales.DotProjScale;
 
             rend.material = GameObject.Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
             rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;

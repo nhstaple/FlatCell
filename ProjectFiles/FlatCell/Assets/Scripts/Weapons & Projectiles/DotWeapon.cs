@@ -17,8 +17,8 @@ namespace Weapon.Command
     public class DotWeapon : WeaponObject
     {
         const float PlayerChargeChance = 10;
-        const float ChargeMinMod = 0f;
-        const float ChargeMaxMod = 1f;
+        const float ChargeMinMod = 4f;
+        const float ChargeMaxMod = 8f;
 
         public new void Init(IGeo GeoOwner, AudioClip Sound, float Damage, float Pierce = 0, float Rate = 0.25f, float lifeTime = 2.5f)
         {
@@ -52,16 +52,16 @@ namespace Weapon.Command
                 bullet_rigidbody.mass = 0.1f;
                 if (Owner.ToString().Contains("Player"))
                 {
-                    float modified = 1;
+                    float modified = 0;
                     if (Random.Range(1, 100) < PlayerChargeChance)
                     {
                         modified = Random.Range(ChargeMinMod, ChargeMaxMod);
                     }
-                    bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
+                    bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + modified + 4 * Owner.GetSpeedPercent() + Owner.GetMovementMagnitude())), ForceMode.Impulse);
                 }
                 else
                 {
-                    bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + Owner.GetMovementMagnitude()) ), ForceMode.Impulse);
+                    bullet_rigidbody.AddRelativeForce(lastMove * (push * (1 + 4 * Owner.GetSpeedPercent() + Owner.GetMovementMagnitude())), ForceMode.Impulse);
                 }
             }
         }

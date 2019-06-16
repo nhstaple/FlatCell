@@ -29,7 +29,7 @@ namespace DotBehaviour.Command
         void Move();
 
         // Returns the type of behaviour script.
-        string GetType();
+        EDot_Behaviour GetType();
 
         // Shields Logic for AI.
         void Shields();

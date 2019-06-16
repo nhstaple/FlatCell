@@ -29,7 +29,7 @@ namespace DotBehaviour.Command
         new void Start()
         {
             base.Start();
-            type = "Shield Dot";
+            type = EDot_Behaviour.Shield;
             shield = owner.GetShield();
         }
 
