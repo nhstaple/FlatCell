@@ -44,11 +44,11 @@ namespace Weapon.Command
             {
                 PlaySound();
 
-                Vector3 spawnLoc = pos + Owner.GetForward() * SpawnOffset;
+                Vector3 spawnLoc = pos + movementDir * SpawnOffset;
                 shootCounter = 0.0f;
                 DotProjectile boopCast = (DotProjectile)Projectile;
                 GameObject bullet = boopCast.Spawn(spawnLoc);
-                bullet.gameObject.transform.SetParent(this.Owner.GetGameObject().transform);
+                // bullet.gameObject.transform.SetParent(this.Owner.GetGameObject().transform);
                 Rigidbody bullet_rigidbody;
                 bullet_rigidbody = bullet.GetComponent<Rigidbody>();
                 bullet_rigidbody.mass = 0.1f;

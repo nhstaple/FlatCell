@@ -20,6 +20,7 @@ namespace DotBehaviour.Command
         const float ResetVisionTimer = 3f;
         float visionCounter = 0.0f;
         GameObject target;
+
         new void Start()
         {
             base.Start();
@@ -34,7 +35,7 @@ namespace DotBehaviour.Command
                 Vector3 distance = target.transform.position - this.transform.position;
                 if(PlayerVisionLocked || distance.magnitude < 100f)
                 {
-                    transform.LookAt(target.transform);
+                    owner.LookAt((target.transform.position - this.transform.position).normalized);
                     Fire();
                 }
             }

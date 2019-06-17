@@ -28,6 +28,7 @@ namespace Geo.Command
         void AddColor(Color c);
         float GetMovementMagnitude();
         Vector3 GetMovementDirection();
+        Vector3 GetGunDir();
 
 /** AI **/
         // Constructors

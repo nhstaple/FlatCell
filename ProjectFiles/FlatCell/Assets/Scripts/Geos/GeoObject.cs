@@ -464,6 +464,11 @@ namespace Geo.Command
             }
         }
 
+        public Vector3 GetGunDir()
+        {
+            return gunDirection;
+        }
+
         // AI Interface
         // Kills the geo.
         public void Kill()
@@ -521,7 +526,7 @@ namespace Geo.Command
             if (weapon.Count >= 1)
             {
                 DotWeapon gun = (DotWeapon)weapon[0];
-                gun.Fire(transform.forward, transform.position, Push, SpawnOffset);
+                gun.Fire(gunDirection, transform.position, Push, SpawnOffset);
             }
             else
             {

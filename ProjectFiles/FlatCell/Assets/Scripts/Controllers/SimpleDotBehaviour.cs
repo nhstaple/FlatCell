@@ -186,6 +186,7 @@ namespace DotBehaviour.Command
                 Vector3 pos = transform.position;
                 float speed = owner.GetSpeed();
                 owner.MoveTo(pos, movementDirection, speed, PlayerVisionLocked);
+                owner.LookAt(movementDirection, PlayerVisionLocked);
             }
         }
 
