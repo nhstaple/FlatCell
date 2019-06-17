@@ -41,6 +41,7 @@ namespace Geo.Command
         // The trail.
         TrailRenderer trail;
         protected Vector3 movementDirection;
+        protected Vector3 lookDir;
 
         float EvoThrottle = 0.5f;
         float EvoCounter = 0f;
@@ -120,7 +121,6 @@ namespace Geo.Command
 
         void handleInput()
         {
-
             if (Input.GetButtonDown("SortWeapon"))
             {
                 Debug.Log("Switching Weapons");
@@ -170,20 +170,32 @@ namespace Geo.Command
         // Grab input information and move the character.
         private void Move()
         {
+            lookDir = new Vector3(Input.GetAxis("Mouse X"), 0, -1 * Input.GetAxis("Mouse Y"));
+            Debug.Log(lookDir);
+
             // Move if there's input.
             movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
             if(movementDirection.magnitude != 0 )
             {
-                geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
+                geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
+            }
+            if(lookDir.magnitude != 0)
+            {
+                geo.LookAt(lookDir.normalized);
             }
         }
 
         // Grab the movement information and apply the boosted information,
         private void BoostedMove()
         {
+            lookDir = new Vector3(Input.GetAxis("Mouse X"), 0, -1 * Input.GetAxis("Mouse Y"));
             movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
             movementDirection *= BoostFactor;
-            geo.MoveTo(transform.position, movementDirection, modifiedSpeed);
+            geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
+            if (lookDir.magnitude != 0)
+            {
+                geo.LookAt(lookDir.normalized);
+            }
         }
 
         void SwitchWeapon()

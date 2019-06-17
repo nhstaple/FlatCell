@@ -177,7 +177,7 @@ namespace DotBehaviour.Command
             {
                 Vector3 pos = transform.position;
                 float speed = owner.GetSpeed();
-                owner.MoveTo(pos, 2 * (Locations.SpawnLocation - pos).normalized, speed);
+                owner.MoveTo(pos, 2 * (Locations.SpawnLocation - pos).normalized, speed, false);
             }
 
             else

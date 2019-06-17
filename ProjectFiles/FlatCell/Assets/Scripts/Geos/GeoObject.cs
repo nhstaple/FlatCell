@@ -148,10 +148,11 @@ namespace Geo.Command
         LineDrawer movementLineX;
         LineDrawer movementLineZ;
         LineDrawer velocityLine;
+        LineDrawer gunLine;
         Vector3 prevADSR;
         //
 
-        // Animation manager.
+    // Animation manager.
         Anim anim = new Anim();
         private bool locked = false;
         [SerializeField] protected float colorRefreshPoll = 0.5f;
@@ -167,17 +168,18 @@ namespace Geo.Command
         protected float currentSpeed;
         protected Vector3 prevPos;
         protected GameObject lastHitBy;
+        protected Vector3 gunDirection;
 
         protected Renderer rend;
 
-    // Audio
+        // Audio
         const string Geo_Death_Sound = "Audio/Death Sound";
         protected AudioClip deathSound;
         protected float volLowRange = 0.5F;
         protected float volHighRange = 1.0F;
         protected AudioSource deathSource;
 
-    // Initializers.
+        // Initializers.
         // Start is called before the first frame update
         public void Start()
         {
@@ -208,18 +210,21 @@ namespace Geo.Command
             velocityLine.Destroy();
             movementLineX.Destroy();
             movementLineZ.Destroy();
+            gunLine.Destroy();
 
             forwardLine = new LineDrawer(this, 0.5f);
             velocityLine = new LineDrawer(this, 1f);
             movementLineX = new LineDrawer(this, 0.75f);
             movementLineZ = new LineDrawer(this, 0.75f);
+            gunLine = new LineDrawer(this, 0.75f);
             Lines.Add(forwardLine);
             Lines.Add(velocityLine);
             Lines.Add(movementLineX);
             Lines.Add(movementLineZ);
+            Lines.Add(gunLine);
 
             // Add components to game object.
-            if(!GetComponent<MeshFilter>())
+            if (!GetComponent<MeshFilter>())
             {
                 gameObject.AddComponent<MeshFilter>();
             }
@@ -260,6 +265,7 @@ namespace Geo.Command
             currentSpeed = 0;
             health = MaxHealth;
             transform.forward = new Vector3(1, 0, 0);
+            this.gunDirection = transform.forward;
             prevADSR = Vector3.zero;
 
             // Kill tracking
@@ -397,7 +403,7 @@ namespace Geo.Command
             }
             else
             {
-                
+
             }
             return;
         }
@@ -434,6 +440,7 @@ namespace Geo.Command
         {
             var length = 15f;
             Color forc = Color.yellow * 10;
+            Color gunc = Color.green * 10;
             Color movc = Color.red * 10;
             Color velc = Color.cyan * 10;
             if (DrawDebugLine || flag)
@@ -444,19 +451,20 @@ namespace Geo.Command
 
                 Vector3 x = new Vector3(movementDirection.x, 0, 0);
                 Vector3 z = new Vector3(0, 0, movementDirection.z);
-                if(x.x >= 1) { x.x = 1; }
-                if(z.z >= 1) { z.z = 1; }
-                if(x.x <= -1) { x.x = -1; }
-                if(z.z <= -1) { z.z = -1; }
+                if (x.x >= 1) { x.x = 1; }
+                if (z.z >= 1) { z.z = 1; }
+                if (x.x <= -1) { x.x = -1; }
+                if (z.z <= -1) { z.z = -1; }
 
                 forwardLine.DrawLineInGameView(pos, pos + forv, forc);
                 movementLineX.DrawLineInGameView(pos, pos + x * x.magnitude * length, movc);
                 movementLineZ.DrawLineInGameView(pos, pos + z * z.magnitude * length, movc);
                 velocityLine.DrawLineInGameView(pos + -1f * prevADSR * length, pos, velc);
+                gunLine.DrawLineInGameView(pos, pos + gunDirection * length, gunc);
             }
         }
 
-    // AI Interface
+        // AI Interface
         // Kills the geo.
         public void Kill()
         {
@@ -522,11 +530,11 @@ namespace Geo.Command
         }
 
         // Moves to the location.
-        public void MoveTo(Vector3 Position, Vector3 MovementVector, float Speed, bool ForwardLock = false)
+        public void MoveTo(Vector3 Position, Vector3 MovementVector, float Speed, bool ForwardLock = true)
         {
             // Set the previous movement vector.
             movementDirection = MovementVector;
-            if(MovementVector.magnitude > 0)
+            if (MovementVector.magnitude > 0)
             {
                 adsrCounter += Time.deltaTime;
             }
@@ -542,9 +550,17 @@ namespace Geo.Command
             // transform.Translate(MovementVector, Space.World);
             prevADSR = adsr.ComputeAttack(MovementVector, adsrCounter);
             transform.Translate(prevADSR * (BaseSpeed + SpeedMultiplier * (Speed / MaxSpeed)), Space.World);
-            if(!ForwardLock)
+            if (!ForwardLock)
             {
                 transform.LookAt(Location, new Vector3(0, 1, 0));
+            }
+        }
+
+        public void LookAt(Vector3 Position, bool VisionLock = false)
+        {
+            if(!VisionLock)
+            {
+                gunDirection = Position;
             }
         }
 

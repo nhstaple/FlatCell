@@ -21,7 +21,8 @@ namespace Geo.Command
     public interface IGeo
     {
         /** Player **/
-        void MoveTo(Vector3 Position, Vector3 MovementVector, float Speed, bool ForwardLock = false);
+        void MoveTo(Vector3 Position, Vector3 MovementVector, float Speed, bool ForwardLock = true);
+        void LookAt(Vector3 Position, bool VisionLock = false);
         void Respawn();
         void Kill();
         void AddColor(Color c);
