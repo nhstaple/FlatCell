@@ -43,9 +43,6 @@ namespace Controller.Player
         protected Vector3 lookDir;
         // The mouse.
         protected Vector3 mouseLookDir;
-        // https://pastebin.com/yJunNcEc
-        private float screenH;
-        private float screenW;
 
         // Script variables
         private float initSpawnOffset;
@@ -107,8 +104,6 @@ namespace Controller.Player
         // Initial values.
         private void initValues()
         {
-            screenH = Screen.height / 2;
-            screenW = Screen.width / 2;
             weaponSelect = 1;
         }
 
@@ -153,7 +148,7 @@ namespace Controller.Player
         // Does all of the input stuff. Hey Kyle!
         private void handleInput()
         {
-            // TODO implement left & right bumper
+            // TODO implement left & right bumper and immplement in InputManager
             if (Input.GetButtonDown("SortWeapon"))
             {
                 Debug.Log("Switching Weapons");
@@ -208,38 +203,11 @@ namespace Controller.Player
             }
         }
 
-        // Gets the input information from the sticks.
-        private void getSticks()
-        {
-            if(inputManger.joystickType == EInput_Type.XboxOne)
-            {
-                // The right stick.
-                lookDir = new Vector3(Input.GetAxis("RightStickX"),
-                                      0f,
-                                      Input.GetAxis("RightStickY") * -1);
-            }
-            else if(inputManger.joystickType == EInput_Type.MouseAndKeyboard)
-            {
-                // The mouse.
-                lookDir = new Vector3(Input.mousePosition.x - screenW,
-                                      0f,
-                                      Input.mousePosition.y - screenH);
-            }
-
-            // The left stick / WASD.
-            movementDirection = new Vector3(Input.GetAxis("Horizontal"),
-                                            0f,
-                                            Input.GetAxis("Vertical"));
-
-            // Normalize the analog vectors.
-            lookDir.Normalize();
-        }
-
         // Grab input information and move the character.
         private void move()
         {
             // Get the input information.
-            getSticks();
+            inputManger.GetSticks(ref movementDirection, ref lookDir);
 
             // Move the player.
             if(movementDirection.magnitude != 0 )
@@ -258,7 +226,9 @@ namespace Controller.Player
         // Grab the movement information and apply the boosted information,
         private void boostedMove()
         {
-            getSticks();
+            // Get the input information.
+            inputManger.GetSticks(ref movementDirection, ref lookDir);
+
             movementDirection *= BoostFactor;
             geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
             if (lookDir.magnitude != 0)

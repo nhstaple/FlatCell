@@ -13,6 +13,7 @@ namespace Utils.InputManager
 
     public class InputManager : MonoBehaviour
     {
+        [SerializeField] public bool InvertedStick = false;
         [SerializeField] public bool PC_DEBUG = false;
         [SerializeField] public bool XBOX_DEBUG = false;
         [SerializeField] public bool PS4_DEBUG = false;
@@ -25,6 +26,10 @@ namespace Utils.InputManager
 
         private float consolePollRate = 1f;
         private float consoleCounter = 0f;
+
+        // https://pastebin.com/yJunNcEc
+        private float screenH;
+        private float screenW;
 
         private void checkJoySticks()
         {
@@ -131,6 +136,8 @@ namespace Utils.InputManager
         public void Start()
         {
             checkJoySticks();
+            screenH = Screen.height / 2;
+            screenW = Screen.width / 2;
             oldPC = PC_DEBUG;
             oldXBOX = XBOX_DEBUG;
             oldPS4 = PS4_DEBUG;
@@ -199,6 +206,39 @@ namespace Utils.InputManager
                     break;
             }
 
+        }
+
+        public void GetSticks(ref Vector3 Movement, ref Vector3 Look)
+        {
+            // The left stick / WASD.
+            Movement = new Vector3(Input.GetAxis("Horizontal"), 0f,
+                                   Input.GetAxis("Vertical"));
+
+            switch (joystickType)
+            {
+                case EInput_Type.MouseAndKeyboard:
+                    // The mouse.
+                    Look = new Vector3(Input.mousePosition.x - screenW, 0f,
+                                       Input.mousePosition.y - screenH);
+                    break;
+
+                case EInput_Type.XboxOne:
+                    Look = new Vector3(Input.GetAxis("RightStickX"), 0f,
+                                       Input.GetAxis("RightStickY"));
+                    if (!InvertedStick)
+                    {
+                        Look.z *= -1;
+                    }
+                    break;
+
+                // TODO
+                case EInput_Type.PS4:
+                    break;
+
+                default:
+                    break;
+            }
+            Look.Normalize();
         }
 
         public bool GetBoost()
