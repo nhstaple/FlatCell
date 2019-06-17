@@ -16,7 +16,7 @@ namespace Utils.InputManager
         [SerializeField] public bool PC_DEBUG = false;
         [SerializeField] public bool XBOX_DEBUG = false;
         [SerializeField] public bool PS4_DEBUG = false;
-        [SerializeField] private EInput_Type joystickType;
+        [SerializeField] public EInput_Type joystickType;
         private bool disconnected = false;
 
         private bool oldPC;
@@ -199,6 +199,67 @@ namespace Utils.InputManager
                     break;
             }
 
+        }
+
+        public bool GetBoost()
+        {
+            return Input.GetButton("Boost");
+        }
+
+        public bool GetFire1(Vector3 LookDir)
+        {
+            switch(joystickType)
+            {
+                case EInput_Type.MouseAndKeyboard:
+                    if(Input.GetButton("Fire1"))
+                    {
+                        return true;
+                    }
+                    break;
+
+                case EInput_Type.XboxOne:
+                    if(LookDir.magnitude != 0)
+                    {
+                        return true;
+                    }
+                    break;
+
+                // TODO
+                case EInput_Type.PS4:
+                    break;
+
+                default:
+                    return false;
+            }
+            return false;
+        }
+
+        public bool GetFire2()
+        {
+            switch (joystickType)
+            {
+                case EInput_Type.MouseAndKeyboard:
+                    if (Input.GetButton("Fire2"))
+                    {
+                        return true;
+                    }
+                    break;
+
+                case EInput_Type.XboxOne:
+                    if (Input.GetAxis("XboxLT") != 0)
+                    {
+                        return true;
+                    }
+                    break;
+
+                // TODO
+                case EInput_Type.PS4:
+                    break;
+
+                default:
+                    return false;
+            }
+            return false;
         }
     }
 }

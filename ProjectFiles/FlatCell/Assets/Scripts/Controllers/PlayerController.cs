@@ -160,7 +160,7 @@ namespace Controller.Player
                 switchWeapon();
             }
             // The player pressed the boost button.
-            if (Input.GetButton("Boost") && !boost.charging)
+            if (inputManger.GetBoost() && !boost.charging)
             {
                 modifiedSpeed *= BoostFactor;
                 trail.widthMultiplier = BoostFactor;
@@ -168,17 +168,17 @@ namespace Controller.Player
                 boostedMove();
             }
             // Else the boost button isn't pressed.
-            else if(!Input.GetButton("Boost"))
+            else if(!inputManger.GetBoost())
             {
                 boost.TurnOff();
                 // Check for shields.
-                if ((Input.GetButton("Fire2")  || Input.GetAxis("XboxLT") != 0) && !geo.GetShield().IsCharging())
+                if (inputManger.GetFire2() && !geo.GetShield().IsCharging())
                 {
                     geo.FlameOn();
                 }
                 // Check for guns.
                 // If the mouse was clicked or the stick was pushed.
-                else if (!geo.GetShield().active && (Input.GetButton("Fire1") || lookDir.magnitude != 0))
+                else if (!geo.GetShield().active && inputManger.GetFire1(lookDir))
                 {
                     // Turn off the shields.
                     geo.FlameOff();
@@ -211,14 +211,21 @@ namespace Controller.Player
         // Gets the input information from the sticks.
         private void getSticks()
         {
-            // The right stick.
-            lookDir = new Vector3(Input.GetAxis("RightStickX"),
-                                  0f,
-                                  Input.GetAxis("RightStickY") * -1);
-            // The mouse.
-            mouseLookDir = new Vector3(Input.mousePosition.x - screenW,
-                                       0f,
-                                       Input.mousePosition.y - screenH);
+            if(inputManger.joystickType == EInput_Type.XboxOne)
+            {
+                // The right stick.
+                lookDir = new Vector3(Input.GetAxis("RightStickX"),
+                                      0f,
+                                      Input.GetAxis("RightStickY") * -1);
+            }
+            else if(inputManger.joystickType == EInput_Type.MouseAndKeyboard)
+            {
+                // The mouse.
+                lookDir = new Vector3(Input.mousePosition.x - screenW,
+                                      0f,
+                                      Input.mousePosition.y - screenH);
+            }
+
             // The left stick / WASD.
             movementDirection = new Vector3(Input.GetAxis("Horizontal"),
                                             0f,
@@ -226,7 +233,6 @@ namespace Controller.Player
 
             // Normalize the analog vectors.
             lookDir.Normalize();
-            mouseLookDir.Normalize();
         }
 
         // Grab input information and move the character.
@@ -246,11 +252,6 @@ namespace Controller.Player
             if (lookDir.magnitude != 0)
             {
                 geo.LookAt(lookDir);
-            }
-            // Used for mouse and keyboard
-            else if (mouseLookDir.magnitude != 0 && Input.GetJoystickNames().Length == 0)
-            {
-                geo.LookAt(mouseLookDir);
             }
         }
 
