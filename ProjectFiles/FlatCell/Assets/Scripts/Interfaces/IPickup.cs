@@ -1,6 +1,11 @@
-﻿// IPickup.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* IPickup.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
 
 using UnityEngine;
 using Geo.Command;
@@ -15,7 +20,13 @@ using Geo.Command;
  * of the owner at death instead of at spawn.
  * 
 */
-  
+
+/*
+ * TODO
+ * Update documentation 6/16/19
+*/
+
+
 namespace Pickup.Command
 {
     public interface IPickup

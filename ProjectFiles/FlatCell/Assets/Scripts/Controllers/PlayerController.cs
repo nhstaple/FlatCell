@@ -1,9 +1,16 @@
-// PlayerController.cs
-// Nick S.
-// Game Logic
+/*
+ * 
+\* PlayerController.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+\* Kyle C.
+\* TODO
+ *
+*/
 
 using UnityEngine;
-using Geo.Command;
 using Utils.Vectors;    // For Locations
 
 /*
@@ -24,32 +31,35 @@ namespace Geo.Command
         [SerializeField] float trailDecay = 0.25f;
         [SerializeField] protected bool DrawDebugLine = true;
 
-        /** Script variables **/
+    // Input variables
+        // The left stick / WASD.
+        protected Vector3 movementDirection;
+        // The right stick.
+        protected Vector3 lookDir;
+        // The mouse.
+        protected Vector3 mouseLookDir;
+        // https://pastebin.com/yJunNcEc
+        private float screenH;
+        private float screenW;
+
+    // Script variables
+        private float initSpawnOffset;
         [SerializeField] public bool EnableBoost = true;
         [SerializeField] protected float BoostFactor = 2f;
+        private bool initColorSet = false;
         private float modifiedSpeed;
         // Added to track the 3 moves we can use
         private int weaponSelect;
 
-        /** Evolution variables **/
-        private float initSpawnOffset;
-        private bool GrowFlag = false;
-        private bool initColorSet = false;
-    
-        // The current geo type,
-        public IGeo geo;
-        // The trail.
-        TrailRenderer trail;
-        protected Vector3 movementDirection;
-        protected Vector3 lookDir;
-        protected Vector3 mouseLookDir;
-
+        // Evolution variables
         float EvoThrottle = 0.5f;
         float EvoCounter = 0f;
 
-        // https://pastebin.com/yJunNcEc
-        private float screenH;
-        private float screenW;
+        // The current piece of geometry the player is controlling.
+        public IGeo geo;
+
+    // Cosemetics
+        TrailRenderer trail;
 
         private void Start()
         {
@@ -64,6 +74,7 @@ namespace Geo.Command
             transform.localScale = Scales.InitDotScale;
         }
 
+        // Adds components to the object.
         private void addComponents()
         {
             geo = this.gameObject.AddComponent<DotObject>();
@@ -71,12 +82,14 @@ namespace Geo.Command
             geo.SetColor(Color.clear);
         }
 
+        // Grabs components from the attached objects.
         private void grabComponents()
         {
             if (trail == null)
             {
                 trail = this.gameObject.GetComponent<TrailRenderer>();
             }
+            // TODO move to GeoObject if we want AI to be boostable.
             if(boost == null)
             {
                 GameObject boop = (GameObject) Instantiate(Resources.Load("Player Items/Boost"));
@@ -85,6 +98,7 @@ namespace Geo.Command
             }
         }
 
+        // Initial values.
         private void initValues()
         {
             screenH = Screen.height / 2;
@@ -92,23 +106,17 @@ namespace Geo.Command
             weaponSelect = 1;
         }
 
-        void checkDebug()
+        private void Update()
         {
-            if(DrawDebugLine)
-            {
-                geo.DrawDebug(DrawDebugLine);
-            }
-        }
-
-        void Update()
-        {
+            // Check the debug flags.
             checkDebug();
-            grabComponents();
+            // Check the player's stats and evolution.
             checkStats();
 
             gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             modifiedSpeed = geo.GetSpeed();
 
+            // Do input related behaviour.
             handleInput();
         }
 
@@ -117,34 +125,47 @@ namespace Geo.Command
             if(collision.gameObject.tag == "Boundary")
             {
                 Debug.Log("Player hit the wall!");
-                Physics.IgnoreCollision(this.gameObject.GetComponent<BoxCollider>(), collision.gameObject.GetComponent<Collider>());
+                Physics.IgnoreCollision(this.gameObject.GetComponent<BoxCollider>(),
+                                        collision.gameObject.GetComponent<Collider>());
             }
             if(collision.gameObject.tag != "Terrain")
             {
                 Physics.IgnoreCollision(this.gameObject.GetComponent<BoxCollider>(),
-                        collision.gameObject.GetComponent<Collider>());
+                                        collision.gameObject.GetComponent<Collider>());
             }
         }
 
-        void handleInput()
+        // Draw's the object's debug lines.
+        private void checkDebug()
         {
+            if (DrawDebugLine)
+            {
+                geo.DrawDebug(DrawDebugLine);
+            }
+        }
+
+        // Does all of the input stuff. Hey Kyle!
+        private void handleInput()
+        {
+            // TODO implement left & right bumper
             if (Input.GetButtonDown("SortWeapon"))
             {
                 Debug.Log("Switching Weapons");
-                SwitchWeapon();
+                switchWeapon();
             }
-
+            // The player pressed the boost button.
+            // TODO renamed to Boost
             if (Input.GetButton("Jump") && !boost.charging)
             {
                 modifiedSpeed *= BoostFactor;
                 trail.widthMultiplier = BoostFactor;
                 boost.TurnOn();
-                BoostedMove();
+                boostedMove();
             }
+            // Else the boost button isn't pressed.
             else if(!Input.GetButton("Jump"))
             {
                 boost.TurnOff();
-
                 // Check for shields.
                 if (Input.GetButton("Fire2") && !geo.GetShield().IsCharging())
                 {
@@ -166,31 +187,51 @@ namespace Geo.Command
                         trail.widthMultiplier -= Time.deltaTime * trailDecay * 0.5f;
                     }
                 }
-                Move();
+                // Always move.
+                move();
             }
+            // All other cases, includes player running out of boost.
             else
             {
-                Move();
+                // Just keep swimming.
+                move();
             }
         }
 
-        void getSticks()
+        // Gets the input information from the sticks.
+        private void getSticks()
         {
-            lookDir = new Vector3(Input.GetAxis("Stick2X"), 0, -1 * Input.GetAxis("Stick2Y"));
-            mouseLookDir = new Vector3(Input.mousePosition.x - screenW, 0, Input.mousePosition.y - screenH);
-            movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+            // The right stick.
+            lookDir = new Vector3(Input.GetAxis("Stick2X"),
+                                  0f,
+                                  Input.GetAxis("Stick2Y") * -1);
+            // The mouse.
+            mouseLookDir = new Vector3(Input.mousePosition.x - screenW,
+                                       0f,
+                                       Input.mousePosition.y - screenH);
+            // The left stick / WASD.
+            movementDirection = new Vector3(Input.GetAxis("Horizontal"),
+                                            0f,
+                                            Input.GetAxis("Vertical"));
+
+            // Normalize the analog vectors.
             lookDir.Normalize();
             mouseLookDir.Normalize();
         }
 
         // Grab input information and move the character.
-        private void Move()
+        private void move()
         {
+            // Get the input information.
             getSticks();
+
+            // Move the player.
             if(movementDirection.magnitude != 0 )
             {
                 geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
             }
+
+            // Move the player's gun vector.
             // Used for controllers.
             if (lookDir.magnitude != 0)
             {
@@ -204,7 +245,7 @@ namespace Geo.Command
         }
 
         // Grab the movement information and apply the boosted information,
-        private void BoostedMove()
+        private void boostedMove()
         {
             getSticks();
             movementDirection *= BoostFactor;
@@ -221,7 +262,8 @@ namespace Geo.Command
             }
         }
 
-        void SwitchWeapon()
+        // TODO implment switching with LB / RB
+        private void switchWeapon()
         {
             if (weaponSelect == 1)
             {
@@ -241,7 +283,8 @@ namespace Geo.Command
 
         }
 
-        void IncrementEvolve()
+        // Checks the player's score and changes the scale of the game object.
+        private void incrementEvolve()
         {
             EvoCounter += Time.deltaTime;
             if(EvoCounter >= EvoThrottle)
@@ -256,25 +299,22 @@ namespace Geo.Command
             }
         }
 
+        // Checks the initial color change, updates the trail decay
         private void checkStats()
         {
             if (!initColorSet)
             {
                 geo.SetColor(Color.clear);
                 initColorSet = true;
+                trail.time = trailDecay; // move to outside of the if statement to update each frame
             }
-            trail.time = trailDecay;
-            IncrementEvolve();
+            incrementEvolve();
         }
 
+        // Returns the last acquired input direction applied by the user.
         public Vector3 GetMovementDirection()
         {
             return geo.GetMovementDirection();
-        }
-
-        public float GetCurrentSpeed()
-        {
-            return geo.GetCurrentSpeed();
         }
     }
 }

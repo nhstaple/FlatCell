@@ -1,6 +1,12 @@
-﻿// DotSpawner.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* DotSpawner.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
+
 
 using System.Collections.Generic;
 using UnityEngine;

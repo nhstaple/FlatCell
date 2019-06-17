@@ -1,6 +1,11 @@
-// IWeapon.cs
-// Nick S.
-// Game Logic - AI
+/*
+ * 
+\* IWeapon.cs
+ *
+\* Nick S.
+\* Game Logic - Combat
+ *
+*/
 
 using UnityEngine;
 using Geo.Command;
@@ -15,6 +20,13 @@ using Geo.Command;
  * 
 
  * 
+*/
+
+/*
+ * TODO
+ * Update documentation 6/16/19
+ * Make damage propagate from Weapon -> Projectile spawn.
+ * Remove damage from Geo.
 */
 
 namespace Weapon.Command

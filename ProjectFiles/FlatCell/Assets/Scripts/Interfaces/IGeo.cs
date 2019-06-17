@@ -1,6 +1,11 @@
-﻿// IGeo.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* IGeo.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
 
 using UnityEngine;
 using Weapon.Command;
@@ -14,6 +19,11 @@ using Weapon.Command;
  * taken because the design approach to his game was to use as many built-in Unity tools as 
  * possible to create Flat Cell.
  * 
+*/
+
+/*
+ * TODO
+ * Update documentation 6/16/19
 */
 
 namespace Geo.Command

@@ -1,10 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+ * 
+\* UI.cs
+ *
+\* TODO David
+ *
+*/
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-using Spawner.Command;
 using Geo.Command;
 
 public class UI : MonoBehaviour 

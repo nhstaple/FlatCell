@@ -1,6 +1,11 @@
-﻿// IDotBehaviour.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* IDotBehaviour.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
 
 using Geo.Command;
 
@@ -15,6 +20,7 @@ using Geo.Command;
    - Shield
  * 
 */
+
 namespace DotBehaviour.Command
 {
     public interface IAIBehaviour

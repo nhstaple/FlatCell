@@ -1,6 +1,19 @@
-﻿// GeoObject.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* GeoObject.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
+
+/*
+ * TODO
+ * Update documentation 6/16/19
+ * Make damage propagate from Weapon -> Projectile spawn.
+ * Remove damage from Geo.
+*/
+
 
 using System.Collections.Generic;
 using UnityEngine;

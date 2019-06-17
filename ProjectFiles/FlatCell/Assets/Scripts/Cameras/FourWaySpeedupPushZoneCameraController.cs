@@ -42,10 +42,10 @@ namespace Obscura
         //GameObject locations are finalized.
         void LateUpdate()
         {
-            var player = GameObject.Find("Player").GetComponent<PlayerController>();
+            IGeo player = (IGeo) GameObject.Find("Player").GetComponent<PlayerController>();
             playerPos = this.Target.transform.position;
             playerDir = player.GetMovementDirection();
-            var playerSpeed = player.GetCurrentSpeed();
+            var playerSpeed = player.GetSpeed();
             bool hitWall = false;
 
             cameraPos = this.ManagedCamera.transform.position;

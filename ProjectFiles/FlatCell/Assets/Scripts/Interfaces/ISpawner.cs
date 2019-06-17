@@ -1,6 +1,12 @@
-﻿// ISpawner.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* ISpawner.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
+
 
 using UnityEngine;
 

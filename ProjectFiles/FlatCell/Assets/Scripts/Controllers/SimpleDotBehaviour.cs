@@ -1,6 +1,11 @@
-﻿// SimpleDotBehaviour.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* SimpleDotBehaviour.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
 
 using UnityEngine;
 using Geo.Command;
@@ -12,23 +17,6 @@ using Utils.Vectors;
  * This script will be attached to an IAI object and control it's movement,
  * guns, shields, movement, etc.
  * 
- Public
-   // Returns the beheviour type. Ie, "Simple Dot", "Shield Dot", ...
-   string GetType()
-
-   // Initializes the script.
-   void init(IGeo geo)
-
-   // The Move logic.
-   void Move()
-
-   // The Firing logic.
-   void Fire()
-
-   // Checks' the AI kill record and update's its stats accordingly.
-   // This is how AI "get stronger."
-   void CheckScore()
-   
 */
 namespace DotBehaviour.Command
 {

@@ -1,9 +1,13 @@
-﻿// Pickup.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* Pickup.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
 
 using UnityEngine;
-using Pickup.Command;
 using Geo.Command;
 using Utils.Vectors;
 
@@ -36,6 +40,12 @@ using Utils.Vectors;
 
  *
  * 
+*/
+
+
+/*
+ * TODO
+ * Update documentation 6/16/19
 */
 
 namespace Pickup.Command

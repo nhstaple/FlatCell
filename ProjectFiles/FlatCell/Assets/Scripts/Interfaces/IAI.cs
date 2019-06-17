@@ -1,6 +1,11 @@
-﻿// IAI.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* IAI.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
 
 using Geo.Command;
 using DotBehaviour.Command;
@@ -25,6 +30,11 @@ using DotBehaviour.Command;
    ShooterDotBehaviour b = Dot.AddComponent<ShooterDotBehaviour>();
    b.init(ai);
    ai2.init(b, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
+*/
+
+/*
+ * TODO
+ * Update documentation 6/16/19
 */
 
 namespace AI.Command

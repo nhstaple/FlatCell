@@ -1,16 +1,21 @@
-﻿// Boost.cs
-// Nick S.
-
+﻿/*
+ * 
+\* Boost.cs
+ *
+\* Nick S.
+\* Game Logic - Game Mechanics
+ *
+*/
 using UnityEngine;
 
 namespace Geo.Command
 {
     public class Boost : Shield
     {
-        // { get; protected set; } 
-        // Values of the base class.
+        // Values of the base class, used to be visible via the editor.
         [SerializeField] private float e;
         [SerializeField] private float max;
+        //
 
         [SerializeField] private float BoostEnergy = 0.5f;
         [SerializeField] private float MaxBoostEnergy = 0.5f;
@@ -50,16 +55,19 @@ namespace Geo.Command
             }
         }
 
+        // Activate boost.
         new public void TurnOn()
         {
             active = true;
         }
 
+        // Deactivate boost.
         new public void TurnOff()
         {
             active = false;
         }
 
+        // Refill the boost energy.
         new protected void Charge(float e)
         {
             energy += e;

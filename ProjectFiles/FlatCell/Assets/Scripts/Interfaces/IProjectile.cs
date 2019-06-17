@@ -1,6 +1,11 @@
-// IProjectile.cs
-// Nick S.
-// Game Logic - Combat
+/*
+ * 
+\* IProjectile.cs
+ *
+\* Nick S.
+\* Game Logic - Combat
+ *
+*/
 
 using UnityEngine;
 using Weapon.Command;
@@ -20,6 +25,15 @@ using Weapon.Command;
    DotProjectile boopCast = (DotProjectile) this.Projectile;
    boopCast.init(this, Damage, Piercing, ProjectileLifetime);
 */
+
+
+/*
+ * TODO
+ * Update documentation 6/16/19
+ * Make damage propagate from Weapon -> Projectile spawn.
+ * Remove damage from Geo.
+*/
+
 namespace Projectile.Command
 {
     public interface IProjectile

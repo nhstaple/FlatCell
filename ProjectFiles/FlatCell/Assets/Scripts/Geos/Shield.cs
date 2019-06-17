@@ -1,6 +1,19 @@
-﻿// Shield.cs
-// Nick S. & Kyle C.
-// Game Logic - Combat
+﻿/*
+ * 
+\* Shield.cs
+ *
+\* Nick S.
+\* Game Logic - Game Mechanics
+ *
+\* Kyle C.
+\* Input - Shields
+ *
+*/
+
+/*
+ * TODO
+ * Abstract Boost and Shield to derive from a Meter class.
+*/
 
 using UnityEngine;
 

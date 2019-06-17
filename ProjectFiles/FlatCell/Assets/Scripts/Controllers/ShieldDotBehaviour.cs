@@ -1,6 +1,11 @@
-﻿// ShieldDotBehaviour.cs
-// Nick S.
-// Game Logic - Nick S.
+﻿/*
+ * 
+\* ShieldDotBehaviour.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
 
 using System.Collections;
 using System.Collections.Generic;

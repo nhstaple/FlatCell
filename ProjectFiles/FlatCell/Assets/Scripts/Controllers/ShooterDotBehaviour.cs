@@ -1,7 +1,11 @@
-﻿// ShooterDotBehaviour.cs
-// Nick S.
-// Game Logic - AI
-
+﻿/*
+ * 
+\* ShooterDotBehaviour.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+*/
 using UnityEngine;
 
 /*

@@ -1,6 +1,17 @@
-﻿// DotObject.cs
-// Nick S.
-// Game Logic - AI
+﻿/*
+ * 
+\* DotObject.cs
+ *
+\* Nick S.
+\* Game Logic - AI
+ *
+\* Brian
+\* TODO
+ * 
+\* Megan
+\* TODO
+ * 
+*/
 
 using UnityEngine;
 using Weapon.Command;
