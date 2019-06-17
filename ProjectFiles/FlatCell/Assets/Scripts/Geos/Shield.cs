@@ -132,9 +132,8 @@ namespace Geo.Command
 
                 rend.material.SetColor("_EmissionColor", c);
 
-                if (shieldLerpCounter >= shieldLerpTime)
+                if (active && shieldLerpCounter >= shieldLerpTime)
                 {
-                    Debug.Log("New color!");
                     shieldLerpCounter = 0;
                     newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) * Random.Range(1f, 2f);
                 }

@@ -173,7 +173,7 @@ namespace Geo.Command
                 }
                 // Check for guns.
                 // If the mouse was clicked or the stick was pushed.
-                else if (!geo.GetShield().active && Input.GetButton("Fire1") || lookDir.magnitude != 0)
+                else if (!geo.GetShield().active && (Input.GetButton("Fire1") || lookDir.magnitude != 0))
                 {
                     // Turn off the shields.
                     geo.FlameOff();
@@ -243,7 +243,7 @@ namespace Geo.Command
                 geo.LookAt(lookDir);
             }
             // Used for mouse and keyboard
-            else if (mouseLookDir.magnitude != 0)
+            else if (mouseLookDir.magnitude != 0 && Input.GetJoystickNames().Length == 0)
             {
                 geo.LookAt(mouseLookDir);
             }

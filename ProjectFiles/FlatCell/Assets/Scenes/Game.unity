@@ -359,8 +359,14 @@ MonoBehaviour:
   NumDots: 50
   ArchetypeCount: 3
   EnableSimple: 1
+  SimpleLowerRange: 0.66
+  SimpleUpperRange: 0.9
   EnableShield: 1
+  ShieldLowerRange: 0.75
+  ShieldUpperRange: 1.15
   EnableShooter: 1
+  ShooterLowerRange: 0.9
+  ShooterUpperRange: 1.25
   SpawnOffset: 500
   SpawnLocation: {x: 0, y: 25, z: 0}
   InitScale: {x: 25, y: 25, z: 25}

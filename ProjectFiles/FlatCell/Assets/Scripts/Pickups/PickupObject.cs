@@ -69,7 +69,7 @@ namespace Pickup.Command
         public float armor = 0;
         public float damage = 0;
         public float piercing = 0;
-        public float lifeTime = 3;
+        public float lifeTime = 4;
         public Color color;
         public Vector3 scale = Scales.PickupScale;
         protected float LowRange = 0.25f;
@@ -193,40 +193,36 @@ namespace Pickup.Command
         {
             if (gameObject.GetComponent<PickupObject>().enabled)
             {
+                Physics.IgnoreCollision(geo.gameObject.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
+
                 if (geo.gameObject.tag == "Projectile")
                 {
                     if(DEBUG_TEXT) { Debug.Log("passed through pickup!"); }
-                    Physics.IgnoreCollision(geo.gameObject.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
                     return;
                 }
-                else if (!gameObject.ToString().Contains("Geo") &&
-                         geo.gameObject.tag == "Player")
+                else if (geo.gameObject.tag == "Player")
                 {
-                    IGeo p;
-                    IGeo[] geos = geo.gameObject.GetComponents<IGeo>();
-                    if (geos.Length > 0)
+                    IGeo p = geo.gameObject.GetComponent<PlayerController>().geo;
+
+                    if (p != null)
                     {
-                        p = geos[0];
-                        if (p != null)
+                        if (this.type == EPickup_Type.Health)
                         {
-                            if (this.type == EPickup_Type.Health)
-                            {
-                                p.Heal(this.hp);
-                            }
-                            else if (this.type == EPickup_Type.Armor)
-                            {
-                                p.ModifyArmor(this.armor);
-                            }
-                            else if (this.type == EPickup_Type.Speed)
-                            {
-                                p.SetSpeed(p.GetSpeed() + this.speed);
-                            }
-                            else if (this.type == EPickup_Type.Color)
-                            {
-                                p.AddColor(this.color);
-                            }
-                            Destroy(this.gameObject);
+                            p.Heal(this.hp);
                         }
+                        else if (this.type == EPickup_Type.Armor)
+                        {
+                            p.ModifyArmor(this.armor);
+                        }
+                        else if (this.type == EPickup_Type.Speed)
+                        {
+                            p.SetSpeed(p.GetSpeed() + this.speed);
+                        }
+                        else if (this.type == EPickup_Type.Color)
+                        {
+                            p.AddColor(this.color);
+                        }
+                        Destroy(this.gameObject);
                     }
                 }
             }

@@ -44,8 +44,14 @@ namespace Spawner.Command
         [SerializeField] public int NumDots = 15;
         [SerializeField] public int ArchetypeCount = 3;
         [SerializeField] public bool EnableSimple = true;
+        [SerializeField] public float SimpleLowerRange = 0.66f;
+        [SerializeField] public float SimpleUpperRange = 0.90f;
         [SerializeField] public bool EnableShield = true;
+        [SerializeField] public float ShieldLowerRange = 0.75f;
+        [SerializeField] public float ShieldUpperRange = 1.15f;
         [SerializeField] public bool EnableShooter = true;
+        [SerializeField] public float ShooterLowerRange = 0.9f;
+        [SerializeField] public float ShooterUpperRange = 1.25f;
         [SerializeField] public float SpawnOffset = 400f;
         [SerializeField] public Vector3 SpawnLocation = Locations.SpawnLocation;
         [SerializeField] public Vector3 InitScale = Scales.InitDotScale;
@@ -114,7 +120,7 @@ namespace Spawner.Command
                 GameObject Dot = new GameObject("Geo Simple Dot" + counter);
                 Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
-                Dot.transform.localScale = InitScale * Random.Range(0.5f, 1.25f);
+                Dot.transform.localScale = InitScale * Random.Range(SimpleLowerRange, SimpleUpperRange);
 
                 IAI ai = Dot.AddComponent<DotController>();
                 ai.Init(null, Speed, MaxHealth, FireRate, FireChance, ShieldChance, EnableTrail, DrawDebugLine);
@@ -126,7 +132,7 @@ namespace Spawner.Command
                 GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
                 Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
-                Dot.transform.localScale = InitScale * Random.Range(0.75f, 1.5f);
+                Dot.transform.localScale = InitScale * Random.Range(ShooterLowerRange, ShooterUpperRange);
                 
 
                 IAI ai = Dot.AddComponent<DotController>();
@@ -141,7 +147,7 @@ namespace Spawner.Command
                 GameObject Dot = new GameObject("Geo Shield Dot" + counter);
                 Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
-                Dot.transform.localScale = InitScale * Random.Range(0.5f, 1.25f);
+                Dot.transform.localScale = InitScale * Random.Range(ShieldLowerRange, ShieldUpperRange);
 
                 IAI ai = Dot.AddComponent<DotController>();
                 ShieldDotBehaviour b = Dot.AddComponent<ShieldDotBehaviour>();
