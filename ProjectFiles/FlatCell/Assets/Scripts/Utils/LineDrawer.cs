@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Geo.Command;
 
 namespace Utils.Debug
 {
@@ -9,14 +10,16 @@ namespace Utils.Debug
     {
         private LineRenderer lineRenderer;
         private float lineSize;
+        public IGeo parent;
 
-        public LineDrawer(float lineSize = 0.2f)
+        public LineDrawer(IGeo p, float lineSize = 0.2f)
         {
+            parent = p;
             GameObject lineObj = new GameObject("LineObj");
             lineRenderer = lineObj.AddComponent<LineRenderer>();
             //Particles/Additive
             lineRenderer.material = new Material(Shader.Find("Hidden/Internal-Colored"));
-
+            lineRenderer.transform.SetParent(p.GetGameObject().transform);
             this.lineSize = lineSize;
         }
 

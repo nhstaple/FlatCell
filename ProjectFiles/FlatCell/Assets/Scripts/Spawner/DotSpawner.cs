@@ -106,6 +106,7 @@ namespace Spawner.Command
             {
                 if(DEBUG_TEXT) { Debug.Log("Spawned simple dot ai"); }
                 GameObject Dot = new GameObject("Geo Simple Dot" + counter);
+                Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
                 Dot.transform.localScale = InitScale * Random.Range(0.5f, 1.25f);
 
@@ -117,6 +118,7 @@ namespace Spawner.Command
             {
                 if(DEBUG_TEXT) { Debug.Log("Spawned shooter dot ai"); }
                 GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
+                Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
                 Dot.transform.localScale = InitScale * Random.Range(0.75f, 2f);
                 
@@ -131,6 +133,7 @@ namespace Spawner.Command
             {
                 if(DEBUG_TEXT) { Debug.Log("Spawned shield dot ai"); }
                 GameObject Dot = new GameObject("Geo Shield Dot" + counter);
+                Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
                 Dot.transform.localScale = InitScale * Random.Range(0.5f, 1.25f);
 

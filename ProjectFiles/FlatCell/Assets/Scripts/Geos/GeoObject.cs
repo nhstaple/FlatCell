@@ -204,10 +204,15 @@ namespace Geo.Command
 
             // Debug lines.
             Lines = new List<LineDrawer>();
-            forwardLine = new LineDrawer(0.5f);
-            velocityLine = new LineDrawer(1f);
-            movementLineX = new LineDrawer(0.75f);
-            movementLineZ = new LineDrawer(0.75f);
+            forwardLine.Destroy();
+            velocityLine.Destroy();
+            movementLineX.Destroy();
+            movementLineZ.Destroy();
+
+            forwardLine = new LineDrawer(this, 0.5f);
+            velocityLine = new LineDrawer(this, 1f);
+            movementLineX = new LineDrawer(this, 0.75f);
+            movementLineZ = new LineDrawer(this, 0.75f);
             Lines.Add(forwardLine);
             Lines.Add(velocityLine);
             Lines.Add(movementLineX);
@@ -241,6 +246,7 @@ namespace Geo.Command
             if (InitWeapon != null)
             {
                 ActiveGun = Instantiate(InitWeapon);
+                ActiveGun.gameObject.transform.SetParent(this.transform);
                 IWeapon ptr = ActiveGun.GetComponents<IWeapon>()[0];
                 ptr.SetOwner(this);
                 weapon.Add(ptr);

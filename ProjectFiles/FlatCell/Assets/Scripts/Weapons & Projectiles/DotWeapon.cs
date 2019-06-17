@@ -26,6 +26,7 @@ namespace Weapon.Command
             this.Projectile = gameObject.AddComponent<DotProjectile>();
             DotProjectile cast = (DotProjectile) this.Projectile;
             cast.Init(this, Damage, Piercing, ProjectileLifetime);
+            this.gameObject.transform.SetParent(GeoOwner.GetGameObject().transform);
         }
 
         new void Start()
@@ -47,6 +48,7 @@ namespace Weapon.Command
                 shootCounter = 0.0f;
                 DotProjectile boopCast = (DotProjectile)Projectile;
                 GameObject bullet = boopCast.Spawn(spawnLoc);
+                bullet.gameObject.transform.SetParent(this.Owner.GetGameObject().transform);
                 Rigidbody bullet_rigidbody;
                 bullet_rigidbody = bullet.GetComponent<Rigidbody>();
                 bullet_rigidbody.mass = 0.1f;

@@ -75,6 +75,7 @@ namespace Geo.Command
             {
                 GameObject boop = (GameObject) Instantiate(Resources.Load("Player Items/Boost"));
                 boost = boop.GetComponent<Boost>();
+                boop.transform.SetParent(this.gameObject.transform);
             }
         }
 
