@@ -9,6 +9,7 @@
 
 using UnityEngine;
 using Weapon.Command;
+using Geo.Meter;
 
 /*
  * IGeo - Geo Object Interface

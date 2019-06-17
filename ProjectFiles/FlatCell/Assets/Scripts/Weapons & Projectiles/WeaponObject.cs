@@ -6,6 +6,7 @@ using UnityEngine;
 using Weapon.Command;
 using Projectile.Command;
 using Geo.Command;
+using Controller.Player;
 
 public class WeaponObject : MonoBehaviour, IWeapon
 {

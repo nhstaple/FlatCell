@@ -356,7 +356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 4463196817797996641, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
-  NumDots: 50
+  NumDots: 0
   ArchetypeCount: 3
   EnableSimple: 1
   SimpleLowerRange: 0.66
@@ -1897,6 +1897,7 @@ MonoBehaviour:
   FireRate: 0.25
   trailDecay: 1
   DrawDebugLine: 1
+  inputManger: {fileID: 0}
   EnableBoost: 1
   BoostFactor: 2
 --- !u!4 &1380216532

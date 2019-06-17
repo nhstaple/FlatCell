@@ -10,6 +10,7 @@
 using UnityEngine;
 using Geo.Command;
 using Utils.Vectors;
+using Controller.Player;
 
 /*
  * There's one pickup object for all types of stat drops.

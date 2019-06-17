@@ -13,6 +13,7 @@
 */
 
 using UnityEngine;
+using Geo.Command;
 
 /*
  * Shield
@@ -44,7 +45,7 @@ using UnityEngine;
    void Charge(float e)
 */
 
-namespace Geo.Command
+namespace Geo.Meter
 {
     public class Meter : MonoBehaviour // ScriptableObject
     {

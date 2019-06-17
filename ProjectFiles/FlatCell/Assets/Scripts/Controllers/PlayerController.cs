@@ -12,6 +12,9 @@
 
 using UnityEngine;
 using Utils.Vectors;    // For Locations
+using Geo.Meter;        // For Boost and Shield
+using Geo.Command;
+using Utils.InputManager;
 
 /*
  * Player Controller
@@ -20,10 +23,12 @@ using Utils.Vectors;    // For Locations
  * 
 */
 
-namespace Geo.Command
+namespace Controller.Player
 {
     class PlayerController : MonoBehaviour // DotObject
     {
+        [SerializeField] public InputManager inputManger;
+
         [SerializeField] protected Boost boost;
         [SerializeField] float InitSpeed = 25f;
         [SerializeField] float InitMaxHP = 3f;
@@ -42,7 +47,7 @@ namespace Geo.Command
         private float screenH;
         private float screenW;
 
-    // Script variables
+        // Script variables
         private float initSpawnOffset;
         [SerializeField] public bool EnableBoost = true;
         [SerializeField] protected float BoostFactor = 2f;
@@ -80,6 +85,7 @@ namespace Geo.Command
             geo = this.gameObject.AddComponent<DotObject>();
             geo.Init(InitSpeed, InitMaxHP, FireRate, 0, 0, true);
             geo.SetColor(Color.clear);
+            inputManger = this.gameObject.AddComponent<InputManager>();
         }
 
         // Grabs components from the attached objects.

@@ -13,7 +13,7 @@ using UnityEngine;
  * Abstract Boost and Shield to derive from a Meter class.
 */
 
-namespace Geo.Command
+namespace Geo.Meter
 {
     public class Boost : Meter
     {

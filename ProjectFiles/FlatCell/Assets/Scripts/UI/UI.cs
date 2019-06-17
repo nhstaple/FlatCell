@@ -11,6 +11,8 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 using Geo.Command;
+using Geo.Meter;
+using Controller.Player;
 
 public class UI : MonoBehaviour 
 {

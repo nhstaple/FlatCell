@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Geo.Command;
+using Geo.Meter;
 
 /*
  * ShieldDotBehaviour - A Shield Dot
