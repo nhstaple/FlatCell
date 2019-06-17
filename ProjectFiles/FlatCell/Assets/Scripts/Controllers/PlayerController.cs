@@ -166,7 +166,7 @@ namespace Geo.Command
             {
                 boost.TurnOff();
                 // Check for shields.
-                if ((Input.GetButton("Fire2")  || Input.GetAxis("XboxLT") != 0 || Input.GetAxis("PS4LT") != 0) && !geo.GetShield().IsCharging())
+                if ((Input.GetButton("Fire2")  || Input.GetAxis("XboxLT") != 0) && !geo.GetShield().IsCharging())
                 {
                     geo.FlameOn();
                 }
