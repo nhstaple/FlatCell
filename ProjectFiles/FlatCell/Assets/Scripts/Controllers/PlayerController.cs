@@ -154,8 +154,7 @@ namespace Geo.Command
                 switchWeapon();
             }
             // The player pressed the boost button.
-            // TODO renamed to Boost
-            if (Input.GetButton("Jump") && !boost.charging)
+            if (Input.GetButton("Boost") && !boost.charging)
             {
                 modifiedSpeed *= BoostFactor;
                 trail.widthMultiplier = BoostFactor;
@@ -163,11 +162,11 @@ namespace Geo.Command
                 boostedMove();
             }
             // Else the boost button isn't pressed.
-            else if(!Input.GetButton("Jump"))
+            else if(!Input.GetButton("Boost"))
             {
                 boost.TurnOff();
                 // Check for shields.
-                if (Input.GetButton("Fire2") && !geo.GetShield().IsCharging())
+                if ((Input.GetButton("Fire2")  || Input.GetAxis("XboxLT") != 0 || Input.GetAxis("PS4LT") != 0) && !geo.GetShield().IsCharging())
                 {
                     geo.FlameOn();
                 }
@@ -207,9 +206,9 @@ namespace Geo.Command
         private void getSticks()
         {
             // The right stick.
-            lookDir = new Vector3(Input.GetAxis("Stick2X"),
+            lookDir = new Vector3(Input.GetAxis("RightStickX"),
                                   0f,
-                                  Input.GetAxis("Stick2Y") * -1);
+                                  Input.GetAxis("RightStickY") * -1);
             // The mouse.
             mouseLookDir = new Vector3(Input.mousePosition.x - screenW,
                                        0f,
