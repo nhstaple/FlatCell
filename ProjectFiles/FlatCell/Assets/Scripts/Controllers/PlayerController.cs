@@ -42,9 +42,14 @@ namespace Geo.Command
         TrailRenderer trail;
         protected Vector3 movementDirection;
         protected Vector3 lookDir;
+        protected Vector3 mouseLookDir;
 
         float EvoThrottle = 0.5f;
         float EvoCounter = 0f;
+
+        // https://pastebin.com/yJunNcEc
+        private float screenH;
+        private float screenW;
 
         private void Start()
         {
@@ -82,6 +87,8 @@ namespace Geo.Command
 
         private void initValues()
         {
+            screenH = Screen.height / 2;
+            screenW = Screen.width / 2;
             weaponSelect = 1;
         }
 
@@ -167,34 +174,50 @@ namespace Geo.Command
             }
         }
 
+        void getSticks()
+        {
+            lookDir = new Vector3(Input.GetAxis("Stick2X"), 0, -1 * Input.GetAxis("Stick2Y"));
+            mouseLookDir = new Vector3(Input.mousePosition.x - screenW, 0, Input.mousePosition.y - screenH);
+            movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+            lookDir.Normalize();
+            mouseLookDir.Normalize();
+        }
+
         // Grab input information and move the character.
         private void Move()
         {
-            lookDir = new Vector3(Input.GetAxis("Mouse X"), 0, -1 * Input.GetAxis("Mouse Y"));
-            Debug.Log(lookDir);
-
-            // Move if there's input.
-            movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+            getSticks();
             if(movementDirection.magnitude != 0 )
             {
                 geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
             }
-            if(lookDir.magnitude != 0)
+            // Used for controllers.
+            if (lookDir.magnitude != 0)
             {
-                geo.LookAt(lookDir.normalized);
+                geo.LookAt(lookDir);
+            }
+            // Used for mouse and keyboard
+            else if (mouseLookDir.magnitude != 0)
+            {
+                geo.LookAt(mouseLookDir);
             }
         }
 
         // Grab the movement information and apply the boosted information,
         private void BoostedMove()
         {
-            lookDir = new Vector3(Input.GetAxis("Mouse X"), 0, -1 * Input.GetAxis("Mouse Y"));
-            movementDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+            getSticks();
             movementDirection *= BoostFactor;
             geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
             if (lookDir.magnitude != 0)
             {
-                geo.LookAt(lookDir.normalized);
+                Debug.Log(lookDir);
+                geo.LookAt(lookDir);
+            }
+            else if (mouseLookDir.magnitude != 0)
+            {
+                Debug.Log(mouseLookDir);
+                geo.LookAt(mouseLookDir);
             }
         }
 
