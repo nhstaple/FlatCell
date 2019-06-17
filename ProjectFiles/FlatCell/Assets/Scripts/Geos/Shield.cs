@@ -49,34 +49,13 @@ using UnityEngine;
 
 namespace Geo.Command
 {
-    public class Shield : MonoBehaviour // ScriptableObject
+    public class Shield : Meter
     {
-        // The shield's energy in seconds.
-        [SerializeField] public float energy { get; protected set; } = 2;
-
-        // Indicates if the shield is charging.
-        [SerializeField] public bool charging { get; protected set; } = false;
-
-        // Indicates if the shields are on.
-        [SerializeField] public bool active { get; protected set; } = false;
-
-        // The max value of the energy in seconds.
-        [SerializeField] public float MaxEnergy { get; protected set; } = 2;
-
-        // The gameobject that this script is attached to.
-        protected GameObject Owner;
-
-        // The geo object that this shield logically belongs to.
-        protected IGeo owner;
-
-        // The owner's mesh renderer.
-        MeshRenderer rend;
-
-        // The owner's trail.
-        TrailRenderer trail;
+        [SerializeField] public float InitShieldEnergy = 2f;
+        [SerializeField] public float InitMaxShieldEnergy = 2f;
 
         // The color of the shield.
-        protected Color shieldColor;
+        Color shieldColor;
 
         // The color the shield should lerp to.
         Color newShieldColor;
@@ -85,122 +64,45 @@ namespace Geo.Command
         float shieldLerpCounter = 0;
 
         // The time required before changing shields colors.
-        [SerializeField] private float InitShieldLerpTime = 0.5f;
+        [SerializeField] float InitShieldLerpTime = 1f;
         float shieldLerpTime = 0f;
 
-        protected void grabComponents()
-        {
-            Owner = gameObject;
-            IGeo[] boop = Owner.GetComponents<IGeo>();
-            if (boop.Length > 0)
-            {
-                owner = boop[0];
-                rend = Owner.GetComponent<MeshRenderer>();
-                trail = Owner.GetComponent<TrailRenderer>();
-            }
-            shieldLerpTime = InitShieldLerpTime * Random.Range(1, 2f);
-        }
-
-        public void Awake()
+        new public void Start()
         {
             grabComponents();
+            this.setVals();
         }
 
-        public void Start()
+        new protected void setVals()
         {
-            grabComponents();
-            energy = MaxEnergy;
+            MaxEnergy = InitMaxShieldEnergy;
+            base.setVals();
+            shieldLerpTime = Random.Range(1f, 2f) * InitShieldLerpTime;
         }
 
-        public void Update()
+        new public void Update()
         {
-            // If the components are null, grab them.
-            if(rend == null || trail == null || Owner == null || owner == null)
-            {
-                grabComponents();
-            }
+            base.Update();
             // If the shield is active and not busy charging.
-            if(active && !charging)
+            if (active && !charging)
             {
                 shieldLerpCounter += Time.deltaTime;
-                Drain(Time.deltaTime);
                 changeColor();
-            }
-            else
-            {
-                Charge(Time.deltaTime);
             }
         }
 
-        
-        public void TurnOn()
+        new public void TurnOn()
         {
-            active = true;
+            base.TurnOn();
             turnOnShieldEffect();
         }
 
-        public void TurnOff()
+        new public void TurnOff()
         {
-            active = false;
+            base.TurnOff();
             turnOffShieldEffect();
             newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
             shieldLerpCounter = 0;
-        }
-
-        public bool CheckEnergy()
-        {
-            if (energy < MaxEnergy)
-            {
-                energy = MaxEnergy;
-                charging = true;
-                return false;
-            }
-            return true;
-        }
-
-        public void ForceRecharge()
-        {
-            energy = MaxEnergy;
-            charging = false;
-        }
-
-        public bool IsCharging()
-        {
-            if (energy <= 0)
-            {
-                charging = true;
-                energy = 0;
-                return charging;
-            }
-            else
-            {
-                return charging;
-            }
-        }
-
-        // Drains energy from the shield.
-        // If the energy is empty, then the shield needs to cooldown.
-        protected void Drain(float e)
-        {
-            if(e > 0) { e *= -1;  }
-            energy += e;
-            if (energy < 0)
-            {
-                energy = 0;
-                charging = true;
-            }
-        }
-
-        // Adds energy back to the shield.
-        // If the energy exceeds max then cap it and clear the cooldown flag
-        protected void Charge(float e)
-        {
-            energy += e;
-            if (energy >= MaxEnergy)
-            {
-                energy = MaxEnergy;
-                charging = false;
-            }
         }
 
     // Private
@@ -232,27 +134,11 @@ namespace Geo.Command
 
                 if (shieldLerpCounter >= shieldLerpTime)
                 {
+                    Debug.Log("New color!");
                     shieldLerpCounter = 0;
                     newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) * Random.Range(1f, 2f);
                 }
             }
         }
-    
-    // Get and Set
-        public float GetMaxEnergy()
-        {
-            return MaxEnergy;
-        }
-
-        public float GetPercent()
-        {
-            return energy / MaxEnergy;
-        }
-
-        public void SetMaxEnergy(float f)
-        {
-            energy = MaxEnergy = f;
-        }
-
     }
 }

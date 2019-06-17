@@ -126,7 +126,7 @@ namespace Spawner.Command
                 GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
                 Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
-                Dot.transform.localScale = InitScale * Random.Range(0.75f, 2f);
+                Dot.transform.localScale = InitScale * Random.Range(0.75f, 1.5f);
                 
 
                 IAI ai = Dot.AddComponent<DotController>();

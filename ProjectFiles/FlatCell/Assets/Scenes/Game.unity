@@ -356,7 +356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 4463196817797996641, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
-  NumDots: 20
+  NumDots: 50
   ArchetypeCount: 3
   EnableSimple: 1
   EnableShield: 1

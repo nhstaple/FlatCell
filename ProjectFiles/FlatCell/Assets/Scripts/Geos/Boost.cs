@@ -8,38 +8,38 @@
 */
 using UnityEngine;
 
+/*
+ * TODO
+ * Abstract Boost and Shield to derive from a Meter class.
+*/
+
 namespace Geo.Command
 {
-    public class Boost : Shield
+    public class Boost : Meter
     {
-        // Values of the base class, used to be visible via the editor.
-        [SerializeField] private float e;
-        [SerializeField] private float max;
-        //
-
-        [SerializeField] private float BoostEnergy = 0.5f;
-        [SerializeField] private float MaxBoostEnergy = 0.5f;
+        [SerializeField] float InitBoostEnergy = 0.5f;
+        [SerializeField] float InitMaxBoostEnergy = 0.5f;
 
         public float RechargeTime = 2f;
 
-        public void setVals()
+        private void setVals()
         {
-            energy = BoostEnergy;
-            MaxEnergy = MaxBoostEnergy;
+            MaxEnergy = InitMaxBoostEnergy;
+            base.setVals();
         }
 
         new public void Start()
         {
+            base.Start();
             setVals();
         }
 
-        new void Update()
+        new public void Update()
         {
             e = energy;
             max = MaxEnergy;
-
             // If the components are null, grab them.
-            if (Owner == null || owner == null)
+            if (rend == null || trail == null || Owner == null || owner == null)
             {
                 grabComponents();
             }
@@ -48,23 +48,10 @@ namespace Geo.Command
             {
                 Drain(Time.deltaTime);
             }
-            // If the shield is charging.
-            else if (charging)
+            else
             {
-                Charge(Time.deltaTime);
+                this.Charge(Time.deltaTime);
             }
-        }
-
-        // Activate boost.
-        new public void TurnOn()
-        {
-            active = true;
-        }
-
-        // Deactivate boost.
-        new public void TurnOff()
-        {
-            active = false;
         }
 
         // Refill the boost energy.

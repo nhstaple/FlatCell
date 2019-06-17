@@ -198,7 +198,7 @@ namespace DotBehaviour.Command
                 initDamage = owner.GetDamage();
                 if(owner.GetScore() <= maxKills)
                 {
-                    owner.SetSpeed(initSpeed + owner.GetScore() * killWeight);
+                    owner.SetSpeed(initSpeed + owner.GetScore());
                 }
             }
         }

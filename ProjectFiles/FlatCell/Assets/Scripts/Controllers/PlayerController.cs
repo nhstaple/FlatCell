@@ -172,16 +172,21 @@ namespace Geo.Command
                     geo.FlameOn();
                 }
                 // Check for guns.
-                else if (Input.GetButton("Fire1") && !geo.GetShield().active)
+                // If the mouse was clicked or the stick was pushed.
+                else if (!geo.GetShield().active && Input.GetButton("Fire1") || lookDir.magnitude != 0)
                 {
+                    // Turn off the shields.
+                    geo.FlameOff();
+
                     // Fire me matey!
                     geo.Shoot();
                 }
-                // Default case- no input.
+                // Default case- no input, use released the shield button, etc.
                 else
                 {
-                    // Shields off.
+                    // Turn off the shields.
                     geo.FlameOff();
+
                     if (trail.widthMultiplier >= 1.0f)
                     {
                         trail.widthMultiplier -= Time.deltaTime * trailDecay * 0.5f;
@@ -252,12 +257,10 @@ namespace Geo.Command
             geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
             if (lookDir.magnitude != 0)
             {
-                Debug.Log(lookDir);
                 geo.LookAt(lookDir);
             }
             else if (mouseLookDir.magnitude != 0)
             {
-                Debug.Log(mouseLookDir);
                 geo.LookAt(mouseLookDir);
             }
         }
