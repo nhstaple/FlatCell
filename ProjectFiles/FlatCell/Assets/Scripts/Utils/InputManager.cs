@@ -11,6 +11,23 @@ namespace Utils.InputManager
         PS4
     }
 
+    public enum EDPad_Type
+    {
+        None = 0,
+        Up,
+        Right,
+        Down,
+        Left
+    }
+
+    public class DPad
+    {
+        public bool UpPressed = false;
+        public bool DownPressed = false;
+        public bool LeftPressed = false;
+        public bool RightPressed = false;
+    }
+
     public class InputManager : MonoBehaviour
     {
         [SerializeField] public bool InvertedStick = false;
@@ -19,10 +36,13 @@ namespace Utils.InputManager
         [SerializeField] public bool PS4_DEBUG = false;
         [SerializeField] public EInput_Type joystickType;
         private bool disconnected = false;
+        DPad dpad = new DPad();
 
         private bool oldPC;
         private bool oldXBOX;
         private bool oldPS4;
+        private bool DEBUG_DPAD = false;
+        private bool DEBUG_GETDPAD = true;
 
         private float consolePollRate = 1f;
         private float consoleCounter = 0f;
@@ -147,6 +167,7 @@ namespace Utils.InputManager
         {
             consoleCounter += Time.deltaTime;
 
+            GetDPad();
             checkDebugFlags();
             
             if (disconnected)
@@ -239,6 +260,148 @@ namespace Utils.InputManager
                     break;
             }
             Look.Normalize();
+        }
+
+        public EDPad_Type GetDPad()
+        {
+            switch(joystickType)
+            {
+                // TODO get arrow keys up or down
+                case EInput_Type.MouseAndKeyboard:
+                    // Up on dpad.
+                    if (!dpad.UpPressed && Input.GetButton("MenuUp"))
+                    {
+                        if(DEBUG_GETDPAD)
+                        {
+                            UnityEngine.Debug.Log("Pressed D-Pad Up on Keyboard!");
+                        }
+
+                        dpad.UpPressed = true;
+                    }
+                    else if (!Input.GetButton("MenuUp"))
+                    {
+                        dpad.UpPressed = false;
+                    }
+
+                    
+                    // Down on dpad.
+                    if (!dpad.DownPressed && Input.GetButton("MenuDown"))
+                    {
+                        if (DEBUG_GETDPAD)
+                        {
+                            UnityEngine.Debug.Log("Pressed D-Pad Down on Keyboard!");
+                        }
+                       
+                        dpad.DownPressed = true;
+                    }
+                    else if (!Input.GetButton("MenuDown"))
+                    {
+                        dpad.DownPressed = false;
+                    }
+                    
+                    // TODO
+                    // Menu Right & Menu Left
+
+                    break;
+
+                case EInput_Type.XboxOne:
+                    // Up/Down on dpad.
+                    if (!dpad.UpPressed && Input.GetAxis("XboxDUp") > 0)
+                    {
+                        if (DEBUG_GETDPAD)
+                        {
+                            UnityEngine.Debug.Log("Pressed D-Pad Up on Xbox One controller!");
+                        }
+                    
+                        dpad.UpPressed = true;
+                    }
+                    else if (!dpad.DownPressed && Input.GetAxis("XboxDUp") < 0)
+                    {
+                        if (DEBUG_GETDPAD)
+                        {
+                            UnityEngine.Debug.Log("Pressed D-Pad Down on Xbox One controller!");
+                        }
+                      
+                        dpad.DownPressed = true;
+                    }
+                    else if (Input.GetAxis("XboxDUp") == 0)
+                    {
+                        dpad.UpPressed = false;
+                        dpad.DownPressed = false;
+                    }
+
+                    // Left/right on dpad
+                    if (!dpad.RightPressed && Input.GetAxis("XboxDRight") > 0)
+                    {
+                        if (DEBUG_GETDPAD)
+                        {
+                            UnityEngine.Debug.Log("Pressed D-Pad Left on Xbox One controller!");
+                        }
+                                       
+                        dpad.RightPressed = true;
+                    }
+                    else if (!dpad.LeftPressed && Input.GetAxis("XboxDRight") < 0)
+                    {
+                        if (DEBUG_GETDPAD)
+                        {
+                            UnityEngine.Debug.Log("Pressed D-Pad Left on Xbox One controller!");
+                        }
+
+                        dpad.LeftPressed = true;
+                    }
+                    else if(Input.GetAxis("XboxDRight") == 0)
+                    {
+                        dpad.RightPressed = false;
+                        dpad.LeftPressed = false;
+                    }
+                    break;
+
+                // TODO get PS4 DPad buttons
+                case EInput_Type.PS4:
+                    break;
+
+                default:
+                    break;
+            }
+
+            EDPad_Type ret = EDPad_Type.None;
+
+            if (dpad.UpPressed)
+            {
+                ret |= EDPad_Type.Up;
+            }
+            if (dpad.RightPressed)
+            {
+                ret |= EDPad_Type.Right;
+            }
+            if (dpad.DownPressed)
+            {
+                ret |= EDPad_Type.Down;
+            }
+            if (dpad.LeftPressed)
+            {
+                ret |= EDPad_Type.Left;
+            }
+
+            if((ret & EDPad_Type.Up) == EDPad_Type.Up && DEBUG_DPAD)
+            {
+                UnityEngine.Debug.Log("Pressed D-Pad Up!");
+            }
+            if ((ret & EDPad_Type.Right) == EDPad_Type.Right && DEBUG_DPAD)
+            {
+                UnityEngine.Debug.Log("Pressed D-Pad Right!");
+            }
+            if ((ret & EDPad_Type.Down) == EDPad_Type.Down && DEBUG_DPAD)
+            {
+                UnityEngine.Debug.Log("Pressed D-Pad Down!");
+            }
+            if ((ret & EDPad_Type.Left) == EDPad_Type.Left && DEBUG_DPAD)
+            {
+                UnityEngine.Debug.Log("Pressed D-Pad Up!");
+            }
+
+
+            return ret;
         }
 
         public bool GetBoost()
