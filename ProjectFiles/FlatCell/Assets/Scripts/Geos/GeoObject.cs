@@ -597,18 +597,18 @@ namespace Geo.Command
                 // If the geo hasn't updated its color
                 if(rend.material.color != Color.gray && !locked)
                 {
-                    geoColorLerpCounter += Time.deltaTime * 0.25f;
+                    geoColorLerpCounter += Time.deltaTime;
                     // Geo color.
                     if (this.gameObject.tag == "Player")
                     {
                         rend.material.color = Color.Lerp(this.color,
-                                 Color.grey,
+                                 Color.grey * 0.5f,
                                  geoColorLerpCounter / geoColorLerpTime);
                     }
                     else
                     {
-                        rend.material.color = Color.Lerp(this.color * 0.25f + Color.grey * 0.25f,
-                                 Color.grey,
+                        rend.material.color = Color.Lerp(this.color * 0.5f + Color.grey * 0.5f,
+                                 Color.grey * 0.5f,
                                  geoColorLerpCounter / geoColorLerpTime);
                     }
                 }

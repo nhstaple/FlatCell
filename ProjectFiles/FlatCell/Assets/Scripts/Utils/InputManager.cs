@@ -51,6 +51,8 @@ namespace Utils.InputManager
         private float screenH;
         private float screenW;
 
+        private float oldLength = 0;
+
         private void checkJoySticks()
         {
             string[] joysticks = Input.GetJoystickNames();
@@ -133,7 +135,15 @@ namespace Utils.InputManager
 
         private void checkDebugFlags()
         {
-            if(oldPC != PC_DEBUG)
+            string[] joysticks = Input.GetJoystickNames();
+            if(joysticks.Length > oldLength)
+            {
+                UnityEngine.Debug.Log("Gamepad connected!");
+                oldLength = joysticks.Length;
+                checkJoySticks();
+            }
+
+            if (oldPC != PC_DEBUG)
             {
                 UnityEngine.Debug.Log("Set PC Flag!");
                 oldPC = PC_DEBUG;

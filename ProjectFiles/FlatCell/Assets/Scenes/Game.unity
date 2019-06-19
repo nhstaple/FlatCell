@@ -1891,13 +1891,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dc65245564919041b115471996eb71f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputManger: {fileID: 0}
   boost: {fileID: 0}
   InitSpeed: 25
   InitMaxHP: 3
   FireRate: 0.25
   trailDecay: 1
   DrawDebugLine: 1
-  inputManger: {fileID: 0}
   EnableBoost: 1
   BoostFactor: 2
 --- !u!4 &1380216532
