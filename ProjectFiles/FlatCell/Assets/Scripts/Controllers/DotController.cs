@@ -39,6 +39,7 @@ public class DotController : DotObject, IAI
             this.behaviour = behaviour;
         }
         this.DrawDebugLine = DrawDebugLine;
+        ThawColor();
     }
 
     new public void Start()

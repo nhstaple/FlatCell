@@ -54,7 +54,7 @@ namespace DotBehaviour.Command
             if (collision.gameObject.tag == "Boundary")
             {
                 ResetToSpawn = true;
-                Debug.Log("Hit the wall!");
+                Debug.Log("AI hit the wall!");
                 movementDirection.x *= -1;
                 movementDirection.y *= -1;
                 Vector3 pos = -1 * transform.position;

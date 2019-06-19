@@ -5,10 +5,9 @@
 // Game Feel - Animation Manager
 
 using System.Collections;
-using System;
 using UnityEngine;
 using Geo.Command;
-using Utils.Anim;
+using Utils.AnimationManager;
 
 namespace Terrain
 {
@@ -20,19 +19,14 @@ namespace Terrain
         bool animLock = false;
         float animTime = 2.5f;
 
-        [SerializeField] public Anim anim;
+        [SerializeField] public AnimationManager anim;
         IEnumerator coroutine;
 
         void Start()
         {
             player = GameObject.FindWithTag("Player");
-            animTime = UnityEngine.Random.Range(1f, 2f);
-            anim = new Anim();
-        }
-
-        void resetLock()
-        {
-            animLock = false;
+            animTime = UnityEngine.Random.Range(0.5f, 1f);
+            anim = new AnimationManager();
         }
 
         void OnTriggerEnter(Collider other)
@@ -57,13 +51,13 @@ namespace Terrain
                         // a primitive synch lock
                         if (animLock == false)
                         {
-                            float time = UnityEngine.Random.Range(1f, 2f) * animTime;
+                            float time = UnityEngine.Random.Range(1f, 1.5f) * animTime;
                             coroutine = anim.lerpColor(time, GetComponent<Renderer>().material, geo.GetColor(), animLock, 1f, 0.5f, 2f);
                             StartCoroutine(coroutine);
                             animLock = true;
 
                             // Set the callback to reset the lock.
-                            StartCoroutine(anim.WaitForSecondsThenExecute(() => resetLock(), time));
+                            StartCoroutine(anim.WaitForSecondsThenExecute(() => anim.ResetLock(ref animLock), time));
                         }
                     }
                 }

@@ -40,6 +40,11 @@ namespace Geo.Command
         float GetMovementMagnitude();
         Vector3 GetMovementDirection();
         Vector3 GetGunDir();
+        void ResetColorAfterShield(float time = 1f);
+        bool GetAnimLock();
+        bool ColorIsFrozen();
+        void FreezeColor();
+        void ThawColor();
 
 /** AI **/
         // Constructors

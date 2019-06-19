@@ -30,6 +30,7 @@ namespace Utils.InputManager
 
     public class InputManager : MonoBehaviour
     {
+        [SerializeField] public bool SupressDebugMessage = true;
         [SerializeField] public bool InvertedStick = false;
         [SerializeField] public bool PC_DEBUG = false;
         [SerializeField] public bool XBOX_DEBUG = false;
@@ -202,7 +203,10 @@ namespace Utils.InputManager
                     {
                         //If it is empty, controller i is disconnected
                         //where i indicates the controller number
-                        UnityEngine.Debug.Log("Controller: " + i + " is disconnected.");
+                        if (!SupressDebugMessage)
+                        {
+                            UnityEngine.Debug.Log("Controller: " + i + " is disconnected.");
+                        }
                         disconnected = true;
                         checkJoySticks();
                     }
@@ -215,21 +219,30 @@ namespace Utils.InputManager
                     if(consoleCounter >= consolePollRate)
                     {
                         consoleCounter = 0;
-                        UnityEngine.Debug.Log("Recieving input from Mouse and Keyboard");
+                        if (!SupressDebugMessage)
+                        {
+                            UnityEngine.Debug.Log("Recieving input from Mouse and Keyboard");
+                        }
                     }
                     break;
                 case EInput_Type.XboxOne:
                     if (consoleCounter >= consolePollRate)
                     {
                         consoleCounter = 0;
-                        UnityEngine.Debug.Log("Recieving input from Xbox one");
+                        if (!SupressDebugMessage)
+                        {
+                            UnityEngine.Debug.Log("Recieving input from Xbox one");
+                        }       
                     }
                     break;
                 case EInput_Type.PS4:
                     if (consoleCounter >= consolePollRate)
                     {
                         consoleCounter = 0;
-                        UnityEngine.Debug.Log("Recieving input form PS4");
+                        if (!SupressDebugMessage)
+                        {
+                            UnityEngine.Debug.Log("Recieving input form PS4");
+                        }
                     }
                     break;
                 default:

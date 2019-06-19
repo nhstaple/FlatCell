@@ -194,6 +194,28 @@ namespace Pickup.Command
         {
             if (gameObject.GetComponent<PickupObject>().enabled)
             {
+                BoxCollider box = geo.gameObject.GetComponent<BoxCollider>();
+                MeshCollider mesh = geo.gameObject.GetComponent<MeshCollider>();
+
+                var playerBoxHit = false;
+                var playerMeshHit = false;
+
+                if (box != null && geo.gameObject.tag == "Player")
+                {
+                    if(box == geo.collider)
+                    {
+                        playerBoxHit = true;
+                    }
+                }
+
+                if (mesh != null && geo.gameObject.tag == "Player")
+                {
+                    if (mesh == geo.collider)
+                    {
+                        playerMeshHit = true;
+                    }
+                }
+
                 Physics.IgnoreCollision(geo.gameObject.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
 
                 if (geo.gameObject.tag == "Projectile")
@@ -205,7 +227,7 @@ namespace Pickup.Command
                 {
                     IGeo p = geo.gameObject.GetComponent<PlayerController>().geo;
 
-                    if (p != null)
+                    if (p != null && playerMeshHit)
                     {
                         if (this.type == EPickup_Type.Health)
                         {

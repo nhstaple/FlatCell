@@ -26,7 +26,7 @@ namespace Utils.ADSR
 
         private static Vector3 linearFunc(Vector3 Offset, float t, float duration)
         {
-            // Debug.Log("called linear");
+            // UnityEngine.Debug.Log("called linear");
 
             bool parityFlag = false;
             Vector3 prev = Offset;
@@ -45,7 +45,7 @@ namespace Utils.ADSR
 
         private static Vector3 squaredFunc(Vector3 Offset, float t, float duration)
         {
-            // Debug.Log("called squared");
+            // UnityEngine.Debug.Log("called squared");
 
             bool parityFlag = false;
             if(Offset.x < 0) { parityFlag = true; }
@@ -63,7 +63,8 @@ namespace Utils.ADSR
 
         private static Vector3 exponentialFunc(Vector3 Offset, float t, float duration)
         {
-            // Debug.Log("called exponential");
+            // UnityEngine.Debug.Log("called exponential");
+
             Offset *= (float)Math.Pow(8, t);
             Vector3 newPos = Vector3.Lerp(Vector3.zero, Offset, t / duration);
             // checkMax(ref newPos);

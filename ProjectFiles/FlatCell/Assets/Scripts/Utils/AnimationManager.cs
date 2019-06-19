@@ -5,16 +5,21 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Utils.Anim
+namespace Utils.AnimationManager
 {
-    public class Anim
+    public class AnimationManager
     {
         // Indicates if the animator is currently busy with a thread.
         bool busy;
 
-        public Anim()
+        public AnimationManager()
         {
             busy = false;
+        }
+
+        public void ResetLock(ref bool Lock)
+        {
+            Lock = false;
         }
 
         // Lerps material's color to value without threads.
@@ -44,9 +49,10 @@ namespace Utils.Anim
         // source https://answers.unity.com/questions/516798/executing-an-action-after-a-coroutine-has-finished.html
         public IEnumerator WaitForSecondsThenExecute(Action method, float waitTime)
         {
-            // Debug.Log("execute delegate coroutine!");
+            // UnityEngine.Debug.Log("waiting " + waitTime + " seconds to run a method...");
             yield return new WaitForSeconds(waitTime);
-            method();
+            // UnityEngine.Debug.Log("waited " + waitTime + " seconds, now running a method...");
+            method.Invoke();
         }
 
         // Changing the upper and lower bounds will increase the spread at which this coroutine yields.

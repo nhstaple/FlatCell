@@ -15,6 +15,7 @@ using Utils.Vectors;    // For Locations
 using Geo.Meter;        // For Boost and Shield
 using Geo.Command;
 using Utils.InputManager;
+using Utils.AnimationManager;
 
 /*
  * Player Controller
@@ -39,10 +40,8 @@ namespace Controller.Player
     // Input variables
         // The left stick / WASD.
         protected Vector3 movementDirection;
-        // The right stick.
+        // The right stick / mouse.
         protected Vector3 lookDir;
-        // The mouse.
-        protected Vector3 mouseLookDir;
 
         // Script variables
         private float initSpawnOffset;
@@ -62,12 +61,42 @@ namespace Controller.Player
 
     // Cosemetics
         TrailRenderer trail;
+        AnimationManager anim;
+
+        // UI
+        public const float UI_WELCOME_MESSAGE_DELAY = 0.25f;
+        public const float UI_FIRST_MESSAGE_LENGTH = 1.5f;
+        bool freezePosition = true;
+
+        private void UI_WelcomeMessage()
+        {
+            Debug.Log("Welcome to the game! You're just a dot... kill other things to evolve into larger pieces of geomtry!");
+            Debug.Log("If you are destroyed you will lose a portion of your <stats to be determined>.");
+            Debug.Log("glhf!");
+
+            // Call next message.
+            StartCoroutine(anim.WaitForSecondsThenExecute(() => this.UI_ExecuteAfterInitialMessage(), UI_FIRST_MESSAGE_LENGTH));
+        }
+
+        private void UI_ExecuteAfterInitialMessage()
+        {
+            Debug.Log("I'm taking away your color. You can get it back by moving around and destroying other geos, picking up the color they drop.");
+            freezePosition = false;
+            StartCoroutine(anim.WaitForSecondsThenExecute(() =>
+            {
+                geo.ThawColor();
+                Debug.Log("Color unthawed!");
+            }, 0.5f));
+
+            // Display additional messages via Coroutines and callbacks.
+        }
 
         private void Start()
         {
             addComponents();
             grabComponents();
             initValues();
+            StartCoroutine(anim.WaitForSecondsThenExecute(() => this.UI_WelcomeMessage(), UI_WELCOME_MESSAGE_DELAY));
         }
 
         void Awake()
@@ -80,9 +109,11 @@ namespace Controller.Player
         private void addComponents()
         {
             geo = this.gameObject.AddComponent<DotObject>();
+            geo.FreezeColor();
             geo.Init(InitSpeed, InitMaxHP, FireRate, 0, 0, true);
             geo.SetColor(Color.clear);
             inputManger = this.gameObject.AddComponent<InputManager>();
+            anim = new AnimationManager();
         }
 
         // Grabs components from the attached objects.
@@ -209,14 +240,13 @@ namespace Controller.Player
             // Get the input information.
             inputManger.GetSticks(ref movementDirection, ref lookDir);
 
-            // Move the player.
-            if(movementDirection.magnitude != 0 )
+            if(!freezePosition)
             {
+                // Move the player.
                 geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
             }
 
             // Move the player's gun vector.
-            // Used for controllers.
             if (lookDir.magnitude != 0)
             {
                 geo.LookAt(lookDir);
@@ -230,14 +260,14 @@ namespace Controller.Player
             inputManger.GetSticks(ref movementDirection, ref lookDir);
 
             movementDirection *= BoostFactor;
-            geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
+            if (!freezePosition)
+            {
+                geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
+            }
+            
             if (lookDir.magnitude != 0)
             {
                 geo.LookAt(lookDir);
-            }
-            else if (mouseLookDir.magnitude != 0)
-            {
-                geo.LookAt(mouseLookDir);
             }
         }
 

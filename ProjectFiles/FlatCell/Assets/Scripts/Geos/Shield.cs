@@ -16,6 +16,8 @@
 */
 
 using UnityEngine;
+using Controller.Player;
+using Geo.Command;
 
 /*
  * Shield
@@ -54,6 +56,11 @@ namespace Geo.Meter
         [SerializeField] public float InitShieldEnergy = 2f;
         [SerializeField] public float InitMaxShieldEnergy = 2f;
 
+        [SerializeField] protected float geoColorLerpTime = 1f;
+        private float geoColorLerpCounter = 0f;
+        [SerializeField] protected float colorRefreshPoll = 0.5f;
+        protected float refreshCounter = 0;
+
         // The color of the shield.
         Color shieldColor;
 
@@ -67,10 +74,13 @@ namespace Geo.Meter
         [SerializeField] float InitShieldLerpTime = 1f;
         float shieldLerpTime = 0f;
 
+        IGeo owner;
+
         new public void Start()
         {
             grabComponents();
             this.setVals();
+            owner = this.gameObject.GetComponents<IGeo>()[0];
         }
 
         new protected void setVals()
@@ -83,11 +93,48 @@ namespace Geo.Meter
         new public void Update()
         {
             base.Update();
-            // If the shield is active and not busy charging.
-            if (active && !charging)
+
+            if(owner == null)
+            {
+                owner = this.gameObject.GetComponents<IGeo>()[0];
+            }
+
+            refreshCounter += Time.deltaTime;
+
+            if (active)
             {
                 shieldLerpCounter += Time.deltaTime;
-                changeColor();
+
+                if (!charging)
+                {
+                    changeColor();
+                }
+
+                if (!owner.GetAnimLock() && this.gameObject.tag == "Player")
+                {
+                    geoColorLerpCounter += Time.deltaTime;
+                    rend.material.color = Color.Lerp(owner.GetColor(),
+                             Color.grey * 0.5f,
+                             geoColorLerpCounter / geoColorLerpTime);
+                }
+                else if (!owner.GetAnimLock())
+                {
+                    geoColorLerpCounter += Time.deltaTime;
+                    rend.material.color = Color.Lerp(owner.GetColor() * 0.5f + Color.grey * 0.5f,
+                             Color.grey * 0.5f,
+                             geoColorLerpCounter / geoColorLerpTime);
+                }
+            }
+            else if(!active && refreshCounter >= colorRefreshPoll)
+            {
+                if(this.gameObject.tag == "Player" && !owner.ColorIsFrozen())
+                {
+                    owner.ResetColorAfterShield(0.5f);
+                }
+                else if (this.gameObject.tag != "Player")
+                {
+                    owner.ResetColorAfterShield(1f);
+                }
             }
         }
 
@@ -103,6 +150,7 @@ namespace Geo.Meter
             turnOffShieldEffect();
             newShieldColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
             shieldLerpCounter = 0;
+            geoColorLerpCounter = 0f;
         }
 
     // Private

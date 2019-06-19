@@ -23,9 +23,10 @@ using Projectile.Command;
 using Pickup.Command;
 using Utils.Debug;
 using Utils.ADSR;
-using Utils.Anim;
+using Utils.AnimationManager;
 using Spawner.Command;
 using Geo.Meter;
+using System.Collections;
 
 /*
  * Geo Object
@@ -164,15 +165,13 @@ namespace Geo.Command
         LineDrawer velocityLine;
         LineDrawer gunLine;
         Vector3 prevADSR;
+        bool freezColor = true;
+        IEnumerator coroutine;
         //
 
-    // Animation manager.
-        Anim anim = new Anim();
+        // Animation manager.
+        AnimationManager anim;
         private bool locked = false;
-        [SerializeField] protected float colorRefreshPoll = 0.5f;
-        [SerializeField] protected float geoColorLerpTime = 1f;
-        private float geoColorLerpCounter = 0f;
-        protected float refreshCounter = 0;
         Color initColor;
 
     // Script variables
@@ -304,8 +303,8 @@ namespace Geo.Command
             deathSource.clip = Resources.Load<AudioClip>(Geo_Death_Sound);
 
             // Cosmetics
-            refreshCounter = colorRefreshPoll;
             initColor = color;
+            anim = new AnimationManager();
 
             // The pickup
             if (pickup == null)
@@ -364,29 +363,49 @@ namespace Geo.Command
             }
         }
 
+        public void ResetColorAfterShield(float time = 1f)
+        {
+            // Lerp the material
+            if(!shield.active)
+            {
+                Color currentColor = GetComponent<Renderer>().material.color;
+                var lerpCheck = (currentColor != this.color);
+                if (this.gameObject.tag == "Player" && !locked && lerpCheck)
+                {
+                    coroutine = anim.lerpColor(time, GetComponent<Renderer>().material, this.color, locked);
+                    StartCoroutine(coroutine);
+                    locked = true;
+
+                    // Set the callback to reset the lock.
+                    StartCoroutine(anim.WaitForSecondsThenExecute(() => anim.ResetLock(ref locked), time));
+                }
+                else if (!locked && lerpCheck)
+                {
+                    coroutine = anim.lerpColor(time, GetComponent<Renderer>().material, this.color, locked);
+                    StartCoroutine(coroutine);
+                    locked = true;
+
+                    // Set the callback to reset the lock.
+                    StartCoroutine(anim.WaitForSecondsThenExecute(() => anim.ResetLock(ref locked), time));
+                }
+                else
+                {
+                    this.color.a = 255;
+                    ResetTrail();
+                }
+            }
+        }
+
+        public bool GetAnimLock()
+        {
+            return locked;
+        }
+
         // Update is called once per frame
         public void Update()
         {
             DrawDebug();
-            refreshCounter += Time.deltaTime;
             checkStats();
-            if (refreshCounter >= colorRefreshPoll && !shield.active)
-            {
-                refreshCounter = 0;
-                geoColorLerpCounter = 0f;
-                float time = 1f;
-                // Lerp the material
-                if (this.gameObject.tag == "Player")
-                {
-                    anim.lerpColorWithoutThread(time, rend.material, this.color, ref locked);
-                }
-                else
-                {
-                    anim.lerpColorWithoutThread(time, rend.material, this.initColor, ref locked);
-                }
-                this.color.a = 255;
-                ResetTrail();
-            }
         }
 
         // Collision logic.
@@ -553,6 +572,7 @@ namespace Geo.Command
         {
             // Set the previous movement vector.
             movementDirection = MovementVector;
+
             if (MovementVector.magnitude > 0)
             {
                 adsrCounter += Time.deltaTime;
@@ -589,29 +609,6 @@ namespace Geo.Command
             if (!shield.active)
             {
                 shield.TurnOn();
-                geoColorLerpCounter = 0f;
-            }
-
-            if (shield.active)
-            {
-                // If the geo hasn't updated its color
-                if(rend.material.color != Color.gray && !locked)
-                {
-                    geoColorLerpCounter += Time.deltaTime;
-                    // Geo color.
-                    if (this.gameObject.tag == "Player")
-                    {
-                        rend.material.color = Color.Lerp(this.color,
-                                 Color.grey * 0.5f,
-                                 geoColorLerpCounter / geoColorLerpTime);
-                    }
-                    else
-                    {
-                        rend.material.color = Color.Lerp(this.color * 0.5f + Color.grey * 0.5f,
-                                 Color.grey * 0.5f,
-                                 geoColorLerpCounter / geoColorLerpTime);
-                    }
-                }
             }
         }
 
@@ -733,6 +730,24 @@ namespace Geo.Command
         public float GetFireChance()
         {
             return FireChance;
+        }
+
+        public bool ColorIsFrozen()
+        {
+            // Debug.Log("Frozen state: " + freezColor);
+            return freezColor;
+        }
+
+        public void FreezeColor()
+        {
+            // Debug.Log("Frozen");
+            freezColor = true;
+        }
+
+        public void ThawColor()
+        {
+            // Debug.Log("Thawed");
+            freezColor = false;
         }
 
         // Returns the active weapon.
