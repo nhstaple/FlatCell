@@ -377,7 +377,7 @@ namespace Geo.Command
                     locked = true;
 
                     // Set the callback to reset the lock.
-                    StartCoroutine(anim.WaitForSecondsThenExecute(() => anim.ResetLock(ref locked), time));
+                    StartCoroutine(anim.WaitForSecondsThenExecute(() => anim.ResetLock(ref locked), () => { }, time));
                 }
                 else if (!locked && lerpCheck)
                 {
@@ -386,7 +386,7 @@ namespace Geo.Command
                     locked = true;
 
                     // Set the callback to reset the lock.
-                    StartCoroutine(anim.WaitForSecondsThenExecute(() => anim.ResetLock(ref locked), time));
+                    StartCoroutine(anim.WaitForSecondsThenExecute(() => anim.ResetLock(ref locked), () => { }, time));
                 }
                 else
                 {

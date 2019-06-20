@@ -28,7 +28,7 @@ namespace Controller.Player
 {
     class PlayerController : MonoBehaviour // DotObject
     {
-        [SerializeField] public InputManager inputManger;
+        [SerializeField] public InputManager inputManager;
 
         [SerializeField] protected Boost boost;
         [SerializeField] float InitSpeed = 25f;
@@ -65,38 +65,55 @@ namespace Controller.Player
 
         // UI
         public const float UI_WELCOME_MESSAGE_DELAY = 0.25f;
-        public const float UI_FIRST_MESSAGE_LENGTH = 1.5f;
+        public const float UI_FIRST_MESSAGE_DELAY = 3f;
         bool freezePosition = true;
 
+    // TODO- make part of the UIManager
         private void UI_WelcomeMessage()
         {
             Debug.Log("Welcome to the game! You're just a dot... kill other things to evolve into larger pieces of geomtry!");
+            Debug.Log("You can't move yet but you can shoot with the <do logic based on detected input>.");
             Debug.Log("If you are destroyed you will lose a portion of your <stats to be determined>.");
             Debug.Log("glhf!");
-
-            // Call next message.
-            StartCoroutine(anim.WaitForSecondsThenExecute(() => this.UI_ExecuteAfterInitialMessage(), UI_FIRST_MESSAGE_LENGTH));
         }
 
         private void UI_ExecuteAfterInitialMessage()
         {
-            Debug.Log("I'm taking away your color. You can get it back by moving around and destroying other geos, picking up the color they drop.");
-            freezePosition = false;
-            StartCoroutine(anim.WaitForSecondsThenExecute(() =>
+            Debug.Log("I'm taking away your color. You can get it back by moving around <do logic based on detected input> and destroying other geos. Geos will drop pickups that can make you stronger and morph your color.");
+            StartCoroutine(anim.WaitForSecondsThenExecute(
+            // Function to execute after delay.
+            () =>
             {
+                freezePosition = false;
                 geo.ThawColor();
                 Debug.Log("Color unthawed!");
-            }, 0.5f));
-
-            // Display additional messages via Coroutines and callbacks.
+            },
+            // Callback to execute when param1 is finished.
+            () =>
+            {
+                // Display additional messages via Coroutines and callbacks.
+            },
+            // Wait half a second to thaw the player's color after displaying the message.
+            0.5f));
         }
+    //
 
         private void Start()
         {
             addComponents();
             grabComponents();
             initValues();
-            StartCoroutine(anim.WaitForSecondsThenExecute(() => this.UI_WelcomeMessage(), UI_WELCOME_MESSAGE_DELAY));
+
+            // TODO- make this part of the UIManager
+            StartCoroutine(anim.WaitForSecondsThenExecute(
+                // The first function to call when the user enters the game.
+                () => this.UI_WelcomeMessage(),
+                // Callback to execute when param1 is finished.
+                () => this.UI_ExecuteAfterInitialMessage(),
+                // The amount of time to delay the first function.
+                UI_WELCOME_MESSAGE_DELAY,
+                // The amount of time to wait after param1 is caled before running parm2.
+                UI_FIRST_MESSAGE_DELAY));
         }
 
         void Awake()
@@ -112,7 +129,7 @@ namespace Controller.Player
             geo.FreezeColor();
             geo.Init(InitSpeed, InitMaxHP, FireRate, 0, 0, true);
             geo.SetColor(Color.clear);
-            inputManger = this.gameObject.AddComponent<InputManager>();
+            inputManager = this.gameObject.AddComponent<InputManager>();
             anim = new AnimationManager();
         }
 
@@ -154,9 +171,8 @@ namespace Controller.Player
 
         public void OnCollisionEnter(Collision collision)
         {
-            if(collision.gameObject.tag == "Boundary")
+            if(collision.gameObject.tag == "Boundary" || collision.gameObject.tag == "Pickup")
             {
-                Debug.Log("Player hit the wall!");
                 Physics.IgnoreCollision(this.gameObject.GetComponent<BoxCollider>(),
                                         collision.gameObject.GetComponent<Collider>());
             }
@@ -186,7 +202,7 @@ namespace Controller.Player
                 switchWeapon();
             }
             // The player pressed the boost button.
-            if (inputManger.GetBoost() && !boost.charging)
+            if (inputManager.GetBoost() && !boost.charging)
             {
                 modifiedSpeed *= BoostFactor;
                 trail.widthMultiplier = BoostFactor;
@@ -194,17 +210,17 @@ namespace Controller.Player
                 boostedMove();
             }
             // Else the boost button isn't pressed.
-            else if(!inputManger.GetBoost())
+            else if(!inputManager.GetBoost())
             {
                 boost.TurnOff();
                 // Check for shields.
-                if (inputManger.GetFire2() && !geo.GetShield().IsCharging())
+                if (inputManager.GetFire2() && !geo.GetShield().IsCharging())
                 {
                     geo.FlameOn();
                 }
                 // Check for guns.
                 // If the mouse was clicked or the stick was pushed.
-                else if (!geo.GetShield().active && inputManger.GetFire1(lookDir))
+                else if (!geo.GetShield().active && inputManager.GetFire1(lookDir))
                 {
                     // Turn off the shields.
                     geo.FlameOff();
@@ -223,13 +239,19 @@ namespace Controller.Player
                         trail.widthMultiplier -= Time.deltaTime * trailDecay * 0.5f;
                     }
                 }
-                // Always move.
+                /*
+                 * Just keep swimming. This will update the movementDirection (left stick)
+                 * and lookDir (right stick) vectors.
+                */
                 move();
             }
             // All other cases, includes player running out of boost.
             else
             {
-                // Just keep swimming.
+                /*
+                 * Just keep swimming. This will update the movementDirection (left stick)
+                 * and lookDir (right stick) vectors.
+                */
                 move();
             }
         }
@@ -238,10 +260,17 @@ namespace Controller.Player
         private void move()
         {
             // Get the input information.
-            inputManger.GetSticks(ref movementDirection, ref lookDir);
+            inputManager.GetSticks(ref movementDirection, ref lookDir);
 
-            if(!freezePosition)
+            // Move if the player isn't frozen.
+            if (freezePosition)
             {
+                gameObject.GetComponent<Rigidbody>().constraints |= RigidbodyConstraints.FreezePosition;
+            }
+            else
+            {
+                gameObject.GetComponent<Rigidbody>().constraints &= ~(RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ);
+                
                 // Move the player.
                 geo.MoveTo(transform.position, movementDirection, modifiedSpeed, false);
             }
@@ -257,7 +286,7 @@ namespace Controller.Player
         private void boostedMove()
         {
             // Get the input information.
-            inputManger.GetSticks(ref movementDirection, ref lookDir);
+            inputManager.GetSticks(ref movementDirection, ref lookDir);
 
             movementDirection *= BoostFactor;
             if (!freezePosition)

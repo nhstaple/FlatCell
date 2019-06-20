@@ -92,7 +92,7 @@ namespace Spawner.Command
 
             if (Alive.Count < NumDots)
             {
-                Spawn();
+                StartCoroutine(ThreadedSpawn(NumDots - Alive.Count));
             }
         }
 
@@ -106,9 +106,25 @@ namespace Spawner.Command
             }
         }
 
+        public System.Collections.IEnumerator ThreadedSpawn(int count)
+        {
+            if (count != 1)
+            {
+                for (int i = 1; i <= count; i++)
+                {
+                    StartCoroutine(ThreadedSpawn(1));
+                }
+            }
+            this.Spawn();
+            yield return new WaitForSeconds(0f);
+        }
+
         public void Spawn()
         {
+            // Possible race condition.
             counter++;
+            //
+
             Vector3 Location = SpawnLocation;
             Location.x = UnityEngine.Random.Range(-SpawnOffset, SpawnOffset);
             Location.z = UnityEngine.Random.Range(-SpawnOffset, SpawnOffset);
@@ -119,6 +135,7 @@ namespace Spawner.Command
             {
                 if(DEBUG_TEXT) { Debug.Log("Spawned simple dot ai"); }
                 GameObject Dot = new GameObject("Geo Simple Dot" + counter);
+                Dot.tag = "Geo";
                 Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
                 Dot.transform.localScale = InitScale * Random.Range(SimpleLowerRange, SimpleUpperRange);
@@ -131,6 +148,7 @@ namespace Spawner.Command
             {
                 if(DEBUG_TEXT) { Debug.Log("Spawned shooter dot ai"); }
                 GameObject Dot = new GameObject("Geo Shooter Dot" + counter);
+                Dot.tag = "Geo";
                 Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
                 Dot.transform.localScale = InitScale * Random.Range(ShooterLowerRange, ShooterUpperRange);
@@ -146,6 +164,7 @@ namespace Spawner.Command
             {
                 if(DEBUG_TEXT) { Debug.Log("Spawned shield dot ai"); }
                 GameObject Dot = new GameObject("Geo Shield Dot" + counter);
+                Dot.tag = "Geo";
                 Dot.transform.SetParent(this.transform);
                 Dot.transform.position = Location;
                 Dot.transform.localScale = InitScale * Random.Range(ShieldLowerRange, ShieldUpperRange);

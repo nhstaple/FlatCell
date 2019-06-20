@@ -47,12 +47,14 @@ namespace Utils.AnimationManager
         // Runs a function after waitTime.
         // Used for calls backs 
         // source https://answers.unity.com/questions/516798/executing-an-action-after-a-coroutine-has-finished.html
-        public IEnumerator WaitForSecondsThenExecute(Action method, float waitTime)
+        public IEnumerator WaitForSecondsThenExecute(Action method, Action callback, float waitTime = 0f, float callBackDelay = 0f)
         {
             // UnityEngine.Debug.Log("waiting " + waitTime + " seconds to run a method...");
             yield return new WaitForSeconds(waitTime);
             // UnityEngine.Debug.Log("waited " + waitTime + " seconds, now running a method...");
             method.Invoke();
+            yield return new WaitForSeconds(callBackDelay);
+            callback.Invoke();
         }
 
         // Changing the upper and lower bounds will increase the spread at which this coroutine yields.

@@ -57,7 +57,7 @@ namespace Terrain
                             animLock = true;
 
                             // Set the callback to reset the lock.
-                            StartCoroutine(anim.WaitForSecondsThenExecute(() => anim.ResetLock(ref animLock), time));
+                            StartCoroutine(anim.WaitForSecondsThenExecute(() => anim.ResetLock(ref animLock), () => { }, time));
                         }
                     }
                 }

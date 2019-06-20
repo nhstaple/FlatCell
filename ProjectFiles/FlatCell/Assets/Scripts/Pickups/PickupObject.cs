@@ -132,6 +132,7 @@ namespace Pickup.Command
             counter++;
             // Create a new projectile object.
             GameObject pickup = new GameObject(" Pickup " + counter);
+            pickup.tag = "Pickup";
 
             // Add mesh components
             rend = pickup.AddComponent<MeshRenderer>();

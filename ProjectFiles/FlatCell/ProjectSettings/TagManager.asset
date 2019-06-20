@@ -7,6 +7,9 @@ TagManager:
   - DotSpawner
   - Spawner
   - Boundary
+  - Terrain
+  - Pickup
+  - Geo
   layers:
   - Default
   - TransparentFX
