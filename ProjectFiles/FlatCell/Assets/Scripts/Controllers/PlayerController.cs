@@ -66,9 +66,39 @@ namespace Controller.Player
         // UI
         public const float UI_WELCOME_MESSAGE_DELAY = 0.25f;
         public const float UI_FIRST_MESSAGE_DELAY = 3f;
+        public bool UI_FIRST_TIME = true;
         bool freezePosition = true;
 
     // TODO- make part of the UIManager
+        private void UI_Do_Tutorial_Stuff()
+        {
+            Debug.Log("Debug- UI_FIRST_TIME flag not set. Doing tutorial stuff.");
+            // TODO- make this part of the UIManager
+            StartCoroutine(anim.WaitForSecondsThenExecute(
+                // The first function to call when the user enters the game.
+                () => this.UI_WelcomeMessage(),
+                // Callback to execute when param1 is finished.
+                () => this.UI_ExecuteAfterInitialMessage(),
+                // The amount of time to delay the first function.
+                UI_WELCOME_MESSAGE_DELAY,
+                // The amount of time to wait after param1 is caled before running parm2.
+                UI_FIRST_MESSAGE_DELAY));
+        }
+
+        private void UI_Do_Return_Stuff()
+        {
+            Debug.Log("DEBUG- UI_FIRST_TIME flag set, player has already played the tutorial. Or flag was set in the editor for debugging.");
+
+            StartCoroutine(anim.WaitForSecondsThenExecute(
+                () => UI_Return_Message(),
+                () => this.UI_ExecuteAfterInitialMessage()));
+        }
+
+        private void UI_Return_Message()
+        {
+            Debug.Log("Welcome back!");
+        }
+
         private void UI_WelcomeMessage()
         {
             Debug.Log("Welcome to the game! You're just a dot... kill other things to evolve into larger pieces of geomtry!");
@@ -103,17 +133,14 @@ namespace Controller.Player
             addComponents();
             grabComponents();
             initValues();
-
-            // TODO- make this part of the UIManager
-            StartCoroutine(anim.WaitForSecondsThenExecute(
-                // The first function to call when the user enters the game.
-                () => this.UI_WelcomeMessage(),
-                // Callback to execute when param1 is finished.
-                () => this.UI_ExecuteAfterInitialMessage(),
-                // The amount of time to delay the first function.
-                UI_WELCOME_MESSAGE_DELAY,
-                // The amount of time to wait after param1 is caled before running parm2.
-                UI_FIRST_MESSAGE_DELAY));
+            if (UI_FIRST_TIME)
+            {
+                UI_Do_Tutorial_Stuff();
+            }
+            else
+            {
+                UI_Do_Return_Stuff();
+            }
         }
 
         void Awake()

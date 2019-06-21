@@ -1900,6 +1900,7 @@ MonoBehaviour:
   DrawDebugLine: 1
   EnableBoost: 1
   BoostFactor: 2
+  UI_FIRST_TIME: 0
 --- !u!4 &1380216532
 Transform:
   m_ObjectHideFlags: 0
