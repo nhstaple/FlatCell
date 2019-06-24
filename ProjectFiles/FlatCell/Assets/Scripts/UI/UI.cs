@@ -30,6 +30,8 @@ public class UI : MonoBehaviour
 
     GameObject player;
     public Text scoretext;
+    public Text speedtext;
+    public Text armortext;
 
     //Nick's stuff for shield Fill
     IGeo p;
@@ -106,6 +108,14 @@ public class UI : MonoBehaviour
         if (scoretext != null)
         {
             scoretext.text = "Score: " + myscore.ToString();
+        }
+        if(speedtext != null && player != null)
+        {
+            speedtext.text = "Speed: " + (Mathf.Round(100f * player.GetComponent<PlayerController>().geo.GetSpeedPercent())).ToString() + "%";
+        }
+        if(armortext != null && player != null)
+        {
+            armortext.text = "Armor: " + (Mathf.Round(100f * player.GetComponent<PlayerController>().geo.GetArmor())).ToString() + "%";
         }
         if (myscore >= 20.0f)
         {
