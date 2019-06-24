@@ -12,31 +12,27 @@ using Controller.Player;
 namespace Pickup.Stats
 {
 
-    class ColorPickup : PickupObject, IPickup
+    class SpeedPickup : PickupObject, IPickup
     {
-        [SerializeField] protected Color color;
-        protected float ColorLowRange = 0.10f;
-        protected float ColorHighRange = 0.25f;
-        float ColorIntensity = 10f;
+        [SerializeField] protected float speed;
+        protected float SpeedLowRange = 0.10f;
+        protected float SpeedHighRange = 0.15f;
 
         public void Start()
         {
-            // Debug.Log("Color set!");
-            type = EPickup_Type.Color;
+            type = EPickup_Type.Speed;
         }
 
         new public void Init(IGeo geo)
         {
-            // Debug.Log("Colorpickup init");
             base.Init(geo);
             this.Start();
+            UpdateValues();
         }
 
         new public void UpdateValues()
         {
-            Debug.Log("Updating color pickup- " + owner.GetColor().ToString());
-            this.color = GetStatFromGeo(owner.GetColor(), ColorLowRange, ColorHighRange);
-            Debug.Log(this.color);
+            this.speed = GetStatFromGeo(owner.GetSpeed(), SpeedLowRange, SpeedHighRange);
         }
 
         new public void OnCollisionEnter(Collision geo)
@@ -48,8 +44,7 @@ namespace Pickup.Stats
                 if (p != null)
                 {
                     Debug.Log("The player's mesh hit the pickup!");
-                    Debug.Log(this.color);
-                    p.AddColor(this.color);
+                    p.SetSpeed(p.GetSpeed() + this.speed);
                     Destroy(this.gameObject);
                 }
             }
@@ -59,16 +54,14 @@ namespace Pickup.Stats
         {
             // Debug.Log("Making a color pickup!");
             GameObject p = base.Spawn(Location);
-            p.name += "Color";
+            p.name += "Speed";
 
-            ColorPickup pickup = p.AddComponent<ColorPickup>();
+            SpeedPickup pickup = p.AddComponent<SpeedPickup>();
 
             pickup.Init(owner);
-            pickup.color = this.color;
+            pickup.speed = this.speed;
 
-            rend.material.color = Pickup_Colors.Color_c;
-            rend.material.SetColor("_EmissionColor", this.color * ColorIntensity);
-            rend.material.EnableKeyword("_EMISSION");
+            rend.material.color = Pickup_Colors.Speed_c;
 
             Destroy(p, lifeTime);
             return p;

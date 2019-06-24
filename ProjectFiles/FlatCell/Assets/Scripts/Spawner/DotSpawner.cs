@@ -232,9 +232,12 @@ namespace Spawner.Command
                 switch(pickup.GetType())
                 {
                     case EPickup_Type.Color:
-                        ColorPickup c = (ColorPickup) pickup;
-                        c.enabled = true;
+                        ColorPickup c = (ColorPickup)pickup;
                         c.Spawn(dead.transform.position + dead.transform.forward * 10);
+                        break;
+                    case EPickup_Type.Speed:
+                        SpeedPickup s = (SpeedPickup)pickup;
+                        s.Spawn(dead.transform.position + dead.transform.forward * 10);
                         break;
                     default:
                         break;
@@ -242,6 +245,7 @@ namespace Spawner.Command
             }
 
             Destroy(dead);
+
             // Log debug information.
             if (killer != null)
             {

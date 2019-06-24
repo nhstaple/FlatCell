@@ -429,7 +429,31 @@ namespace Utils.InputManager
 
         public bool GetBoost()
         {
-            return Input.GetButton("Boost");
+
+            switch (joystickType)
+            {
+                case EInput_Type.MouseAndKeyboard:
+                    if (Input.GetButton("Boost"))
+                    {
+                        return true;
+                    }
+                    break;
+
+                case EInput_Type.XboxOne:
+                    if (Input.GetAxis("XboxLT") != 0)
+                    {
+                        return true;
+                    }
+                    break;
+
+                // TODO
+                case EInput_Type.PS4:
+                    break;
+
+                default:
+                    return false;
+            }
+            return false;
         }
 
         public bool GetFire1(Vector3 LookDir)
@@ -472,7 +496,7 @@ namespace Utils.InputManager
                     break;
 
                 case EInput_Type.XboxOne:
-                    if (Input.GetAxis("XboxLT") != 0)
+                    if (Input.GetAxis("XboxRT") != 0)
                     {
                         return true;
                     }

@@ -15,6 +15,7 @@
 */
 
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -215,6 +216,9 @@ namespace Geo.Command
 
         private void addComponents()
         {
+            // For adding pickups
+            initPickupFunctions();
+
             // Movement
             adsr = new ADSR();
 
@@ -272,6 +276,27 @@ namespace Geo.Command
             }
         }
 
+        protected List<Func<IPickup>> addPickups;
+
+        private void initPickupFunctions()
+        {
+            addPickups = new List<Func<IPickup>>();
+            addPickups.Add(() =>
+            {
+                ColorPickup p = this.gameObject.AddComponent<ColorPickup>();
+                p.enabled = false;
+                p.Init(this);
+                return p as IPickup;
+            });
+            addPickups.Add(() =>
+            {
+                SpeedPickup p = this.gameObject.AddComponent<SpeedPickup>();
+                p.enabled = false;
+                p.Init(this);
+                return p as IPickup;
+            });
+        }
+
         // Sets the initial values for the geo.
         private void initValues()
         {
@@ -310,11 +335,20 @@ namespace Geo.Command
             // The pickup
             if (pickup == null)
             {
-                Debug.Log("Adding a color pickup.");
-                pickup = gameObject.AddComponent<ColorPickup>();
-                ColorPickup cast = (ColorPickup)pickup;
-                cast.enabled = false;
-                cast.Init(this);
+                int index = UnityEngine.Random.Range(0, 100) % addPickups.Count;
+                pickup = addPickups[index].Invoke();
+                switch(pickup.GetType())
+                {
+                    case EPickup_Type.Color:
+                        // Debug.Log("Adding a color pickup.");
+                        break;
+                    case EPickup_Type.Speed:
+                        // Debug.Log("Adding a speed pickup.");
+                        break;
+                    default:
+                        // Debug.Log("Adding a default pickup.");
+                        break;
+                }
             }
         }
 
@@ -449,6 +483,24 @@ namespace Geo.Command
             if (health <= 0)
             {
                 GameObject spawner = GameObject.FindWithTag("Spawner");
+
+                Debug.Log("Pickup type: " + pickup.GetType().ToString());
+                switch (pickup.GetType())
+                {
+                    case EPickup_Type.Color:
+                        ColorPickup c = (ColorPickup)pickup;
+                        c.enabled = true;
+                        c.UpdateValues();
+                        break;
+                    case EPickup_Type.Speed:
+                        SpeedPickup s = (SpeedPickup)pickup;
+                        s.enabled = true;
+                        s.UpdateValues();
+                        break;
+                    default:
+                        break;
+                }
+
                 spawner.GetComponent<DotSpawner>().Kill(this.gameObject, lastHitBy);
             }
             if (this.Speed >= MaxSpeed)
@@ -645,11 +697,14 @@ namespace Geo.Command
         public void Hurt(float d)
         {
             health -= d;
+            checkStats();
+            /*
             if (health <= 0)
             {
                 GameObject spawner = GameObject.FindWithTag("Spawner");
                 spawner.GetComponent<DotSpawner>().Kill(this.gameObject, lastHitBy);
             }
+            */
         }
 
         // Increments the value at key @name in killHistory<string, int>

@@ -10,8 +10,6 @@
 using UnityEngine;
 using Geo.Command;
 using Utils.Vectors;
-using Controller.Player;
-using Pickup.Stats;
 
 /*
  * There's one pickup object for all types of stat drops.
@@ -55,6 +53,7 @@ namespace Pickup.Stats
     public struct Pickup_Colors
     {
         public static Color Color_c = Color.grey * 0.5f;
+        public static Color Speed_c = Color.cyan;
     }
 }
 namespace Pickup.Command
@@ -68,12 +67,12 @@ namespace Pickup.Command
         Speed
     }
 
-    public class PickupObject : MonoBehaviour, IPickup
+    public class PickupObject : MonoBehaviour
     {
-        bool DEBUG_TEXT = false;
+        protected bool DEBUG_TEXT = false;
 
-        public EPickup_Type type;
-        
+        public EPickup_Type type { get; protected set; }
+
         /*
         public float speed = 0;
         public float hp = 0;
@@ -83,18 +82,18 @@ namespace Pickup.Command
         public Color color;
         */
 
-        public float lifeTime = 4;
-        public Vector3 scale = Scales.PickupScale;
+        public float lifeTime { get; protected set; } = 4;
+        public Vector3 scale { get; protected set; } = Scales.PickupScale;
 
         // Script variables
         protected Renderer rend;
         protected IGeo owner;
 
-        protected bool playerBoxHit = false;
-        protected bool playerMeshHit = false;
+        private bool playerBoxHit = false;
+        private bool playerMeshHit = false;
         protected bool playerHit = false;
 
-        public void Init(IGeo geo)
+        protected void Init(IGeo geo)
         {
             owner = geo;
             /*
@@ -125,7 +124,7 @@ namespace Pickup.Command
             return type;
         }
 
-        public GameObject Spawn(Vector3 Location)
+        protected GameObject Spawn(Vector3 Location)
         {
             // Create a new projectile object.
             GameObject pickup = new GameObject("Pickup ");
@@ -232,7 +231,6 @@ namespace Pickup.Command
                     if (playerMeshHit)
                     {
                         playerHit = true;
-                        Destroy(this.gameObject);
                         /*
                         IGeo p = geo.gameObject.GetComponent<PlayerController>().geo;
                         if (this.type == EPickup_Type.Health)
