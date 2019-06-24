@@ -11,6 +11,7 @@ using UnityEngine;
 using Geo.Command;
 using Utils.Vectors;
 using Controller.Player;
+using Pickup.Stats;
 
 /*
  * There's one pickup object for all types of stat drops.
@@ -49,6 +50,13 @@ using Controller.Player;
  * Update documentation 6/16/19
 */
 
+namespace Pickup.Stats
+{
+    public struct Pickup_Colors
+    {
+        public static Color Color_c = Color.grey * 0.5f;
+    }
+}
 namespace Pickup.Command
 {
     public enum EPickup_Type
@@ -65,56 +73,51 @@ namespace Pickup.Command
         bool DEBUG_TEXT = false;
 
         public EPickup_Type type;
+        
+        /*
         public float speed = 0;
         public float hp = 0;
         public float armor = 0;
         public float damage = 0;
         public float piercing = 0;
-        public float lifeTime = 4;
         public Color color;
+        */
+
+        public float lifeTime = 4;
         public Vector3 scale = Scales.PickupScale;
-        protected float LowRange = 0.25f;
-        protected float HighRange = 0.50f;
-        protected float ColorIntensity = 100f;
 
-        /** Script variables **/
-        protected float counter = -1;
-
+        // Script variables
         protected Renderer rend;
         protected IGeo owner;
 
-        private float colorRefresh = 0.25f;
-        private float refreshCounter = 0f;
+        protected bool playerBoxHit = false;
+        protected bool playerMeshHit = false;
+        protected bool playerHit = false;
 
-        public void Init(IGeo geo, EPickup_Type t)
+        public void Init(IGeo geo)
         {
-            type = t;
             owner = geo;
+            /*
             hp = 1 * Random.Range(LowRange, HighRange);
             armor = Random.Range(LowRange, HighRange) / 4;
             damage = 1 * Random.Range(LowRange, HighRange);
             speed = owner.GetSpeed() * Random.Range(LowRange, HighRange);
             color = owner.GetColor() * Random.Range(LowRange*1.5f, HighRange);
+            */
+        }
+        
+        protected void UpdateValues()
+        {
         }
 
-        // Start is called before the first frame update
-        void Start()
+        protected float GetStatFromGeo(float geoStat, float lowRange, float highRange)
         {
-            if (owner != null)
-            {
-                color = owner.GetColor() * Random.Range(0.01f, 0.10f);
-            }
+            return geoStat * Random.Range(lowRange, highRange);
         }
 
-        // Update is called once per frame
-        void Update()
+        protected Color GetStatFromGeo(Color geoStat, float lowRange, float highRange)
         {
-            refreshCounter += Time.deltaTime;
-            if (owner != null && refreshCounter >= colorRefresh)
-            {
-                refreshCounter = 0f;
-                color = owner.GetColor() * Random.Range(0.01f, 0.10f);
-            }
+            return geoStat * Random.Range(lowRange, highRange);
         }
 
         public EPickup_Type GetType()
@@ -122,16 +125,10 @@ namespace Pickup.Command
             return type;
         }
 
-        public void SetType(EPickup_Type t)
-        {
-            type = t;
-        }
-
         public GameObject Spawn(Vector3 Location)
         {
-            counter++;
             // Create a new projectile object.
-            GameObject pickup = new GameObject(" Pickup " + counter);
+            GameObject pickup = new GameObject("Pickup ");
             pickup.tag = "Pickup";
 
             // Add mesh components
@@ -154,6 +151,9 @@ namespace Pickup.Command
             rend.material = GameObject.Instantiate(Resources.Load("Geo Mat", typeof(Material)) as Material);
             rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
+            return pickup;
+
+            /*
             // Add the script
             PickupObject p = pickup.AddComponent<PickupObject>();
             var res = Random.Range(1, 100);
@@ -189,17 +189,20 @@ namespace Pickup.Command
 
             Destroy(pickup, lifeTime);
             return pickup;
+            */
         }
+        
 
         public void OnCollisionEnter(Collision geo)
         {
+            playerBoxHit = false;
+            playerMeshHit = false;
+            playerHit = false;
+
             if (gameObject.GetComponent<PickupObject>().enabled)
             {
                 BoxCollider box = geo.gameObject.GetComponent<BoxCollider>();
                 MeshCollider mesh = geo.gameObject.GetComponent<MeshCollider>();
-
-                var playerBoxHit = false;
-                var playerMeshHit = false;
 
                 if (box != null && geo.gameObject.tag == "Player")
                 {
@@ -226,10 +229,12 @@ namespace Pickup.Command
                 }
                 else if (geo.gameObject.tag == "Player")
                 {
-                    IGeo p = geo.gameObject.GetComponent<PlayerController>().geo;
-
-                    if (p != null && playerMeshHit)
+                    if (playerMeshHit)
                     {
+                        playerHit = true;
+                        Destroy(this.gameObject);
+                        /*
+                        IGeo p = geo.gameObject.GetComponent<PlayerController>().geo;
                         if (this.type == EPickup_Type.Health)
                         {
                             p.Heal(this.hp);
@@ -246,7 +251,7 @@ namespace Pickup.Command
                         {
                             p.AddColor(this.color);
                         }
-                        Destroy(this.gameObject);
+                        */
                     }
                 }
             }

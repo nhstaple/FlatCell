@@ -16,6 +16,7 @@ using Pickup.Command;
 using AI.Command;
 using Utils.Vectors;
 using Controller.Player;
+using Pickup.Stats;
 
 /*
  * Dot Spawner
@@ -217,18 +218,27 @@ namespace Spawner.Command
 
             // Kill the dead object in the game.
             Alive.Remove(dead);
-            IAI[] res = dead.GetComponents<IAI>();
-            if (res.Length > 0)
+            IAI res = dead.GetComponent<IAI>();
+            if (res != null)
             {
-                IAI ai = res[0];
+                IAI ai = res;
                 ai.Kill();
             }
 
             // Spawn the stat drop.
-            IPickup pickup = dead.GetComponent<PickupObject>();
-            if (pickup != null)
+            IPickup pickup = dead.GetComponent<IPickup>();
+            if(pickup != null)
             {
-                pickup.Spawn(dead.transform.position + dead.transform.forward * 10);
+                switch(pickup.GetType())
+                {
+                    case EPickup_Type.Color:
+                        ColorPickup c = (ColorPickup) pickup;
+                        c.enabled = true;
+                        c.Spawn(dead.transform.position + dead.transform.forward * 10);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             Destroy(dead);

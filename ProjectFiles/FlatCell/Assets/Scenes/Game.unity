@@ -476,12 +476,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 4463196817797996641, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
-  NumDots: 10
+  NumDots: 1
   ArchetypeCount: 3
   EnableSimple: 1
   SimpleLowerRange: 0.66
   SimpleUpperRange: 0.9
-  EnableShield: 1
+  EnableShield: 0
   ShieldLowerRange: 0.75
   ShieldUpperRange: 1.15
   EnableShooter: 0

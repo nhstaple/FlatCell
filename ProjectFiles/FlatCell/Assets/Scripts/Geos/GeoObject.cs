@@ -21,6 +21,7 @@ using UnityEngine;
 using Weapon.Command;
 using Projectile.Command;
 using Pickup.Command;
+using Pickup.Stats;
 using Utils.Debug;
 using Utils.ADSR;
 using Utils.AnimationManager;
@@ -309,10 +310,11 @@ namespace Geo.Command
             // The pickup
             if (pickup == null)
             {
-                pickup = gameObject.AddComponent<PickupObject>();
-                pickup.Init(this, EPickup_Type.Default);
-                PickupObject cast = (PickupObject)pickup;
+                Debug.Log("Adding a color pickup.");
+                pickup = gameObject.AddComponent<ColorPickup>();
+                ColorPickup cast = (ColorPickup)pickup;
                 cast.enabled = false;
+                cast.Init(this);
             }
         }
 
