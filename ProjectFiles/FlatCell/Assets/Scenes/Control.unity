@@ -147,14 +147,14 @@ RectTransform:
   m_GameObject: {fileID: 1291495}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_Children: []
   m_Father: {fileID: 1071002420}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -325.4, y: 151.01}
+  m_AnchoredPosition: {x: -325.4, y: 139}
   m_SizeDelta: {x: 650.9, y: 302.02}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1291497
@@ -224,6 +224,15 @@ MonoBehaviour:
   Player: {fileID: 4463196817797996641, guid: 47d588308289b4dec8b4208a5b087f0d, type: 3}
   NumDots: 30
   ArchetypeCount: 3
+  EnableSimple: 1
+  SimpleLowerRange: 0.66
+  SimpleUpperRange: 0.9
+  EnableShield: 1
+  ShieldLowerRange: 0.75
+  ShieldUpperRange: 1.15
+  EnableShooter: 1
+  ShooterLowerRange: 0.9
+  ShooterUpperRange: 1.25
   SpawnOffset: 500
   SpawnLocation: {x: 0, y: 25, z: 0}
   InitScale: {x: 25, y: 25, z: 25}
@@ -1094,14 +1103,14 @@ RectTransform:
   m_GameObject: {fileID: 1746830245}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_Children: []
   m_Father: {fileID: 1071002420}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 327.8, y: 151.01}
+  m_AnchoredPosition: {x: 327.8, y: 138}
   m_SizeDelta: {x: 655.6, y: 302.02}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1746830247
@@ -1239,7 +1248,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000076293945, y: -117}
+  m_AnchoredPosition: {x: 0.0000076293945, y: -141}
   m_SizeDelta: {x: 704.95, y: 234}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2137041266
@@ -1275,8 +1284,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: FOR KEYBOARD INPUT USE ARROW KEYS OR WASD TO MOVE AND LEFT CLICK/CTRL TO
-    SHOOT AND RIGHT CLICK TO SHIELD AND SPACE TO BOOST.
+  m_Text: TODO needs to be updated
 --- !u!222 &2137041267
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -280,6 +280,9 @@ namespace Geo.Command
 
         private void initPickupFunctions()
         {
+            // Think of addPickups as a sample space and each item you add
+            // has a uniform distribution. Adding duplicate items will
+            // increase that item's distribution weight.
             addPickups = new List<Func<IPickup>>();
             
             addPickups.Add(() =>
