@@ -164,7 +164,7 @@ public class UI : MonoBehaviour
                 else
                 {
                     BoostBar.enabled = true;
-                    BoostBar.fillAmount = boostfillPercent;
+                    BoostBar.fillAmount = player.GetComponent<PlayerController>().GetBoostPercent();
                 }
             }
             if(HealthBar != null)
@@ -192,7 +192,7 @@ public class UI : MonoBehaviour
         }
         if(armortext != null && player != null)
         {
-            armortext.text = "Armor: " + (Mathf.Round(100f * player.GetComponent<PlayerController>().geo.GetArmor())).ToString() + "%";
+            armortext.text = "Armor: " + (Mathf.Round(player.GetComponent<PlayerController>().geo.GetArmor())).ToString() + "%";
         }
         if(boosttext != null)
         {
@@ -231,14 +231,14 @@ public class UI : MonoBehaviour
             {
                 healthtext.text = "Energy: " + Mathf.Round(remainder*100) + "%\n";
                 healthtext.text += "Health: " + Mathf.Floor(health) + " (";
-                healthtext.text += player.GetComponent<PlayerController>().geo.GetMaxHealth() + ")";
+                healthtext.text += Mathf.Round(player.GetComponent<PlayerController>().geo.GetMaxHealth()) + ")";
                 HealthBar.color = Color.Lerp(Color.red + new Color(0, 0, 80 / 255f), Color.blue + new Color(0, 80 / 255f, 0), player.GetComponent<PlayerController>().geo.GetShield().GetPercent() + minHeartShieldPercent);
             }
             else
             {
                 healthtext.text = "Energy: " + Mathf.Round(remainder * 100) + "%\n";
                 healthtext.text += "Health: " + Mathf.Floor(health) + " (";
-                healthtext.text += player.GetComponent<PlayerController>().geo.GetMaxHealth() + ")";
+                healthtext.text += Mathf.Round(player.GetComponent<PlayerController>().geo.GetMaxHealth()) + ")";
                 HealthBar.color = Color.red + new Color(0, 0, 80/255f);
             }
         }

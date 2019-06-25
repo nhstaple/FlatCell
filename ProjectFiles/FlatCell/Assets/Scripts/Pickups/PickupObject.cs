@@ -54,6 +54,8 @@ namespace Pickup.Stats
     {
         public static Color Color_c = Color.grey * 0.5f;
         public static Color Speed_c = Color.cyan;
+        public static Color Armor_c = Color.yellow;
+        public static Color Health_c = Color.red + new Color(0, 0, 80/255);
     }
 }
 namespace Pickup.Command

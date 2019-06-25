@@ -239,6 +239,14 @@ namespace Spawner.Command
                         SpeedPickup s = (SpeedPickup)pickup;
                         s.Spawn(dead.transform.position + dead.transform.forward * 10);
                         break;
+                    case EPickup_Type.Armor:
+                        ArmorPickup a = (ArmorPickup)pickup;
+                        a.Spawn(dead.transform.position + dead.transform.forward * 10);
+                        break;
+                    case EPickup_Type.Health:
+                        HealthPickup h = (HealthPickup)pickup;
+                        h.Spawn(dead.transform.position + dead.transform.forward * 10);
+                        break;
                     default:
                         break;
                 }

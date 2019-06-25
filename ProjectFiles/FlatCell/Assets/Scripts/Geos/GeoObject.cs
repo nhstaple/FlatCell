@@ -281,6 +281,7 @@ namespace Geo.Command
         private void initPickupFunctions()
         {
             addPickups = new List<Func<IPickup>>();
+            
             addPickups.Add(() =>
             {
                 ColorPickup p = this.gameObject.AddComponent<ColorPickup>();
@@ -291,6 +292,34 @@ namespace Geo.Command
             addPickups.Add(() =>
             {
                 SpeedPickup p = this.gameObject.AddComponent<SpeedPickup>();
+                p.enabled = false;
+                p.Init(this);
+                return p as IPickup;
+            });
+            addPickups.Add(() =>
+            {
+                ArmorPickup p = this.gameObject.AddComponent<ArmorPickup>();
+                p.enabled = false;
+                p.Init(this);
+                return p as IPickup;
+            });
+            addPickups.Add(() =>
+            {
+                ArmorPickup p = this.gameObject.AddComponent<ArmorPickup>();
+                p.enabled = false;
+                p.Init(this);
+                return p as IPickup;
+            });
+            addPickups.Add(() =>
+            {
+                ArmorPickup p = this.gameObject.AddComponent<ArmorPickup>();
+                p.enabled = false;
+                p.Init(this);
+                return p as IPickup;
+            });
+            addPickups.Add(() =>
+            {
+                HealthPickup p = this.gameObject.AddComponent<HealthPickup>();
                 p.enabled = false;
                 p.Init(this);
                 return p as IPickup;
@@ -337,18 +366,6 @@ namespace Geo.Command
             {
                 int index = UnityEngine.Random.Range(0, 100) % addPickups.Count;
                 pickup = addPickups[index].Invoke();
-                switch(pickup.GetType())
-                {
-                    case EPickup_Type.Color:
-                        // Debug.Log("Adding a color pickup.");
-                        break;
-                    case EPickup_Type.Speed:
-                        // Debug.Log("Adding a speed pickup.");
-                        break;
-                    default:
-                        // Debug.Log("Adding a default pickup.");
-                        break;
-                }
             }
         }
 
@@ -461,11 +478,11 @@ namespace Geo.Command
                     }
                     lastHitBy = bullet.GetOwner().GetOwner().GetGameObject();
                     float armorBuff = armor;
-                    if (armorBuff > .5f)
+                    if (armorBuff > 50f)
                     {
-                        armorBuff = .5f;
+                        armorBuff = 50f;
                     }
-                    Hurt(bullet.GetDamage() * (1 - armorBuff));
+                    Hurt(bullet.GetDamage() * (100 - armorBuff)/100);
                 }
                 Destroy(collision.gameObject, .1f);
 
@@ -496,6 +513,16 @@ namespace Geo.Command
                         SpeedPickup s = (SpeedPickup)pickup;
                         s.enabled = true;
                         s.UpdateValues();
+                        break;
+                    case EPickup_Type.Armor:
+                        ArmorPickup a = (ArmorPickup)pickup;
+                        a.enabled = true;
+                        a.UpdateValues();
+                        break;
+                    case EPickup_Type.Health:
+                        HealthPickup h = (HealthPickup)pickup;
+                        h.enabled = true;
+                        h.UpdateValues();
                         break;
                     default:
                         break;
@@ -596,7 +623,7 @@ namespace Geo.Command
                 float lowerBound = DeathPenaltyLower;
                 float upperBound = DeathPenaltyUpper;
                 var statPenalty = UnityEngine.Random.Range(lowerBound, upperBound);
-                this.armor -= this.armor * statPenalty;
+                this.armor -= this.armor * statPenalty * 0.5f;
                 this.Speed -= this.Speed * statPenalty * 0.25f;
                 this.color -= this.color * statPenalty;
             }
@@ -678,6 +705,11 @@ namespace Geo.Command
         // Adds health to the geo's hp.
         public void Heal(float h)
         {
+            if(h < 0)
+            {
+                h *= -1;
+            }
+
             if (health == MaxHealth)
             {
                 MaxHealth += h;
