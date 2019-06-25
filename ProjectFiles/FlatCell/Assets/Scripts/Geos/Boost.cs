@@ -21,6 +21,7 @@ namespace Geo.Meter
         [SerializeField] float InitMaxBoostEnergy = 0.5f;
 
         public float RechargeTime = 2f;
+        private float rechargeCounter = 0f;
 
         private void setVals()
         {
@@ -57,11 +58,27 @@ namespace Geo.Meter
         // Refill the boost energy.
         new protected void Charge(float e)
         {
-            energy += e;
-            if (energy >= RechargeTime)
+            if(charging)
             {
-                energy = MaxEnergy;
-                charging = false;
+                rechargeCounter += Time.deltaTime;
+                if (rechargeCounter >= RechargeTime)
+                {
+                    rechargeCounter = 0;
+                    energy = MaxEnergy;
+                    charging = false;
+                }
+            }
+        }
+
+        public float GetChargePercent()
+        {
+            if(charging)
+            {
+                return rechargeCounter / RechargeTime;
+            }
+            else
+            {
+                return 1f;
             }
         }
 

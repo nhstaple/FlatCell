@@ -173,7 +173,7 @@ namespace Geo.Meter
         {
             if (e > 0) { e *= -1; }
             energy += e;
-            if (energy < 0)
+            if (energy <= 0)
             {
                 energy = 0;
                 charging = true;

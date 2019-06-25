@@ -381,5 +381,20 @@ namespace Controller.Player
         {
             return geo.GetMovementDirection();
         }
+
+        public float GetBoostPercent()
+        {
+            return boost.GetPercent();
+        }
+
+        public bool IsBoostCharging()
+        {
+            return boost.IsCharging();
+        }
+
+        public float GetBoostRechargePercent()
+        {
+            return boost.GetChargePercent();
+        }
     }
 }

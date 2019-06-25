@@ -32,13 +32,20 @@ public class UI : MonoBehaviour
     public Text scoretext;
     public Text speedtext;
     public Text armortext;
+    public Text boosttext;
+    public Text shieldtext;
+    public Text healthtext;
 
     //Nick's stuff for shield Fill
     IGeo p;
     Shield shieldCopy;
     public float fillPercent;
+    public float boostfillPercent;
     float minHeartShieldPercent = 0.33f;
     public Image ShieldBar;
+    public Image BoostBar;
+    public Image UserData;
+    public Image HealthBar;
     Color ogColor;
     void GetPlayer()
     {
@@ -62,6 +69,7 @@ public class UI : MonoBehaviour
                     shieldCopy = p.GetShield();
                     fillPercent = shieldCopy.GetPercent();
                     ShieldBar.fillAmount = fillPercent;
+                    boostfillPercent = controller.GetBoostPercent();
                 }
             }
             else
@@ -73,6 +81,13 @@ public class UI : MonoBehaviour
         this.RandomizeThrottle();
     }
 
+    float boostCounter = 0f;
+    float boostToggleTime = 0.175f;
+    bool boostToggle = false;
+
+    float shieldCounter = 0f;
+    float shieldToggleTime = 0.175f;
+    bool shieldToggle = false;
 
     private void RandomizeThrottle()
     {
@@ -101,7 +116,69 @@ public class UI : MonoBehaviour
             fillPercent = controller.GetShield().GetPercent();
             if (ShieldBar != null)
             {
+                if (player.GetComponent<PlayerController>().geo.GetShield().IsCharging())
+                {
+                    shieldCounter += Time.deltaTime;
+                    if (shieldCounter >= shieldToggleTime)
+                    {
+                        shieldCounter = 0f;
+                        if (shieldToggle)
+                        {
+                            shieldToggle = false;
+                            ShieldBar.enabled = false;
+                        }
+                        else
+                        {
+                            shieldToggle = true;
+                            ShieldBar.enabled = true;
+                        }
+                    }
+                }
+                else
+                {
+                    ShieldBar.enabled = true;
+                }
                 ShieldBar.fillAmount = fillPercent;
+            }
+            if (BoostBar != null)
+            {
+                if(player.GetComponent<PlayerController>().IsBoostCharging())
+                {
+                    BoostBar.fillAmount = player.GetComponent<PlayerController>().GetBoostRechargePercent();
+                    boostCounter += Time.deltaTime;
+                    if (boostCounter >= boostToggleTime)
+                    {
+                        boostCounter = 0f;
+                        if (boostToggle)
+                        {
+                            boostToggle = false;
+                            BoostBar.enabled = false;
+                        }
+                        else
+                        {
+                            boostToggle = true;
+                            BoostBar.enabled = true;
+                        }
+                    }
+                }
+                else
+                {
+                    BoostBar.enabled = true;
+                    BoostBar.fillAmount = boostfillPercent;
+                }
+            }
+            if(HealthBar != null)
+            {
+                float remainder = controller.GetHealth();
+                while(remainder - 1 > 0)
+                {
+                    remainder--;
+                }
+                if(remainder < 0)
+                {
+                    remainder++;
+                }
+                HealthBar.fillAmount = remainder;
             }
         }
 
@@ -117,6 +194,54 @@ public class UI : MonoBehaviour
         {
             armortext.text = "Armor: " + (Mathf.Round(100f * player.GetComponent<PlayerController>().geo.GetArmor())).ToString() + "%";
         }
+        if(boosttext != null)
+        {
+            if (player.GetComponent<PlayerController>().IsBoostCharging())
+            {
+                boosttext.text = "Boost Charging!";
+            }
+            else
+            {
+                boosttext.text = "Boost: " + (Mathf.Round(100f * player.GetComponent<PlayerController>().GetBoostPercent())).ToString() + "%";
+            }
+        }
+        if(shieldtext != null)
+        {
+            if (player.GetComponent<PlayerController>().geo.GetShield().IsCharging())
+            {
+                shieldtext.text = "Shield Charging!";
+            }
+            else
+            {
+                shieldtext.text = "Shield: " + (Mathf.Round(100f * fillPercent)).ToString() + "%";
+            }
+        }
+        if(healthtext != null)
+        {
+            float remainder = controller.GetHealth();
+            while (remainder - 1 > 0)
+            {
+                remainder--;
+            }
+            if (remainder < 0)
+            {
+                remainder++;
+            }
+            if (player.GetComponent<PlayerController>().geo.GetShield().active)
+            {
+                healthtext.text = "Energy: " + Mathf.Round(remainder*100) + "%\n";
+                healthtext.text += "Health: " + Mathf.Floor(health) + " (";
+                healthtext.text += player.GetComponent<PlayerController>().geo.GetMaxHealth() + ")";
+                HealthBar.color = Color.Lerp(Color.red + new Color(0, 0, 80 / 255f), Color.blue + new Color(0, 80 / 255f, 0), player.GetComponent<PlayerController>().geo.GetShield().GetPercent() + minHeartShieldPercent);
+            }
+            else
+            {
+                healthtext.text = "Energy: " + Mathf.Round(remainder * 100) + "%\n";
+                healthtext.text += "Health: " + Mathf.Floor(health) + " (";
+                healthtext.text += player.GetComponent<PlayerController>().geo.GetMaxHealth() + ")";
+                HealthBar.color = Color.red + new Color(0, 0, 80/255f);
+            }
+        }
         if (myscore >= 20.0f)
         {
             SceneManager.LoadScene("WIN");
@@ -127,9 +252,11 @@ public class UI : MonoBehaviour
         }
         for (int i = 0; i < Numhearts.Length; i++)
         {
+
+            Numhearts[i].enabled = false;
+            /*
             if (player.GetComponent<PlayerController>().geo.GetShield().active)
             {
-
                 Numhearts[i].color = Color.Lerp(Color.white, Color.blue, player.GetComponent<PlayerController>().geo.GetShield().GetPercent() + minHeartShieldPercent);
             }
             else
@@ -137,23 +264,23 @@ public class UI : MonoBehaviour
                 Numhearts[i].color = Color.white;
             }
             if (i < health)
-                {
-                    Numhearts[i].sprite = YesHeart;
-                }
-                else
-                {
-                    Numhearts[i].sprite = NoHeart;
-                }
+            {
+                Numhearts[i].sprite = YesHeart;
+            }
+            else
+            {
+                Numhearts[i].sprite = NoHeart;
+            }
 
-                if (i < maxhealth)
-                {
-                    Numhearts[i].enabled = true;
-                }
-                else
-                {
-                    Numhearts[i].enabled = false;
-                }
-            
+            if (i < maxhealth)
+            {
+                Numhearts[i].enabled = true;
+            }
+            else
+            {
+                Numhearts[i].enabled = false;
+            }
+            */
         }
     }
 }
