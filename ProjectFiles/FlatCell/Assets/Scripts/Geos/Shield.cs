@@ -166,6 +166,11 @@ namespace Geo.Meter
             trail.enabled = true;
         }
 
+        public float GetMaxDuration()
+        {
+            return MaxEnergy;
+        }
+
         private void changeColor()
         {
             if (active)

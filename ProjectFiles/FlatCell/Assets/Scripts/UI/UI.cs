@@ -34,7 +34,10 @@ public class UI : MonoBehaviour
     public Text armortext;
     public Text boosttext;
     public Text shieldtext;
+    public Text shieldtime;
     public Text healthtext;
+    public Text healthlives;
+    public Text healthmax;
 
     //Nick's stuff for shield Fill
     IGeo p;
@@ -44,7 +47,6 @@ public class UI : MonoBehaviour
     float minHeartShieldPercent = 0.33f;
     public Image ShieldBar;
     public Image BoostBar;
-    public Image UserData;
     public Image HealthBar;
     Color ogColor;
     void GetPlayer()
@@ -169,16 +171,17 @@ public class UI : MonoBehaviour
             }
             if(HealthBar != null)
             {
-                float remainder = controller.GetHealth();
-                while(remainder - 1 > 0)
+                
+                float r = controller.GetHealth();
+                while(r - 1 > 0)
                 {
-                    remainder--;
+                    r--;
                 }
-                if(remainder < 0)
+                if(r < 0)
                 {
-                    remainder++;
+                    r++;
                 }
-                HealthBar.fillAmount = remainder;
+                HealthBar.fillAmount = r;
             }
         }
 
@@ -202,7 +205,7 @@ public class UI : MonoBehaviour
             }
             else
             {
-                boosttext.text = "Boost: " + (Mathf.Round(100f * player.GetComponent<PlayerController>().GetBoostPercent())).ToString() + "%";
+                boosttext.text = "Boost    " + (Mathf.Round(100f * player.GetComponent<PlayerController>().GetBoostPercent())).ToString() + "%";
             }
         }
         if(shieldtext != null)
@@ -213,12 +216,16 @@ public class UI : MonoBehaviour
             }
             else
             {
-                shieldtext.text = "Shield: " + (Mathf.Round(100f * fillPercent)).ToString() + "%";
+                shieldtext.text = "Shield    " + (Mathf.Round(100f * fillPercent)).ToString() + "%";
             }
         }
-        if(healthtext != null)
+        if(shieldtime != null)
         {
-            float remainder = controller.GetHealth();
+            shieldtime.text = "Time " + Mathf.Round(player.GetComponent<PlayerController>().geo.GetShield().GetMaxDuration()) + "s";
+        }
+        float remainder = controller.GetHealth();
+        if (healthtext != null)
+        {
             while (remainder - 1 > 0)
             {
                 remainder--;
@@ -229,19 +236,25 @@ public class UI : MonoBehaviour
             }
             if (player.GetComponent<PlayerController>().geo.GetShield().active)
             {
-                healthtext.text = "Energy: " + Mathf.Round(remainder*100) + "%\n";
-                healthtext.text += "Health: " + Mathf.Floor(health) + " (";
-                healthtext.text += Mathf.Round(player.GetComponent<PlayerController>().geo.GetMaxHealth()) + ")";
+                // healthtext.text = "Energy    " + Mathf.Round(remainder*100) + "%\n";
+                healthtext.text = "Protected by shields!";
                 HealthBar.color = Color.Lerp(Color.red + new Color(0, 0, 80 / 255f), Color.blue + new Color(0, 80 / 255f, 0), player.GetComponent<PlayerController>().geo.GetShield().GetPercent() + minHeartShieldPercent);
             }
             else
             {
-                healthtext.text = "Energy: " + Mathf.Round(remainder * 100) + "%\n";
-                healthtext.text += "Health: " + Mathf.Floor(health) + " (";
-                healthtext.text += Mathf.Round(player.GetComponent<PlayerController>().geo.GetMaxHealth()) + ")";
+                healthtext.text = "Energy    " + Mathf.Round(remainder * 100) + "%\n";
                 HealthBar.color = Color.red + new Color(0, 0, 80/255f);
             }
         }
+        if (healthlives != null)
+        {
+            healthlives.text = "Lives " + Mathf.Floor(controller.GetHealth());
+        }
+        if (healthmax != null)
+        {
+            healthmax.text = "Max " + Mathf.Ceil(controller.GetHealth());
+        }
+
         if (myscore >= 20.0f)
         {
             SceneManager.LoadScene("WIN");
