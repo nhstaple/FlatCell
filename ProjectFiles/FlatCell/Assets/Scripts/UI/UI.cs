@@ -13,6 +13,8 @@ using UnityEngine.SceneManagement;
 using Geo.Command;
 using Geo.Meter;
 using Controller.Player;
+using Utils.AnimationManager;
+
 
 public class UI : MonoBehaviour 
 {
@@ -49,9 +51,15 @@ public class UI : MonoBehaviour
     public Image BoostBar;
     public Image HealthBar;
     Color ogColor;
+
+    AnimationManager anim;
+
+    bool HPLocked = false;
+
     void GetPlayer()
     {
         player = GameObject.FindWithTag("Player");
+        anim = new AnimationManager();
     }
 
     //public PlayerController p;
@@ -91,6 +99,10 @@ public class UI : MonoBehaviour
     float shieldToggleTime = 0.175f;
     bool shieldToggle = false;
 
+    float oldHP;
+    bool oldHPSet = false;
+    bool setHPFill = false;
+
     private void RandomizeThrottle()
     {
        Throttle = Random.Range(0.0f, 1.0f);
@@ -106,6 +118,23 @@ public class UI : MonoBehaviour
         if(controller != null)
         {
             myscore = controller.GetScore();
+            if (!oldHPSet)
+            {
+                oldHP = controller.GetHealth();
+                oldHPSet = true;
+            }
+            else
+            {
+                if(oldHP != controller.GetHealth())
+                {
+                    oldHP = controller.GetHealth();
+                    setHPFill = true;
+                }
+                else
+                {
+                    setHPFill = false;
+                }
+            }
         }
         if (TimetoWatch >= Throttle)
         {
@@ -171,17 +200,7 @@ public class UI : MonoBehaviour
             }
             if(HealthBar != null)
             {
-                
-                float r = controller.GetHealth();
-                while(r - 1 > 0)
-                {
-                    r--;
-                }
-                if(r < 0)
-                {
-                    r++;
-                }
-                HealthBar.fillAmount = r;
+                lerpHP();
             }
         }
 
@@ -294,6 +313,36 @@ public class UI : MonoBehaviour
                 Numhearts[i].enabled = false;
             }
             */
+        }
+    }
+
+    private void lerpHP()
+    {
+        var i = 0;
+        float time = 10f;
+        float oldFill = HealthBar.fillAmount;
+        float r = oldHP;
+
+        if (!HPLocked)
+        {
+            HPLocked = true;
+            while (r - 1 > 0)
+            {
+                r--;
+            }
+            if (r < 0)
+            {
+                r++;
+            }
+            float counter = 0;
+            do
+            {
+                // Debug.Log("fill amount: " + Mathf.Round(100*counter/time) +"%");
+                this.HealthBar.fillAmount = Mathf.Lerp(oldFill, r, counter / time);
+                counter += Time.deltaTime;
+                i++;
+            } while (counter <= time);
+            HPLocked = false;
         }
     }
 }

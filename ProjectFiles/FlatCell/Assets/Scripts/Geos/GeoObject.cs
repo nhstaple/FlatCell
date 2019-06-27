@@ -285,6 +285,7 @@ namespace Geo.Command
             // increase that item's distribution weight.
             addPickups = new List<Func<IPickup>>();
             
+            // Color
             addPickups.Add(() =>
             {
                 ColorPickup p = this.gameObject.AddComponent<ColorPickup>();
@@ -292,6 +293,7 @@ namespace Geo.Command
                 p.Init(this);
                 return p as IPickup;
             });
+            // Speed
             addPickups.Add(() =>
             {
                 SpeedPickup p = this.gameObject.AddComponent<SpeedPickup>();
@@ -299,6 +301,7 @@ namespace Geo.Command
                 p.Init(this);
                 return p as IPickup;
             });
+            // Armor
             addPickups.Add(() =>
             {
                 ArmorPickup p = this.gameObject.AddComponent<ArmorPickup>();
@@ -313,9 +316,24 @@ namespace Geo.Command
                 p.Init(this);
                 return p as IPickup;
             });
+            // Health
             addPickups.Add(() =>
             {
-                ArmorPickup p = this.gameObject.AddComponent<ArmorPickup>();
+                HealthPickup p = this.gameObject.AddComponent<HealthPickup>();
+                p.enabled = false;
+                p.Init(this);
+                return p as IPickup;
+            });
+            addPickups.Add(() =>
+            {
+                HealthPickup p = this.gameObject.AddComponent<HealthPickup>();
+                p.enabled = false;
+                p.Init(this);
+                return p as IPickup;
+            });
+            addPickups.Add(() =>
+            {
+                HealthPickup p = this.gameObject.AddComponent<HealthPickup>();
                 p.enabled = false;
                 p.Init(this);
                 return p as IPickup;
