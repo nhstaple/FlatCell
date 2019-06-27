@@ -252,7 +252,7 @@ public class UI : MonoBehaviour
         }
         if (healthmax != null)
         {
-            healthmax.text = "Max " + Mathf.Ceil(controller.GetHealth());
+            healthmax.text = "Max " + Mathf.Ceil(controller.GetMaxHealth());
         }
 
         if (myscore >= 20.0f)

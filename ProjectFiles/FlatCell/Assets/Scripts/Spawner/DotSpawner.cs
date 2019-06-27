@@ -66,7 +66,7 @@ namespace Spawner.Command
         [SerializeField] public float FireRate = 0.05f;
         [SerializeField] public float FireChance = 25;
         [SerializeField] public float ShieldChance = 25;
-        [SerializeField] public float Damage = 1;
+        [SerializeField] public float Damage = 0.15f;
 
         // Container of alive objects.
         private List<GameObject> Alive;

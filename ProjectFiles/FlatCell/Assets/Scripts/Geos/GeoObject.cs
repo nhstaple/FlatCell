@@ -485,7 +485,14 @@ namespace Geo.Command
                     {
                         armorBuff = 50f;
                     }
-                    Hurt(bullet.GetDamage() * (100 - armorBuff)/100);
+                    if (this.gameObject.tag == "Player")
+                    {
+                        Hurt((bullet.GetDamage() * 0.1f) * (100 - armorBuff) / 100);
+                    }
+                    else
+                    {
+                        Hurt((bullet.GetDamage() * 1.0f) * (100 - armorBuff) / 100);
+                    }
                 }
                 Destroy(collision.gameObject, .1f);
 

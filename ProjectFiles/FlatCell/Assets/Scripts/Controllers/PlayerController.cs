@@ -180,6 +180,7 @@ namespace Controller.Player
         private void initValues()
         {
             weaponSelect = 1;
+            geo.ModifyArmor(5f);
         }
 
         private void Update()
