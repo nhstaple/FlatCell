@@ -359,7 +359,6 @@ namespace Controller.Player
                 var score = geo.GetScore();
                 Vector3 newScale = Scales.InitDotScale;
                 newScale.x += score;
-                newScale.y -= score;
                 newScale.z -= score;
                 this.gameObject.transform.localScale = newScale;
             }

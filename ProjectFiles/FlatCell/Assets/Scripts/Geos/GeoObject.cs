@@ -513,6 +513,7 @@ namespace Geo.Command
                     }
                 }
                 Destroy(collision.gameObject, .1f);
+                collision.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 
             }
             else
