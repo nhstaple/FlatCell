@@ -110,6 +110,7 @@ public class UI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if(player == null)
         {
             GetPlayer();
@@ -282,6 +283,7 @@ public class UI : MonoBehaviour
         {
             health = maxhealth;
         }
+        */
         for (int i = 0; i < Numhearts.Length; i++)
         {
 

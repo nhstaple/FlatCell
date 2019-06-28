@@ -26,7 +26,7 @@ using Utils.AnimationManager;
 
 namespace Controller.Player
 {
-    class PlayerController : MonoBehaviour // DotObject
+    public class PlayerController : MonoBehaviour // DotObject
     {
         [SerializeField] public InputManager inputManager;
 
