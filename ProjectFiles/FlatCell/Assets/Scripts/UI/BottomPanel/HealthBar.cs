@@ -7,7 +7,7 @@ using Utils.UIManager;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] GameObject UI;
+    [SerializeField] GameObject Manager;
     [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] TextMeshProUGUI hpLives;
     [SerializeField] TextMeshProUGUI hpMaxLives;
@@ -28,12 +28,14 @@ public class HealthBar : MonoBehaviour
     bool hpChangeIncrease = false;
     float barLerpCounter = 0f;
     float maxHp = 0f;
+    float shieldTime = 0;
+    float lastLerp = 0f;
 
     void GetManager()
     {
         if(manager == null)
         {
-            manager = UI.GetComponent<UIManager>();
+            manager = Manager.GetComponent<UIManager>();
         }
     }
 
@@ -96,9 +98,6 @@ public class HealthBar : MonoBehaviour
             UpateHealthBar();
         }
     }
-
-    float shieldTime = 0;
-    float lastLerp = 0f;
 
     void UpdateHPPercent()
     {

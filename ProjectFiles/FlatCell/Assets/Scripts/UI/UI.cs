@@ -284,67 +284,6 @@ public class UI : MonoBehaviour
             health = maxhealth;
         }
         */
-        for (int i = 0; i < Numhearts.Length; i++)
-        {
-
-            Numhearts[i].enabled = false;
-            /*
-            if (player.GetComponent<PlayerController>().geo.GetShield().active)
-            {
-                Numhearts[i].color = Color.Lerp(Color.white, Color.blue, player.GetComponent<PlayerController>().geo.GetShield().GetPercent() + minHeartShieldPercent);
-            }
-            else
-            {
-                Numhearts[i].color = Color.white;
-            }
-            if (i < health)
-            {
-                Numhearts[i].sprite = YesHeart;
-            }
-            else
-            {
-                Numhearts[i].sprite = NoHeart;
-            }
-
-            if (i < maxhealth)
-            {
-                Numhearts[i].enabled = true;
-            }
-            else
-            {
-                Numhearts[i].enabled = false;
-            }
-            */
-        }
-    }
-
-    private void lerpHP()
-    {
-        var i = 0;
-        float time = 10f;
-        float oldFill = HealthBar.fillAmount;
-        float r = oldHP;
-
-        if (!HPLocked)
-        {
-            HPLocked = true;
-            while (r - 1 > 0)
-            {
-                r--;
-            }
-            if (r < 0)
-            {
-                r++;
-            }
-            float counter = 0;
-            do
-            {
-                // Debug.Log("fill amount: " + Mathf.Round(100*counter/time) +"%");
-                this.HealthBar.fillAmount = Mathf.Lerp(oldFill, r, counter / time);
-                counter += Time.deltaTime;
-                i++;
-            } while (counter <= time);
-            HPLocked = false;
-        }
+     
     }
 }
