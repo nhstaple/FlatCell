@@ -126,7 +126,7 @@ public class PauseMenu : MonoBehaviour
     {
         foreach (Button b in buttons)
         {
-            //b.enabled = false;
+            b.enabled = false;
             b.interactable = false;
         }
         Time.timeScale = 1f;
@@ -139,7 +139,7 @@ public class PauseMenu : MonoBehaviour
         GamePause = true;
         foreach (Button b in buttons)
         {
-            //b.enabled = true;
+            b.enabled = true;
             b.interactable = true;
         }
     }
