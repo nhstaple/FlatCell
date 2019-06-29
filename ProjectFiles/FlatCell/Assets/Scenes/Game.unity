@@ -1174,7 +1174,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 257
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -2199,7 +2199,7 @@ RectTransform:
   - {fileID: 147488128}
   - {fileID: 1397540292}
   m_Father: {fileID: 2144460626}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2792,7 +2792,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 257
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -2954,7 +2954,7 @@ RectTransform:
   - {fileID: 1367082328}
   - {fileID: 1374554511}
   m_Father: {fileID: 2144460626}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3226,7 +3226,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 257
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -4702,6 +4702,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
+  panels:
+  - {fileID: 1684213487}
+  - {fileID: 736375217}
+  meterBars:
+  - {fileID: 308776409}
+  - {fileID: 708135173}
+  - {fileID: 1561210513}
+  meterBackgrounds:
+  - {fileID: 189893110}
+  - {fileID: 1872428862}
+  - {fileID: 1993893394}
+  textBoxTitles:
+  - {fileID: 1433643781}
+  - {fileID: 226062629}
+  - {fileID: 12765450}
+  - {fileID: 483611052}
+  - {fileID: 1374554512}
+  - {fileID: 1237810314}
+  - {fileID: 147488129}
+  - {fileID: 1397540293}
+  textBoxInfo:
+  - {fileID: 1707744948}
+  - {fileID: 1367082329}
+  - {fileID: 1420463419}
+  textBoxBackground:
+  - {fileID: 1010704501}
+  panelFadeIn: 1
 --- !u!4 &1991855575
 Transform:
   m_ObjectHideFlags: 0
@@ -4818,9 +4845,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1.5000001, z: 1}
   m_Children:
   - {fileID: 1333252818}
-  - {fileID: 1052662984}
-  - {fileID: 407630479}
   - {fileID: 1342552392}
+  - {fileID: 407630479}
+  - {fileID: 1052662984}
   m_Father: {fileID: 469632215}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
