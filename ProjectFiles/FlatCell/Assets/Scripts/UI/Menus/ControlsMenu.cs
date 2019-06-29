@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -48,5 +49,14 @@ public class ControlsMenu : MonoBehaviour
             text.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, alpha);
         }
         fadeInCounter += Time.deltaTime;
+    }
+
+    private string Scene = "Title";
+
+    public void StartMenu()
+    {
+        Debug.Log("Loading");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(Scene);
     }
 }

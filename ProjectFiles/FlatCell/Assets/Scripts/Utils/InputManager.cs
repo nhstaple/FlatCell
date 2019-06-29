@@ -512,6 +512,39 @@ namespace Utils.InputManager
             return false;
         }
 
+        bool isPaused = false;
+        float timer = 0f;
+        float maxTime = 0.25f;
+
+        public bool GetPause()
+        {
+            switch (joystickType)
+            {
+                case EInput_Type.MouseAndKeyboard:
+                    if (Input.GetKeyDown(KeyCode.Escape))
+                    {
+                        return true;
+                    }
+                    break;
+
+                case EInput_Type.XboxOne:
+                    if (Input.GetButtonDown("XboxPause"))
+                    {
+                        return true;
+                    }
+                    break;
+
+                // TODO
+                case EInput_Type.PS4:
+                    break;
+
+                default:
+                    return false;
+            }
+            
+            return false;
+        }
+
         // TODO
         // 
     }

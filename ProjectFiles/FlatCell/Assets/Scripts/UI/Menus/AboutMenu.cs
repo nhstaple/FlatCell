@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -26,7 +27,10 @@ public class AboutMenu : MonoBehaviour
         {
             text.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, -1f);
         }
-        background.color = new Color(1, 1, 1, 1);
+        if (background != null)
+        {
+            background.color = new Color(1, 1, 1, 1);
+        }
         fadeInCounter = 0f;
     }
 
@@ -51,8 +55,19 @@ public class AboutMenu : MonoBehaviour
             text.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, alpha);
         }
 
-        background.color = newColor;
+        if (background != null)
+        {
+            background.color = newColor;
+        }
 
         fadeInCounter += Time.deltaTime;
+    }
+
+    private string Scene = "Title";
+    public void StartMenu()
+    {
+        Debug.Log("Loading");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(Scene);
     }
 }

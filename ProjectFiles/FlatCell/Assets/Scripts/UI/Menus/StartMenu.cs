@@ -12,6 +12,7 @@ public class StartMenu : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI title;
     [SerializeField] TextMeshProUGUI[] menu;
+    [SerializeField] TextMeshProUGUI[] textFade;
 
     [SerializeField] float fadeInLerpTime = 3f;
     [SerializeField] float menuDelay = 1f;
@@ -28,7 +29,10 @@ public class StartMenu : MonoBehaviour
 
         if (enableTitleAnim)
         {
-            title.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, -1f);
+            if (title != null)
+            {
+                title.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, -1f);
+            }
         }
 
         if (enableMenuAnim)
@@ -39,6 +43,11 @@ public class StartMenu : MonoBehaviour
             }
         }
 
+        foreach(TextMeshProUGUI txt in textFade)
+        {
+            txt.color = new Color(0, 0, 0, 0);
+        }
+
         fadeInCounter = 0f;
     }
 
@@ -46,19 +55,31 @@ public class StartMenu : MonoBehaviour
     {
         if (enableTitleAnim)
         {
-            title.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, -1f);
+            if (title != null)
+            {
+                title.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, -1f);
+            }
         }
         fadeInCounter = 0f;
     }
 
     private void Update()
     {
-        float alpha = Mathf.SmoothStep(-1f, -.25f, fadeInCounter / fadeInLerpTime);
-        float beta = Mathf.SmoothStep(-.8f, 0, (fadeInCounter - menuDelay) / fadeInLerpTime);
+        float alpha = Mathf.SmoothStep(-.8f, -.25f, fadeInCounter / fadeInLerpTime);
+        float beta = Mathf.SmoothStep(-.775f, 0, (fadeInCounter - menuDelay) / fadeInLerpTime);
+        float gamma = Mathf.SmoothStep(0, 0.5f, (fadeInCounter - menuDelay) / fadeInLerpTime);
+
+        foreach (TextMeshProUGUI txt in textFade)
+        {
+            txt.color = new Color(0, 0, 0, gamma);
+        }
 
         if (enableTitleAnim && enableMenuAnim)
         {
-            title.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, alpha);
+            if (title != null)
+            {
+                title.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, alpha);
+            }
         }
 
         if (enableMenuAnim)
@@ -80,7 +101,10 @@ public class StartMenu : MonoBehaviour
             if (enableTitleAnim)
             {
                 float alphaPrime = Mathf.SmoothStep(-1f, -.25f, fadeInCounter / (0.25f * fadeInLerpTime));
-                title.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, alphaPrime);
+                if (title != null)
+                {
+                    title.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, alphaPrime);
+                }
             }
         }
 
