@@ -96,29 +96,32 @@ namespace Utils.UIManager
             float gamma = Mathf.SmoothStep(0, 64f / 255, fadeInCounter / panelFadeIn);
             float boop = Mathf.SmoothStep(0, 16f / 255, fadeInCounter / panelFadeIn);
 
-            foreach (Image panel in panels)
+            if (fadeInCounter <= panelFadeIn)
             {
-                panel.color = new Color(0, 0, 0, alpha);
-            }
-            foreach (TextMeshProUGUI text in textBoxTitles)
-            {
-                text.color = new Color(1, 1, 1, alpha);
-            }
-            foreach (Image bar in meterBars)
-            {
-                bar.color = new Color(bar.color.r, bar.color.g, bar.color.b, alpha);
-            }
-            foreach (Image back in meterBackgrounds)
-            {
-                back.color = new Color(back.color.r, back.color.g, back.color.b, gamma);
-            }
-            foreach (TextMeshProUGUI panel in textBoxInfo)
-            {
-                panel.color = new Color(1, 1, 1, beta);
-            }
-            foreach (TextMeshProUGUI text in textBoxBackground)
-            {
-                text.color = new Color(1, 1, 1, boop);
+                foreach (Image panel in panels)
+                {
+                    panel.color = new Color(0, 0, 0, alpha);
+                }
+                foreach (TextMeshProUGUI text in textBoxTitles)
+                {
+                    text.color = new Color(1, 1, 1, alpha);
+                }
+                foreach (Image bar in meterBars)
+                {
+                    bar.color = new Color(bar.color.r, bar.color.g, bar.color.b, alpha);
+                }
+                foreach (Image back in meterBackgrounds)
+                {
+                    back.color = new Color(back.color.r, back.color.g, back.color.b, gamma);
+                }
+                foreach (TextMeshProUGUI panel in textBoxInfo)
+                {
+                    panel.color = new Color(1, 1, 1, beta);
+                }
+                foreach (TextMeshProUGUI text in textBoxBackground)
+                {
+                    text.color = new Color(1, 1, 1, boop);
+                }
             }
             fadeInCounter += Time.deltaTime;
         }

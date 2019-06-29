@@ -1138,6 +1138,8 @@ MonoBehaviour:
   boostText: {fileID: 1237810314}
   boostBar: {fileID: 708135173}
   boostBackground: {fileID: 1993893394}
+  boostRechargeFlashPoll: 0.25
+  minAlpha: 0.4
 --- !u!1 &469632214
 GameObject:
   m_ObjectHideFlags: 0
@@ -3079,6 +3081,8 @@ MonoBehaviour:
   shieldTime: {fileID: 1367082329}
   shieldBar: {fileID: 1561210513}
   shieldBackground: {fileID: 1872428862}
+  shieldRechargeFlashPoll: 0.25
+  minAlpha: 0.4
 --- !u!1 &1367082327
 GameObject:
   m_ObjectHideFlags: 0

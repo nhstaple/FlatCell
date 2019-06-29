@@ -18,10 +18,10 @@ public class BoostBar : MonoBehaviour
     float boostRechargePercent = 0f;
 
     float flashCounter = 0f;
-    float boostRechargeFlashPoll = 0.25f;
+    [SerializeField] float boostRechargeFlashPoll = 0.25f;
     bool boostFlash = false;
     float colorCounter = 0f;
-
+    [SerializeField] float minAlpha = 0.40f;
     void GetManager()
     {
         if(manager == null)
@@ -86,12 +86,12 @@ public class BoostBar : MonoBehaviour
 
             if (boostFlash)
             {
-                boostBar.color = Color.Lerp(new Color(0, 1, 80f / 255, 1), new Color(0, 1, 80f / 255, 0.25f), colorCounter / (2f * boostRechargeFlashPoll));
+                boostBar.color = Color.Lerp(new Color(0, 1, 80f / 255, 1), new Color(0, 1, 80f / 255, minAlpha), colorCounter / (2f * boostRechargeFlashPoll));
                 colorCounter += Time.deltaTime;
             }
             else
             {
-                boostBar.color = Color.Lerp(new Color(0, 1, 80f / 255, 0.25f), new Color(0, 1, 80f / 255, 1), colorCounter / (2f * boostRechargeFlashPoll));
+                boostBar.color = Color.Lerp(new Color(0, 1, 80f / 255, minAlpha), new Color(0, 1, 80f / 255, 1), colorCounter / (2f * boostRechargeFlashPoll));
                 colorCounter += Time.deltaTime;
             }
             

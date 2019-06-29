@@ -18,9 +18,10 @@ public class ShieldBar : MonoBehaviour
     float shieldEnergy = 0f;
     float shieldMaxTime = 0f;
     float flashCounter = 0f;
-    float shieldRechargeFlashPoll = 0.25f;
+    [SerializeField] float shieldRechargeFlashPoll = 0.25f;
     bool shieldFlash = false;
     float colorCounter = 0f;
+    [SerializeField] float minAlpha = 0.40f;
 
     float restoreLerpTime = 0.5f;
 
@@ -77,12 +78,12 @@ public class ShieldBar : MonoBehaviour
             }
             if(shieldFlash)
             {
-                shieldBar.color = Color.Lerp(new Color(0, 80f / 255, 1, 1), new Color(0, 80f / 255, 1, 0.25f), colorCounter / (2f * shieldRechargeFlashPoll));
+                shieldBar.color = Color.Lerp(new Color(0, 80f / 255, 1, 1), new Color(0, 80f / 255, 1, minAlpha), colorCounter / (2f * shieldRechargeFlashPoll));
                 colorCounter += Time.deltaTime;
             }
             else
             {
-                shieldBar.color = Color.Lerp(new Color(0, 80f / 255, 1, 0.25f), new Color(0, 80f / 255, 1, 1), colorCounter / (2f * shieldRechargeFlashPoll));
+                shieldBar.color = Color.Lerp(new Color(0, 80f / 255, 1, minAlpha), new Color(0, 80f / 255, 1, 1), colorCounter / (2f * shieldRechargeFlashPoll));
                 colorCounter += Time.deltaTime;
             }
             shieldText.text = "Shield Charging";
