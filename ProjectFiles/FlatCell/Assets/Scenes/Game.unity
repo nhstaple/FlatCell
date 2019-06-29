@@ -2696,7 +2696,10 @@ MonoBehaviour:
   - {fileID: 2081033823}
   - {fileID: 501096309}
   - {fileID: 1657899198}
-  buttons: []
+  buttons:
+  - {fileID: 701593057}
+  - {fileID: 1707734603}
+  - {fileID: 173582346}
   PauseUI: {fileID: 1109429280}
 --- !u!1 &1159016970
 GameObject:

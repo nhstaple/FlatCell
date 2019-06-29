@@ -101,12 +101,6 @@ public class PauseMenu : MonoBehaviour
                 t.color = new Color(1, 1, 1, beta);
             }
 
-            foreach (Button b in buttons)
-            {
-                b.enabled = true;
-                b.interactable = true;
-            }
-
             fadeInCounter += lastDelta;
         }
         // Fade out the pause menu
@@ -124,17 +118,17 @@ public class PauseMenu : MonoBehaviour
                 t.color = new Color(1, 1, 1, beta);
             }
 
-            foreach (Button b in buttons)
-            {
-                b.enabled = false;
-            }
-
             fadeOutCounter += lastDelta;
         }
     }
 
     public void Resume()
     {
+        foreach (Button b in buttons)
+        {
+            //b.enabled = false;
+            b.interactable = false;
+        }
         Time.timeScale = 1f;
         GamePause = false;
     }
@@ -143,6 +137,11 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 0f;
         GamePause = true;
+        foreach (Button b in buttons)
+        {
+            //b.enabled = true;
+            b.interactable = true;
+        }
     }
 
     public void StartMenu()
