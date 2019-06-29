@@ -254,19 +254,23 @@ namespace Utils.InputManager
 
         public void GetSticks(ref Vector3 Movement, ref Vector3 Look)
         {
-            // The left stick / WASD.
-            Movement = new Vector3(Input.GetAxis("Horizontal"), 0f,
-                                   Input.GetAxis("Vertical"));
 
             switch (joystickType)
             {
                 case EInput_Type.MouseAndKeyboard:
+                    // The left stick / WASD.
+                    Movement = new Vector3(Input.GetAxis("Horizontal"), 0f,
+                                           Input.GetAxis("Vertical"));
                     // The mouse.
                     Look = new Vector3(Input.mousePosition.x - screenW, 0f,
                                        Input.mousePosition.y - screenH);
                     break;
 
                 case EInput_Type.XboxOne:
+                    // The left stick / WASD.
+                    Movement = new Vector3(Input.GetAxis("LeftStickX"), 0f,
+                                           Input.GetAxis("LeftStickY"));
+
                     Look = new Vector3(Input.GetAxis("RightStickX"), 0f,
                                        Input.GetAxis("RightStickY"));
                     if (!InvertedStick)
