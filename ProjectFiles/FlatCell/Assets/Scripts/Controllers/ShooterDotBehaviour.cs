@@ -34,18 +34,21 @@ namespace DotBehaviour.Command
         new public void Update()
         {
             base.Update();
-            if (target != null)
+            if (Time.timeScale > 0)
             {
-                Vector3 distance = target.transform.position - this.transform.position;
-                if(PlayerVisionLocked || distance.magnitude < 100f)
+                if (target != null)
                 {
-                    owner.LookAt((target.transform.position - this.transform.position).normalized);
+                    Vector3 distance = target.transform.position - this.transform.position;
+                    if (PlayerVisionLocked || distance.magnitude < 100f)
+                    {
+                        owner.LookAt((target.transform.position - this.transform.position).normalized);
+                        Fire();
+                    }
+                }
+                else
+                {
                     Fire();
                 }
-            }
-            else
-            {
-                Fire();
             }
         }
 

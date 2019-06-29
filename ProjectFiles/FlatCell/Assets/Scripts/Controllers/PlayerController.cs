@@ -185,16 +185,19 @@ namespace Controller.Player
 
         private void Update()
         {
-            // Check the debug flags.
-            checkDebug();
-            // Check the player's stats and evolution.
-            checkStats();
+            if (Time.timeScale > 0)
+            {
+                // Check the debug flags.
+                checkDebug();
+                // Check the player's stats and evolution.
+                checkStats();
 
-            gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            modifiedSpeed = geo.GetSpeed();
+                gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                modifiedSpeed = geo.GetSpeed();
 
-            // Do input related behaviour.
-            handleInput();
+                // Do input related behaviour.
+                handleInput();
+            }
         }
 
         public void OnCollisionEnter(Collision collision)

@@ -11,6 +11,7 @@ public class StartMenu : MonoBehaviour
     private string About = "Abeut";
 
     [SerializeField] TextMeshProUGUI title;
+    [SerializeField] TextMeshProUGUI message;
     [SerializeField] TextMeshProUGUI[] menu;
     [SerializeField] TextMeshProUGUI[] textFade;
 
@@ -21,7 +22,13 @@ public class StartMenu : MonoBehaviour
     static bool init = false;
     
     float fadeInCounter;
-
+    const int NUM_MESSAGES = 3;
+    string[] messages =
+        {
+            "Welcome! We're still in Alpha...",
+            "Now with more bugs!",
+            "I think the last update broke the game..."
+        };
 
     void Start()
     {
@@ -60,6 +67,9 @@ public class StartMenu : MonoBehaviour
                 title.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, -1f);
             }
         }
+
+        message.text = messages[(int)Random.Range((int)0, (int)NUM_MESSAGES)];
+
         fadeInCounter = 0f;
     }
 

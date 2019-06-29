@@ -9,6 +9,7 @@ using TMPro;
 public class ControlsMenu : MonoBehaviour
 {
     [SerializeField] RawImage[] images;
+    [SerializeField] Image[] imgs;
     [SerializeField] TextMeshProUGUI[] textBoxes;
     [SerializeField] float fadeInLerpTime = 0.75f;
 
@@ -21,7 +22,10 @@ public class ControlsMenu : MonoBehaviour
         {
             img.color = new Color(255, 255, 255, 0);
         }
-
+        foreach (Image img in imgs)
+        {
+            img.color = new Color(255, 255, 255, 0);
+        }
         foreach (TextMeshProUGUI text in textBoxes)
         {
             text.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, -1f);
@@ -47,6 +51,10 @@ public class ControlsMenu : MonoBehaviour
         foreach (TextMeshProUGUI text in textBoxes)
         {
             text.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, alpha);
+        }
+        foreach (Image img in imgs)
+        {
+            img.color = new Color(0, 0, 0, alpha + 1 - 0.25f);
         }
         fadeInCounter += Time.deltaTime;
     }

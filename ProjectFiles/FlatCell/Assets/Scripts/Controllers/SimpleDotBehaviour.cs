@@ -105,8 +105,11 @@ namespace DotBehaviour.Command
 
         public void Update()
         {
-            CheckScore();
-            Move();
+            if (Time.timeScale > 0)
+            {
+                CheckScore();
+                Move();
+            }
         }
 
         public void Move()

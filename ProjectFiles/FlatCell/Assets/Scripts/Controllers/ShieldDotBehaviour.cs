@@ -42,7 +42,10 @@ namespace DotBehaviour.Command
         new public void Update()
         {
             base.Update();
-            Shields();
+            if (Time.timeScale > 0)
+            {
+                Shields();
+            }
         }
 
         new public void Shields()

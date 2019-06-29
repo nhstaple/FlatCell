@@ -291,8 +291,9 @@ namespace Utils.InputManager
             {
                 // TODO get arrow keys up or down
                 case EInput_Type.MouseAndKeyboard:
+                    float res = Input.GetAxis("MenuUp");
                     // Up on dpad.
-                    if (!dpad.UpPressed && Input.GetButton("MenuUp"))
+                    if (!dpad.UpPressed && res > 0)
                     {
                         if(DEBUG_GETDPAD)
                         {
@@ -301,14 +302,14 @@ namespace Utils.InputManager
 
                         dpad.UpPressed = true;
                     }
-                    else if (!Input.GetButton("MenuUp"))
+                    else if (res == 0)
                     {
                         dpad.UpPressed = false;
                     }
 
                     
                     // Down on dpad.
-                    if (!dpad.DownPressed && Input.GetButton("MenuDown"))
+                    if (!dpad.DownPressed && res < 0)
                     {
                         if (DEBUG_GETDPAD)
                         {
@@ -317,7 +318,7 @@ namespace Utils.InputManager
                        
                         dpad.DownPressed = true;
                     }
-                    else if (!Input.GetButton("MenuDown"))
+                    else if (res == 0)
                     {
                         dpad.DownPressed = false;
                     }

@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] Image background;
     [SerializeField] TextMeshProUGUI[] text;
+    [SerializeField] Button[] buttons;
 
     public static bool GamePause = false;
 
@@ -39,6 +40,11 @@ public class PauseMenu : MonoBehaviour
         {
             t.color = new Color(1, 1, 1, 0);
             t.fontSharedMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0);
+        }
+        foreach(Button b in buttons)
+        {
+            b.enabled = false;
+            b.interactable = false;
         }
     }
 
@@ -89,9 +95,16 @@ public class PauseMenu : MonoBehaviour
             float beta = Mathf.SmoothStep(0, 1, fadeInCounter / lerpTime);
 
             background.color = new Color(0, 0, 0, alpha);
+
             foreach (TextMeshProUGUI t in text)
             {
                 t.color = new Color(1, 1, 1, beta);
+            }
+
+            foreach (Button b in buttons)
+            {
+                b.enabled = true;
+                b.interactable = true;
             }
 
             fadeInCounter += lastDelta;
@@ -105,9 +118,15 @@ public class PauseMenu : MonoBehaviour
             float beta = Mathf.SmoothStep(1, 0, fadeOutCounter / lerpTime);
 
             background.color = new Color(0, 0, 0, alpha);
+
             foreach (TextMeshProUGUI t in text)
             {
                 t.color = new Color(1, 1, 1, beta);
+            }
+
+            foreach (Button b in buttons)
+            {
+                b.enabled = false;
             }
 
             fadeOutCounter += lastDelta;
